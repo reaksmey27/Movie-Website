@@ -42,7 +42,7 @@ const MovieSlider = ({ title, movies = [] }) => {
       </div>
 
       {canScrollLeft && (
-        <div 
+        <div
           onClick={() => handleScroll('left')}
           className="absolute left-0 top-[100px] bottom-10 w-16 md:w-24 z-40 flex items-center justify-center cursor-pointer opacity-0 group-hover/slider:opacity-100 transition-opacity duration-300"
         >
@@ -53,7 +53,7 @@ const MovieSlider = ({ title, movies = [] }) => {
       )}
 
       {canScrollRight && (
-        <div 
+        <div
           onClick={() => handleScroll('right')}
           className="absolute right-0 top-[100px] bottom-10 w-16 md:w-24 z-40 flex items-center justify-center cursor-pointer opacity-0 group-hover/slider:opacity-100 transition-opacity duration-300"
         >
@@ -63,14 +63,17 @@ const MovieSlider = ({ title, movies = [] }) => {
         </div>
       )}
 
-      <div 
+      <div
         ref={sliderRef}
         onScroll={checkScroll}
         className="flex gap-6 overflow-x-auto no-scrollbar scroll-smooth pb-12 px-4 sm:px-12 lg:px-24"
       >
         {movies.map((movie) => (
-          <MovieCard key={movie.id} movie={movie} />
+          <div key={movie.id} className="flex-shrink-0 w-[260px] md:w-[calc((100%-72px)/4)]">
+            <MovieCard movie={movie} />
+          </div>
         ))}
+
       </div>
     </div>
   );
