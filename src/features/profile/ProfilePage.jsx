@@ -39,14 +39,11 @@ const ProfilePage = () => {
 
     return (
         <div className="min-h-screen bg-slate-950 pt-40 pb-24 px-4 sm:px-12 lg:px-24 xl:px-40 relative overflow-hidden">
-            {/* Background Decorations */}
             <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-purple-600/10 blur-[120px] rounded-full -z-10" />
             <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-blue-600/10 blur-[120px] rounded-full -z-10" />
 
             <div className="max-w-6xl mx-auto flex flex-col lg:flex-row gap-12">
-                {/* Left Column: Sidebar Cards */}
                 <div className="w-full lg:w-80 space-y-6 flex-shrink-0 animate-in fade-in slide-in-from-left-8 duration-700">
-                    {/* User Info Card */}
                     <div className="bg-white/5 backdrop-blur-2xl border border-white/10 rounded-[2.5rem] p-8 text-center shadow-2xl overflow-hidden relative group">
                         <div className="absolute inset-0 bg-gradient-to-b from-purple-600/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
@@ -73,7 +70,6 @@ const ProfilePage = () => {
                         </div>
                     </div>
 
-                    {/* Stats List */}
                     <div className="bg-white/5 backdrop-blur-2xl border border-white/10 rounded-[2.5rem] p-8 space-y-6 shadow-xl">
                         {stats.map((stat, i) => (
                             <div key={i} className="flex items-center gap-4 group">
@@ -89,7 +85,6 @@ const ProfilePage = () => {
                     </div>
                 </div>
 
-                {/* Right Column: Main Settings */}
                 <div className="flex-1 space-y-8 animate-in fade-in slide-in-from-bottom-8 duration-700 delay-200">
                     <div className="bg-white/5 backdrop-blur-2xl border border-white/10 rounded-[2.5rem] p-10 shadow-2xl">
                         <div className="flex items-center justify-between mb-10">

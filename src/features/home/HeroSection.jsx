@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useFavorites } from "../../context/FavoritesContext";
-import { PlayCircleIcon, HeartIcon, StarIcon } from "@heroicons/react/24/solid";
+import { PlayCircleIcon, HeartIcon, StarIcon, PlayIcon, XMarkIcon, ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/solid";
 import { HeartIcon as HeartOutline } from "@heroicons/react/24/outline";
 
 const HeroSection = ({ trendingMovies = [] }) => {
@@ -10,21 +10,33 @@ const HeroSection = ({ trendingMovies = [] }) => {
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [fade, setFade] = useState(true);
+  const [showTrailer, setShowTrailer] = useState(false);
 
   useEffect(() => {
-    if (FEATURED_MOVIES.length === 0) return;
+    if (FEATURED_MOVIES.length === 0 || showTrailer) return;
 
     const interval = setInterval(() => {
-      setFade(false);
-
-      setTimeout(() => {
-        setCurrentIndex((prev) => (prev + 1) % FEATURED_MOVIES.length);
-        setFade(true);
-      }, 600);
+      handleNext();
     }, 8000);
 
     return () => clearInterval(interval);
-  }, [FEATURED_MOVIES.length]);
+  }, [FEATURED_MOVIES.length, showTrailer]);
+
+  const handleNext = () => {
+    setFade(false);
+    setTimeout(() => {
+      setCurrentIndex((prev) => (prev + 1) % FEATURED_MOVIES.length);
+      setFade(true);
+    }, 600);
+  };
+
+  const handlePrev = () => {
+    setFade(false);
+    setTimeout(() => {
+      setCurrentIndex((prev) => (prev === 0 ? FEATURED_MOVIES.length - 1 : prev - 1));
+      setFade(true);
+    }, 600);
+  };
 
   if (FEATURED_MOVIES.length === 0) return null;
 
@@ -80,11 +92,21 @@ const HeroSection = ({ trendingMovies = [] }) => {
             <span className="text-lg">Watch Now</span>
           </Link>
 
+          {movie.trailerKey && (
+            <button
+              onClick={() => setShowTrailer(true)}
+              className="group flex items-center gap-3 bg-white/5 hover:bg-white/10 border border-white/10 text-white px-8 py-4 rounded-xl font-bold transition-all backdrop-blur-xl active:scale-95"
+            >
+              <PlayIcon className="h-6 w-6 text-purple-500 transition-transform group-hover:scale-125" />
+              <span className="text-lg">Watch Trailer</span>
+            </button>
+          )}
+
           <button
             onClick={() => toggleFavorite(movie)}
             className={`flex items-center gap-3 px-8 py-4 rounded-xl font-bold transition-all backdrop-blur-md active:scale-95 border-2 ${isFav
-              ? "bg-red-500/20 border-red-500 text-red-500"
-              : "bg-white/5 border-white/10 text-white hover:bg-white/10"
+                ? "bg-red-500/20 border-red-500 text-red-500"
+                : "bg-white/5 border-white/10 text-white hover:bg-white/10"
               }`}
           >
             {isFav ? <HeartIcon className="h-6 w-6" /> : <HeartOutline className="h-6 w-6" />}
@@ -93,15 +115,60 @@ const HeroSection = ({ trendingMovies = [] }) => {
         </div>
       </div>
 
+      <div className="absolute inset-y-0 left-0 flex items-center px-4 md:px-10 z-30">
+        <button
+          onClick={handlePrev}
+          className="p-3 rounded-full bg-black/20 border border-white/10 backdrop-blur-md text-white hover:bg-white/10 transition-all active:scale-90 group"
+        >
+          <ChevronLeftIcon className="h-6 w-6 group-hover:-translate-x-1 transition-transform" />
+        </button>
+      </div>
+      <div className="absolute inset-y-0 right-0 flex items-center px-4 md:px-10 z-30">
+        <button
+          onClick={handleNext}
+          className="p-3 rounded-full bg-black/20 border border-white/10 backdrop-blur-md text-white hover:bg-white/10 transition-all active:scale-90 group"
+        >
+          <ChevronRightIcon className="h-6 w-6 group-hover:translate-x-1 transition-transform" />
+        </button>
+      </div>
+
       <div className="absolute bottom-10 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2">
         {FEATURED_MOVIES.map((_, idx) => (
-          <div
+          <button
             key={idx}
-            className={`h-1.5 transition-all duration-500 rounded-full ${idx === currentIndex ? "w-10 bg-purple-600" : "w-2 bg-white/30"
+            onClick={() => {
+              setFade(false);
+              setTimeout(() => {
+                setCurrentIndex(idx);
+                setFade(true);
+              }, 400);
+            }}
+            className={`h-1.5 transition-all duration-500 rounded-full ${idx === currentIndex ? "w-10 bg-purple-600 shadow-lg shadow-purple-500/50" : "w-2 bg-white/30 hover:bg-white/50"
               }`}
           />
         ))}
       </div>
+
+      {showTrailer && movie.trailerKey && (
+        <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 md:p-10 bg-black/95 backdrop-blur-2xl animate-in fade-in duration-300">
+          <div className="relative w-full max-w-6xl aspect-video bg-black rounded-3xl overflow-hidden shadow-[0_0_100px_rgba(168,85,247,0.3)] border border-white/10 animate-in zoom-in duration-500">
+            <button
+              onClick={() => setShowTrailer(false)}
+              className="absolute top-6 right-6 z-[210] p-3 bg-black/40 hover:bg-red-500 text-white rounded-full transition-all active:scale-90 backdrop-blur-md border border-white/10 group"
+            >
+              <XMarkIcon className="h-6 w-6 group-hover:rotate-90 transition-transform duration-300" />
+            </button>
+            <iframe
+              className="w-full h-full"
+              src={`https://www.youtube.com/embed/${movie.trailerKey}?autoplay=1&rel=0`}
+              title={`${movie.title} Official Trailer`}
+              frameBorder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowFullScreen
+            ></iframe>
+          </div>
+        </div>
+      )}
     </section>
   );
 };
