@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { tmdbService } from '../../services/tmdbService';
 import { useFavorites } from '../../context/FavoritesContext';
-import { PlayIcon, HeartIcon, StarIcon, ClockIcon, CalendarIcon, ChevronLeftIcon } from '@heroicons/react/24/solid';
+import { PlayIcon, HeartIcon, StarIcon, ClockIcon, CalendarIcon, ChevronLeftIcon, XMarkIcon } from '@heroicons/react/24/solid';
 import { HeartIcon as HeartOutline } from '@heroicons/react/24/outline';
 
 const MovieDetailPage = () => {
@@ -11,6 +11,7 @@ const MovieDetailPage = () => {
     const { toggleFavorite, isFavorite } = useFavorites();
     const [movie, setMovie] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [showTrailer, setShowTrailer] = useState(false);
 
     useEffect(() => {
         const fetchDetails = async () => {
@@ -57,7 +58,6 @@ const MovieDetailPage = () => {
 
     return (
         <div className="min-h-screen bg-slate-950 relative overflow-hidden">
-            {/* Backdrop Image with Overlay */}
             <div className="absolute inset-0 h-[70vh] w-full">
                 <img
                     src={movie.image}
@@ -69,7 +69,6 @@ const MovieDetailPage = () => {
             </div>
 
             <div className="relative z-10 px-4 sm:px-12 lg:px-24 xl:px-40 pt-32 pb-20">
-                {/* Back Button */}
                 <button
                     onClick={() => navigate(-1)}
                     className="mb-8 flex items-center gap-2 text-gray-400 hover:text-white transition-colors group"
@@ -79,7 +78,6 @@ const MovieDetailPage = () => {
                 </button>
 
                 <div className="flex flex-col lg:flex-row gap-12">
-                    {/* Poster - hidden on smaller screens, shown on desktop */}
                     <div className="hidden lg:block w-80 flex-shrink-0">
                         <img
                             src={movie.image}
@@ -88,7 +86,6 @@ const MovieDetailPage = () => {
                         />
                     </div>
 
-                    {/* Basic Info */}
                     <div className="flex-1 space-y-8 mt-10 lg:mt-0">
                         <div className="space-y-4">
                             <h1 className="text-4xl md:text-6xl lg:text-7xl font-black text-white leading-none tracking-tighter">
@@ -110,7 +107,6 @@ const MovieDetailPage = () => {
                             </div>
                         </div>
 
-                        {/* Genres */}
                         <div className="flex flex-wrap gap-2">
                             {movie.genres.map((genre) => (
                                 <span
@@ -122,25 +118,37 @@ const MovieDetailPage = () => {
                             ))}
                         </div>
 
-                        {/* Description */}
                         <div className="space-y-4">
                             <h3 className="text-white font-black uppercase tracking-widest text-xs opacity-50">Overview</h3>
-                            <p className="text-gray-300 text-lg md:text-xl leading-relaxed font-medium max-w-3xl">
+                            <p className="text-gray-300 text-lg md:text-xl leading-relaxed font-medium max-w-3xl line-clamp-6">
                                 {movie.description}
                             </p>
                         </div>
 
-                        {/* Actions */}
                         <div className="flex flex-wrap gap-5 pt-4">
-                            <button className="flex items-center gap-3 bg-purple-600 hover:bg-purple-500 text-white px-10 py-4 rounded-2xl font-black uppercase tracking-widest text-sm transition-all shadow-xl shadow-purple-600/20 active:scale-95">
-                                <PlayIcon className="h-5 w-5" />
-                                Watch Trailer
-                            </button>
+                            {movie.trailerKey ? (
+                                <button
+                                    onClick={() => setShowTrailer(true)}
+                                    className="flex items-center gap-3 bg-purple-600 hover:bg-purple-500 text-white px-10 py-4 rounded-2xl font-black uppercase tracking-widest text-sm transition-all shadow-xl shadow-purple-600/20 active:scale-95"
+                                >
+                                    <PlayIcon className="h-5 w-5" />
+                                    Watch Trailer
+                                </button>
+                            ) : (
+                                <button
+                                    disabled
+                                    className="flex items-center gap-3 bg-gray-800 text-gray-500 cursor-not-allowed px-10 py-4 rounded-2xl font-black uppercase tracking-widest text-sm"
+                                >
+                                    <PlayIcon className="h-5 w-5" />
+                                    No Trailer Available
+                                </button>
+                            )}
+
                             <button
                                 onClick={() => toggleFavorite(movie)}
                                 className={`flex items-center gap-3 border-2 px-10 py-4 rounded-2xl font-black uppercase tracking-widest text-sm transition-all active:scale-95 ${isFav
-                                        ? "bg-red-500/10 border-red-500 text-red-500 shadow-lg shadow-red-500/20"
-                                        : "bg-white/5 border-white/10 text-white hover:bg-white/10"
+                                    ? "bg-red-500/10 border-red-500 text-red-500 shadow-lg shadow-red-500/20"
+                                    : "bg-white/5 border-white/10 text-white hover:bg-white/10"
                                     }`}
                             >
                                 {isFav ? (
@@ -154,6 +162,28 @@ const MovieDetailPage = () => {
                     </div>
                 </div>
             </div>
+
+            {showTrailer && movie.trailerKey && (
+                <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 sm:p-6 lg:p-10 backdrop-blur-2xl bg-black/80 animate-in fade-in duration-300">
+                    <div className="relative w-full max-w-6xl aspect-video bg-black rounded-3xl overflow-hidden shadow-[0_0_100px_rgba(168,85,247,0.3)] border border-white/10 animate-in zoom-in duration-500">
+                        <button
+                            onClick={() => setShowTrailer(false)}
+                            className="absolute top-6 right-6 z-[210] p-3 bg-black/40 hover:bg-red-500 text-white rounded-full transition-all active:scale-90 backdrop-blur-md border border-white/10 group"
+                        >
+                            <XMarkIcon className="h-6 w-6 group-hover:rotate-90 transition-transform duration-300" />
+                        </button>
+
+                        <iframe
+                            className="w-full h-full"
+                            src={`https://www.youtube.com/embed/${movie.trailerKey}?autoplay=1&rel=0`}
+                            title={`${movie.title} Official Trailer`}
+                            frameBorder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                            allowFullScreen
+                        ></iframe>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

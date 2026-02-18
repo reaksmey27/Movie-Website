@@ -90,15 +90,28 @@ export const tmdbService = {
         37: "Western",
     },
 
-    formatMovieData: (movie) => ({
-        id: movie.id,
-        title: movie.title || movie.name,
-        subtitle: movie.release_date ? new Date(movie.release_date).getFullYear().toString() : (movie.first_air_date ? new Date(movie.first_air_date).getFullYear().toString() : ''),
-        rating: movie.vote_average?.toFixed(1) || '0.0',
-        duration: movie.runtime ? `${Math.floor(movie.runtime / 60)}h ${movie.runtime % 60}m` : '',
-        genres: movie.genre_ids ? movie.genre_ids.map(id => tmdbService.GENRE_MAP[id]).filter(Boolean) : (movie.genres ? movie.genres.map(g => g.name) : []),
-        description: movie.overview,
-        image: movie.backdrop_path ? `${IMAGE_BASE_URL}${movie.backdrop_path}` : (movie.poster_path ? `${IMAGE_BASE_URL}${movie.poster_path}` : ''),
-    })
+    formatMovieData: (movie) => {
+        const trailer = movie.videos?.results?.find(
+            vid => vid.type === 'Trailer' && vid.site === 'YouTube'
+        );
+
+        return {
+            id: movie.id,
+            title: movie.title || movie.name,
+            subtitle: movie.release_date
+                ? new Date(movie.release_date).getFullYear().toString()
+                : (movie.first_air_date ? new Date(movie.first_air_date).getFullYear().toString() : ''),
+            rating: movie.vote_average?.toFixed(1) || '0.0',
+            duration: movie.runtime ? `${Math.floor(movie.runtime / 60)}h ${movie.runtime % 60}m` : '',
+            genres: movie.genre_ids
+                ? movie.genre_ids.map(id => tmdbService.GENRE_MAP[id]).filter(Boolean)
+                : (movie.genres ? movie.genres.map(g => g.name) : []),
+            description: movie.overview,
+            image: movie.backdrop_path
+                ? `${IMAGE_BASE_URL}${movie.backdrop_path}`
+                : (movie.poster_path ? `${IMAGE_BASE_URL}${movie.poster_path}` : ''),
+            trailerKey: trailer ? trailer.key : null,
+        };
+    }
 };
 
