@@ -54,9 +54,9 @@ const HeroSection = ({ trendingMovies = [] }) => {
       <div className={`relative z-10 px-6 sm:px-12 lg:px-24 xl:px-40 mt-32 sm:mt-16 max-w-7xl transition-all duration-700 ease-out transform 
         ${fade ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-12"}`}>
 
-        <h2 className="text-4xl sm:text-6xl lg:text-8xl font-black text-white leading-[0.9] tracking-tighter mb-4 sm:mb-6 drop-shadow-2xl">
+        <h2 className="text-3xl sm:text-5xl lg:text-6xl font-black text-white leading-[0.9] tracking-tighter mb-4 sm:mb-6 drop-shadow-2xl">
           {movie.title} <br className="hidden sm:block" />
-          <span className="text-white/60 text-xl sm:text-4xl lg:text-5xl font-bold tracking-tight block sm:inline mt-2 sm:mt-0">
+          <span className="text-white/60 text-lg sm:text-3xl lg:text-4xl font-bold tracking-tight block sm:inline mt-2 sm:mt-0">
             {movie.subtitle}
           </span>
         </h2>
@@ -79,7 +79,7 @@ const HeroSection = ({ trendingMovies = [] }) => {
           </div>
         </div>
 
-        <p className="text-gray-400 text-base sm:text-xl max-w-2xl mb-8 sm:mb-12 leading-relaxed font-medium line-clamp-3 sm:line-clamp-4">
+        <p className="text-gray-400 text-base sm:text-xl max-w-2xl mb-8 sm:mb-12 leading-relaxed font-medium line-clamp-3">
           {movie.description}
         </p>
 
@@ -108,8 +108,8 @@ const HeroSection = ({ trendingMovies = [] }) => {
             <button
               onClick={() => toggleFavorite(movie)}
               className={`flex-shrink-0 flex items-center justify-center gap-4 px-6 sm:px-10 py-4 sm:py-5 rounded-2xl font-black transition-all backdrop-blur-xl active:scale-95 border-2 ${isFav
-                  ? "bg-red-500/20 border-red-500 text-red-500 shadow-lg shadow-red-500/20"
-                  : "bg-white/5 border-white/10 text-white hover:bg-white/10"
+                ? "bg-red-500/20 border-red-500 text-red-500 shadow-lg shadow-red-500/20"
+                : "bg-white/5 border-white/10 text-white hover:bg-white/10"
                 }`}
             >
               {isFav ? <HeartIcon className="h-5 w-5 sm:h-6 sm:w-6" /> : <HeartOutline className="h-5 w-5 sm:h-6 sm:w-6" />}
