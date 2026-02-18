@@ -11,9 +11,7 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-10 mb-12">
           
           <div className="space-y-4">
-            <h2 className="text-2xl font-bold bg-gradient-to-r from-purple-400 to-pink-600 bg-clip-text text-transparent">
-              CineMax
-            </h2>
+            <img src="/images/logo.png" alt="CineMax Logo" className="h-8 w-auto sm:h-10" />
             <p className="text-gray-400 text-sm leading-relaxed">
               Your ultimate destination for the latest blockbusters and timeless classics.
               Explore, discover, and enjoy the world of cinema.

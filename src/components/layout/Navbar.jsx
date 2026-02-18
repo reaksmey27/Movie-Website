@@ -65,14 +65,8 @@ const Navbar = () => {
            backdrop-blur-md bg-black/60 border-b sm:border border-white/10 
            ring-1 ring-white/5 text-white shadow-2xl transition-all">
 
-        {/* Logo */}
         <Link to="/" className="flex items-center gap-2" onClick={() => setIsMenuOpen(false)}>
-          <div className="bg-purple-600 p-1.5 rounded-lg shadow-lg active:scale-95 transition-transform">
-            <FilmIcon className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
-          </div>
-          <span className="text-lg sm:text-xl font-bold tracking-tight text-white">
-            CineMax
-          </span>
+          <img src="/images/logo.png" alt="CineMax Logo" className="h-8 w-auto sm:h-10" />
         </Link>
 
         <div className="hidden lg:flex gap-10">
