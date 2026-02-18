@@ -16,7 +16,6 @@ const MovieDetailPage = () => {
     const [activeServer, setActiveServer] = useState('Server 1');
 
     const SERVERS = [
-        { name: 'Server 1', url: (id) => `https://vidsrc.pro/embed/movie/${id}` },
         { name: 'Server 2', url: (id) => `https://vidsrc.cc/v2/embed/movie/${id}` },
     ];
 
