@@ -16,7 +16,8 @@ const MovieDetailPage = () => {
     const [activeServer, setActiveServer] = useState('Server 1');
 
     const SERVERS = [
-        { name: 'Server 1', url: (id) => `https://vidsrc.cc/v2/embed/movie/${id}` },
+        { name: 'Server 1', url: (id) => `https://vidsrc.pro/embed/movie/${id}` },
+        { name: 'Server 2', url: (id) => `https://vidsrc.cc/v2/embed/movie/${id}` },
     ];
 
     useEffect(() => {
@@ -97,8 +98,8 @@ const MovieDetailPage = () => {
                                     key={server.name}
                                     onClick={() => setActiveServer(server.name)}
                                     className={`flex-shrink-0 px-6 py-2 rounded-full text-[10px] font-black uppercase tracking-widest transition-all ${activeServer === server.name
-                                            ? 'bg-purple-600 text-white shadow-lg shadow-purple-600/40'
-                                            : 'bg-white/5 text-gray-400 hover:bg-white/10 hover:text-white border border-white/5'
+                                        ? 'bg-purple-600 text-white shadow-lg shadow-purple-600/40'
+                                        : 'bg-white/5 text-gray-400 hover:bg-white/10 hover:text-white border border-white/5'
                                         }`}
                                 >
                                     {server.name}
@@ -136,7 +137,7 @@ const MovieDetailPage = () => {
 
                         <div className="flex-1 space-y-8">
                             <div className="space-y-4">
-                                <h1 className="text-4xl sm:text-6xl lg:text-8xl font-black text-white leading-[0.9] tracking-tighter">
+                                <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black text-white leading-[0.9] tracking-tighter">
                                     {movie.title}
                                 </h1>
                                 <div className="flex flex-wrap items-center gap-4 sm:gap-6 text-sm">
@@ -144,11 +145,11 @@ const MovieDetailPage = () => {
                                         <StarIcon className="h-4 w-4" />
                                         <span>{movie.rating}</span>
                                     </div>
-                                    <div className="flex items-center gap-2 text-gray-400 font-bold uppercase tracking-widest text-[10px] bg-white/5 px-3 py-1 rounded-lg border border-white/5">
+                                    <div className="flex items-center gap-2 text-gray-400 font-bold uppercase tracking-widest text-[9px] sm:text-[10px] bg-white/5 px-3 py-1 rounded-lg border border-white/5">
                                         <CalendarIcon className="h-4 w-4 text-purple-600" />
                                         <span>{movie.subtitle}</span>
                                     </div>
-                                    <div className="flex items-center gap-2 text-gray-400 font-bold uppercase tracking-widest text-[10px] bg-white/5 px-3 py-1 rounded-lg border border-white/5">
+                                    <div className="flex items-center gap-2 text-gray-400 font-bold uppercase tracking-widest text-[9px] sm:text-[10px] bg-white/5 px-3 py-1 rounded-lg border border-white/5">
                                         <ClockIcon className="h-4 w-4 text-purple-600" />
                                         <span>{movie.duration}</span>
                                     </div>
@@ -159,7 +160,7 @@ const MovieDetailPage = () => {
                                 {movie.genres.map((genre) => (
                                     <span
                                         key={genre}
-                                        className="px-4 py-1.5 bg-white/5 border border-white/10 text-gray-400 rounded-full text-[10px] font-black uppercase tracking-widest backdrop-blur-md"
+                                        className="px-4 py-1.5 bg-white/5 border border-white/10 text-gray-400 rounded-full text-[9px] sm:text-[10px] font-black uppercase tracking-widest backdrop-blur-md"
                                     >
                                         {genre}
                                     </span>
@@ -168,7 +169,7 @@ const MovieDetailPage = () => {
 
                             <div className="space-y-3">
                                 <h3 className="text-white font-black uppercase tracking-[0.3em] text-[10px] opacity-40">Storyline</h3>
-                                <p className="text-gray-300 text-lg sm:text-2xl leading-relaxed font-medium max-w-4xl line-clamp-6 selection:bg-purple-600">
+                                <p className="text-gray-300 text-base sm:text-lg leading-relaxed font-medium max-w-4xl line-clamp-3 selection:bg-purple-600">
                                     {movie.description}
                                 </p>
                             </div>
