@@ -15,9 +15,7 @@ const HeroSection = ({ trendingMovies = [] }) => {
   useEffect(() => {
     if (FEATURED_MOVIES.length === 0 || showTrailer) return;
 
-    const interval = setInterval(() => {
-      handleNext();
-    }, 8000);
+    const interval = setInterval(handleNext, 8000);
 
     return () => clearInterval(interval);
   }, [FEATURED_MOVIES.length, showTrailer]);
