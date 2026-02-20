@@ -60,7 +60,7 @@ export const tmdbService = {
 
     getMoviesByIds: async (movieIds) => {
         const fetchPromises = movieIds.map(id =>
-            fetchFromTMDB(`/movie/${id}`).catch(() => null)
+            fetchFromTMDB(`/movie/${id}`, { append_to_response: 'videos,credits' }).catch(() => null)
         );
         const results = await Promise.all(fetchPromises);
         return results.filter(Boolean);
