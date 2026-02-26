@@ -14,9 +14,13 @@ const MovieDetailPage = () => {
     const [showTrailer, setShowTrailer] = useState(false);
     const [isPlaying, setIsPlaying] = useState(false);
     const [activeServer, setActiveServer] = useState('Server 1');
+    const [iframeLoading, setIframeLoading] = useState(false);
+    const [playerMessage, setPlayerMessage] = useState('');
 
     const SERVERS = [
         { name: 'Server 1', url: (id) => `https://vidsrc.cc/v2/embed/movie/${id}` },
+        { name: 'Server 2', url: (id) => `https://vidsrc.xyz/embed/movie/${id}` },
+        { name: 'Server 3', url: (id) => `https://vidsrc.me/embed/movie?tmdb=${id}` },
     ];
     useEffect(() => {
         const fetchDetails = async () => {
@@ -36,6 +40,23 @@ const MovieDetailPage = () => {
         fetchDetails();
         window.scrollTo(0, 0);
     }, [id]);
+
+    useEffect(() => {
+        if (!isPlaying) return;
+        setIframeLoading(true);
+        setPlayerMessage('');
+    }, [isPlaying, activeServer, id]);
+
+    useEffect(() => {
+        if (!isPlaying || !iframeLoading) return;
+
+        const timeoutId = setTimeout(() => {
+            setIframeLoading(false);
+            setPlayerMessage('This server is taking too long. Please switch server.');
+        }, 12000);
+
+        return () => clearTimeout(timeoutId);
+    }, [isPlaying, iframeLoading]);
 
     if (loading) {
         return (
@@ -62,6 +83,13 @@ const MovieDetailPage = () => {
     const isFav = isFavorite(movie.id);
     const currentServer = SERVERS.find(s => s.name === activeServer) || SERVERS[0];
     const currentServerUrl = currentServer.url(movie.id);
+    const activeServerIndex = SERVERS.findIndex(s => s.name === activeServer);
+
+    const goToNextServer = () => {
+        if (!SERVERS.length) return;
+        const nextIndex = (activeServerIndex + 1) % SERVERS.length;
+        setActiveServer(SERVERS[nextIndex].name);
+    };
 
     return (
         <div className="min-h-screen bg-slate-950 relative overflow-x-hidden">
@@ -113,7 +141,17 @@ const MovieDetailPage = () => {
                                 scrolling="no"
                                 allowFullScreen
                                 title="Cinema Player"
+                                onLoad={() => setIframeLoading(false)}
+                                onError={() => {
+                                    setIframeLoading(false);
+                                    setPlayerMessage('Unable to load this server. Please switch server.');
+                                }}
                             ></iframe>
+                            {iframeLoading && (
+                                <div className="absolute inset-0 flex items-center justify-center bg-black/70 backdrop-blur-sm">
+                                    <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-purple-500"></div>
+                                </div>
+                            )}
                         </div>
 
                         <div className="p-4 bg-purple-600/10 border border-purple-500/20 rounded-2xl flex items-center gap-3">
@@ -122,6 +160,20 @@ const MovieDetailPage = () => {
                                 Tip: Try switching servers if the stream is slow.
                             </p>
                         </div>
+
+                        {playerMessage && (
+                            <div className="p-4 bg-red-500/10 border border-red-500/30 rounded-2xl flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                                <p className="text-[10px] text-red-300 font-bold uppercase tracking-widest">
+                                    {playerMessage}
+                                </p>
+                                <button
+                                    onClick={goToNextServer}
+                                    className="px-4 py-2 rounded-lg bg-red-500 hover:bg-red-400 text-white text-[10px] font-black uppercase tracking-widest active:scale-95"
+                                >
+                                    Try Next Server
+                                </button>
+                            </div>
+                        )}
                     </div>
                 ) : (
                     <div className="flex flex-col lg:flex-row gap-8 sm:gap-12 lg:gap-16 animate-in slide-in-from-left-6 duration-700">
