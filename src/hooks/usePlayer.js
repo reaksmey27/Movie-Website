@@ -7,9 +7,9 @@ export const usePlayer = (id) => {
     const [playerMessage, setPlayerMessage] = useState('');
 
     const SERVERS = [
-        { name: 'Server 1', url: (id) => `https://vidsrc.cc/v2/embed/movie/${id}` },
-        { name: 'Server 2', url: (id) => `https://vidsrc.xyz/embed/movie/${id}` },
-        { name: 'Server 3', url: (id) => `https://vidsrc.me/embed/movie?tmdb=${id}` },
+        { name: 'Server 1', url: (id) => `https://vidsrc.to/embed/movie/${id}` },
+        { name: 'Server 2', url: (id) => `https://vidsrc.me/embed/movie/${id}` },
+        { name: 'Server 3', url: (id) => `https://embed.su/embed/movie/${id}` },
     ];
 
     const currentServer = SERVERS.find(s => s.name === activeServer) || SERVERS[0];

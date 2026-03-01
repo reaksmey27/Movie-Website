@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { useAuth } from '@/context/AuthContext';
-import { useMovie, usePlayer } from '@/hooks';
+import { useMovie, usePlayer, useFavorites } from '@/hooks';
 import { MovieHero, MovieInfo, VideoPlayer, ActionButtons, TrailerModal } from '@/components';
 
 const MovieDetailPage = () => {
     const { id } = useParams();
     const navigate = useNavigate();
-    const { favorites, toggleFavorite } = useAuth();
+    const { favorites, toggleFavorite } = useFavorites();
     const [showTrailer, setShowTrailer] = useState(false);
 
     const { movie, loading, error } = useMovie(id);
@@ -44,7 +43,7 @@ const MovieDetailPage = () => {
 
     return (
         <div className="min-h-screen bg-slate-950 text-white relative">
-            <MovieHero movieImage={movie.mainImage} isPlaying={isPlaying} />
+            <MovieHero movieImage={movie.image} isPlaying={isPlaying} />
 
             <div className="relative z-10 pt-32 pb-24 px-4 sm:px-12 lg:px-24 xl:px-40">
                 <div className="max-w-[1400px] mx-auto">

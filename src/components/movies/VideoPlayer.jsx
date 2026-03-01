@@ -38,6 +38,7 @@ const VideoPlayer = ({ player, movieId }) => {
                     frameBorder="0"
                     scrolling="no"
                     allowFullScreen
+                    sandbox="allow-forms allow-pointer-lock allow-same-origin allow-scripts allow-top-navigation"
                     title="Cinema Player"
                     onLoad={() => setIframeLoading(false)}
                     onError={() => {

@@ -19,7 +19,7 @@ const ActionButtons = ({ movie, isFav, toggleFavorite, setIsPlaying, setShowTrai
                         onClick={() => setShowTrailer(true)}
                         className="flex-1 flex items-center justify-center gap-3 bg-white/5 border border-white/10 hover:bg-white/10 text-white px-8 py-5 rounded-2xl font-black uppercase tracking-widest text-xs transition-all backdrop-blur-md active:scale-95"
                     >
-                        Archives
+                        Watch Trailer
                     </button>
                 )}
 

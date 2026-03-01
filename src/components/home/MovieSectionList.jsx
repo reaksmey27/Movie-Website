@@ -20,14 +20,7 @@ const MovieSectionList = ({ movies }) => {
         (section, index) =>
           section.data.length > 0 && (
             <div key={index} className="animate-in fade-in slide-in-from-bottom-8 duration-1000" style={{ animationDelay: `${index * 150}ms` }}>
-              <div className="flex items-center gap-4 mb-8">
-                <div className="h-px flex-1 bg-gradient-to-r from-transparent via-white/10 to-transparent" />
-                <h2 className="text-white text-xs sm:text-sm font-black uppercase tracking-[0.5em] italic opacity-60">
-                  {section.title}
-                </h2>
-                <div className="h-px flex-1 bg-gradient-to-r from-transparent via-white/10 to-transparent" />
-              </div>
-              <MovieSlider movies={section.data} />
+              <MovieSlider title={section.title} movies={section.data} />
             </div>
           )
       )}
