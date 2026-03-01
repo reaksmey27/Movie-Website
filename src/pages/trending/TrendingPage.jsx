@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { tmdbService } from '../../services/tmdbService';
-import MovieCard from '../../components/ui/MovieCard';
+import { tmdbService } from '@/services/tmdbService';
+import { MovieCard } from '@/components';
 import { FireIcon, XMarkIcon } from '@heroicons/react/24/outline';
 
 const TrendingPage = () => {
