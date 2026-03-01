@@ -14,7 +14,6 @@ const SignupPage = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
-        // Simulate API call
         setTimeout(() => {
             login({ email, name });
             setLoading(false);
@@ -24,7 +23,6 @@ const SignupPage = () => {
 
     return (
         <div className="min-h-screen bg-slate-950 flex items-center justify-center p-4 relative overflow-hidden">
-            {/* Background Decorations */}
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-blue-600/10 blur-[120px] rounded-full -z-10" />
 
             <div className="w-full max-w-md animate-in fade-in zoom-in duration-700">

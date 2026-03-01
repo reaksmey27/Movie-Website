@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { useFavorites } from "../../context/FavoritesContext";
+import { useFavorites } from "@/hooks";
 import { PlayCircleIcon, HeartIcon, StarIcon, PlayIcon, XMarkIcon, ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/solid";
 import { HeartIcon as HeartOutline } from "@heroicons/react/24/outline";
 
