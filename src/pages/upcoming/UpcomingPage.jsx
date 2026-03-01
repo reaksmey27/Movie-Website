@@ -1,34 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import { tmdbService } from '../../services/tmdbService';
+import React from 'react';
 import MovieCard from '../../components/ui/MovieCard';
 import { CalendarDaysIcon, SparklesIcon } from '@heroicons/react/24/outline';
+import useUpcomingMovies from '../../hooks/movies/useUpcomingMovies';
 
 const UpcomingPage = () => {
-    const [movies, setMovies] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
-
-    useEffect(() => {
-        const fetchUpcoming = async () => {
-            setLoading(true);
-            try {
-                const response = await tmdbService.getUpcomingMovies();
-                const results = Array.isArray(response) ? response : (response?.results || []);
-
-                if (results.length > 0) {
-                    setMovies(results.map(tmdbService.formatMovieData));
-                }
-            } catch (err) {
-                console.error("Error fetching upcoming movies:", err);
-                setError("Could not predict the future. Please check your connection.");
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchUpcoming();
-        window.scrollTo(0, 0);
-    }, []);
+    const { movies, loading, error } = useUpcomingMovies();
 
     return (
         <div className="min-h-screen bg-slate-950 pt-40 pb-24 px-4 sm:px-12 lg:px-24 xl:px-40 relative overflow-hidden">

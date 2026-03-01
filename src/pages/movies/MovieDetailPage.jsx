@@ -1,62 +1,31 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { tmdbService } from '../../services/tmdbService';
 import { useFavorites } from '../../context/FavoritesContext';
 import { PlayIcon, HeartIcon, StarIcon, ClockIcon, CalendarIcon, ChevronLeftIcon, XMarkIcon } from '@heroicons/react/24/solid';
 import { HeartIcon as HeartOutline } from '@heroicons/react/24/outline';
+import useMovieDetail from '../../hooks/movies/useMovieDetail';
 
 const MovieDetailPage = () => {
     const { id } = useParams();
     const navigate = useNavigate();
     const { toggleFavorite, isFavorite } = useFavorites();
-    const [movie, setMovie] = useState(null);
-    const [loading, setLoading] = useState(true);
-    const [showTrailer, setShowTrailer] = useState(false);
-    const [isPlaying, setIsPlaying] = useState(false);
-    const [activeServer, setActiveServer] = useState('Server 1');
-    const [iframeLoading, setIframeLoading] = useState(false);
-    const [playerMessage, setPlayerMessage] = useState('');
 
-    const SERVERS = [
-        { name: 'Server 1', url: (id) => `https://vidsrc.cc/v2/embed/movie/${id}` },
-        { name: 'Server 2', url: (id) => `https://vidsrc.xyz/embed/movie/${id}` },
-        { name: 'Server 3', url: (id) => `https://vidsrc.me/embed/movie?tmdb=${id}` },
-    ];
-    useEffect(() => {
-        const fetchDetails = async () => {
-            setLoading(true);
-            try {
-                const data = await tmdbService.getMovieDetails(id);
-                if (data) {
-                    setMovie(tmdbService.formatMovieData(data));
-                }
-            } catch (error) {
-                console.error("Error fetching movie details:", error);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchDetails();
-        window.scrollTo(0, 0);
-    }, [id]);
-
-    useEffect(() => {
-        if (!isPlaying) return;
-        setIframeLoading(true);
-        setPlayerMessage('');
-    }, [isPlaying, activeServer, id]);
-
-    useEffect(() => {
-        if (!isPlaying || !iframeLoading) return;
-
-        const timeoutId = setTimeout(() => {
-            setIframeLoading(false);
-            setPlayerMessage('This server is taking too long. Please switch server.');
-        }, 12000);
-
-        return () => clearTimeout(timeoutId);
-    }, [isPlaying, iframeLoading]);
+    const {
+        movie,
+        loading,
+        SERVERS,
+        showTrailer,
+        setShowTrailer,
+        isPlaying,
+        setIsPlaying,
+        activeServer,
+        setActiveServer,
+        iframeLoading,
+        setIframeLoading,
+        playerMessage,
+        currentServerUrl,
+        goToNextServer,
+    } = useMovieDetail(id);
 
     if (loading) {
         return (
@@ -81,15 +50,7 @@ const MovieDetailPage = () => {
     }
 
     const isFav = isFavorite(movie.id);
-    const currentServer = SERVERS.find(s => s.name === activeServer) || SERVERS[0];
-    const currentServerUrl = currentServer.url(movie.id);
-    const activeServerIndex = SERVERS.findIndex(s => s.name === activeServer);
 
-    const goToNextServer = () => {
-        if (!SERVERS.length) return;
-        const nextIndex = (activeServerIndex + 1) % SERVERS.length;
-        setActiveServer(SERVERS[nextIndex].name);
-    };
 
     return (
         <div className="min-h-screen bg-slate-950 relative overflow-x-hidden">

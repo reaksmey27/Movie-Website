@@ -1,26 +1,10 @@
-import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
-import { useAuth } from '../../context/AuthContext';
+import React from 'react';
+import { Link } from 'react-router-dom';
 import { EnvelopeIcon, LockClosedIcon, UserIcon, FilmIcon } from '@heroicons/react/24/outline';
+import useAuthForm from '../../hooks/auth/useAuthForm';
 
 const SignupPage = () => {
-    const [name, setName] = useState('');
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [loading, setLoading] = useState(false);
-    const { login } = useAuth();
-    const navigate = useNavigate();
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        setLoading(true);
-        // Simulate API call
-        setTimeout(() => {
-            login({ email, name });
-            setLoading(false);
-            navigate('/');
-        }, 1500);
-    };
+    const { name, setName, email, setEmail, password, setPassword, loading, handleSubmit } = useAuthForm('signup');
 
     return (
         <div className="min-h-screen bg-slate-950 flex items-center justify-center p-4 relative overflow-hidden">
