@@ -5,7 +5,6 @@ import { HeartIcon as HeartOutline } from '@heroicons/react/24/outline';
 const MovieInfo = ({ movie, isFav, onPlay, onTrailer, onFavorite }) => {
     return (
         <div className="flex flex-col lg:flex-row gap-8 sm:gap-12 lg:gap-16 animate-in slide-in-from-left-6 duration-700">
-            {/* Poster */}
             <div className="w-full sm:w-[350px] lg:w-96 flex-shrink-0 mx-auto lg:mx-0">
                 <img
                     src={movie.image}
@@ -14,7 +13,6 @@ const MovieInfo = ({ movie, isFav, onPlay, onTrailer, onFavorite }) => {
                 />
             </div>
 
-            {/* Details */}
             <div className="flex-1 space-y-8">
                 <div className="space-y-4">
                     <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black text-white leading-[0.9] tracking-tighter">
@@ -36,7 +34,6 @@ const MovieInfo = ({ movie, isFav, onPlay, onTrailer, onFavorite }) => {
                     </div>
                 </div>
 
-                {/* Genres */}
                 <div className="flex flex-wrap gap-2 text-nowrap overflow-x-hidden">
                     {movie.genres.map((genre) => (
                         <span key={genre} className="px-4 py-1.5 bg-white/5 border border-white/10 text-gray-400 rounded-full text-[9px] sm:text-[10px] font-black uppercase tracking-widest backdrop-blur-md">
@@ -45,7 +42,6 @@ const MovieInfo = ({ movie, isFav, onPlay, onTrailer, onFavorite }) => {
                     ))}
                 </div>
 
-                {/* Storyline */}
                 <div className="space-y-3">
                     <h3 className="text-white font-black uppercase tracking-[0.3em] text-[10px] opacity-40">Storyline</h3>
                     <p className="text-gray-300 text-base sm:text-lg leading-relaxed font-medium max-w-4xl line-clamp-3 selection:bg-purple-600">
@@ -53,7 +49,6 @@ const MovieInfo = ({ movie, isFav, onPlay, onTrailer, onFavorite }) => {
                     </p>
                 </div>
 
-                {/* Actions */}
                 <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 pt-4">
                     <button
                         onClick={onPlay}

@@ -13,7 +13,6 @@ const FavoritesPage = () => {
             <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-purple-600/10 blur-[120px] rounded-full -z-10" />
 
             <div className="max-w-[1400px] mx-auto">
-                {/* Header */}
                 <div className="flex flex-col gap-10 mb-16">
                     <div className="space-y-3">
                         <h1 className="text-3xl md:text-5xl font-black text-white tracking-tighter uppercase leading-none">

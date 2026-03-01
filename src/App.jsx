@@ -14,6 +14,12 @@ import ProfilePage from "./pages/profile/ProfilePage";
 import { FavoritesProvider } from "./context/FavoritesContext";
 import { AuthProvider } from "./context/AuthContext";
 import { NotificationProvider } from "./context/NotificationContext";
+import useScrollToTop from "./hooks/useScrollToTop";
+
+const ScrollManager = () => {
+  useScrollToTop();
+  return null;
+};
 
 const App = () => {
   return (
@@ -21,6 +27,7 @@ const App = () => {
       <AuthProvider>
         <FavoritesProvider>
           <Router>
+            <ScrollManager />
             <div className="min-h-screen bg-slate-950 text-white selection:bg-purple-500/30">
               <Navbar />
               <main className="relative">

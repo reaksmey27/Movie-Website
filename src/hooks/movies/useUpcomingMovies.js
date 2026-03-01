@@ -24,7 +24,6 @@ const useUpcomingMovies = () => {
         };
 
         fetchUpcoming();
-        window.scrollTo(0, 0);
     }, []);
 
     return { movies, loading, error };

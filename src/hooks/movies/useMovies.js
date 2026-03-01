@@ -1,17 +1,34 @@
 import { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { tmdbService } from '../../services/tmdbService';
 
 const useMovies = () => {
+    const [searchParams, setSearchParams] = useSearchParams();
+
+    const page = parseInt(searchParams.get('page') || '1', 10);
+    const selectedGenre = searchParams.get('genre') ? parseInt(searchParams.get('genre'), 10) : null;
+    const searchQuery = searchParams.get('q') || '';
+
     const [movies, setMovies] = useState([]);
     const [genres, setGenres] = useState([]);
-    const [selectedGenre, setSelectedGenre] = useState(null);
-    const [searchQuery, setSearchQuery] = useState('');
     const [loading, setLoading] = useState(true);
-    const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(0);
     const [error, setError] = useState(null);
 
-    // Fetch genres once on mount
+    const updateParams = (updates) => {
+        setSearchParams((prev) => {
+            const next = new URLSearchParams(prev);
+            Object.entries(updates).forEach(([key, value]) => {
+                if (value === null || value === '' || value === undefined) {
+                    next.delete(key);
+                } else {
+                    next.set(key, String(value));
+                }
+            });
+            return next;
+        }, { replace: true });
+    };
+
     useEffect(() => {
         const fetchGenres = async () => {
             const genreData = await tmdbService.getGenres();
@@ -20,7 +37,6 @@ const useMovies = () => {
         fetchGenres();
     }, []);
 
-    // Fetch movies whenever search, genre, or page changes
     useEffect(() => {
         const fetchMovies = async () => {
             setLoading(true);
@@ -38,8 +54,6 @@ const useMovies = () => {
                     setMovies(response.results.map(tmdbService.formatMovieData));
                     setTotalPages(Math.min(response.total_pages, 100));
                 }
-
-                window.scrollTo({ top: 0, behavior: 'smooth' });
             } catch (err) {
                 console.error('Error fetching movies:', err);
                 setError('Unable to connect to the movie database. Please check your network.');
@@ -53,28 +67,23 @@ const useMovies = () => {
     }, [selectedGenre, page, searchQuery]);
 
     const handleGenreChange = (genreId) => {
-        setSearchQuery('');
-        setSelectedGenre(genreId);
-        setPage(1);
+        updateParams({ genre: genreId, page: 1, q: null });
         setError(null);
     };
 
     const handleSearch = (e) => {
-        setSearchQuery(e.target.value);
-        setSelectedGenre(null);
-        setPage(1);
+        updateParams({ q: e.target.value, genre: null, page: 1 });
         setError(null);
     };
 
     const clearSearch = () => {
-        setSearchQuery('');
-        setPage(1);
+        updateParams({ q: null, page: 1 });
         setError(null);
     };
 
     const handlePageChange = (newPage) => {
         if (newPage >= 1 && newPage <= totalPages) {
-            setPage(newPage);
+            updateParams({ page: newPage });
         }
     };
 

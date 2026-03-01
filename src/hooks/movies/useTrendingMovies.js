@@ -24,7 +24,6 @@ const useTrendingMovies = () => {
         };
 
         fetchTrending();
-        window.scrollTo(0, 0);
     }, []);
 
     return { movies, loading, error };

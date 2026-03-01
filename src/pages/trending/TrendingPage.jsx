@@ -14,7 +14,6 @@ const TrendingPage = () => {
             <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-purple-600/10 blur-[120px] rounded-full -z-10" />
 
             <div className="max-w-[1400px] mx-auto">
-                {/* Header */}
                 <div className="flex flex-col gap-4 mb-16">
                     <div className="flex items-center gap-3 mb-2">
                         <div className="p-2 bg-orange-500/20 rounded-lg">

@@ -14,7 +14,6 @@ const UpcomingPage = () => {
             <div className="absolute bottom-0 left-1/4 w-[500px] h-[500px] bg-emerald-600/10 blur-[120px] rounded-full -z-10" />
 
             <div className="max-w-[1400px] mx-auto">
-                {/* Header */}
                 <div className="flex flex-col gap-4 mb-16 border-l-4 border-blue-500 pl-8">
                     <div className="flex items-center gap-3 mb-2">
                         <div className="p-2 bg-blue-500/20 rounded-lg">

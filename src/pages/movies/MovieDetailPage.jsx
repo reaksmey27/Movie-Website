@@ -42,7 +42,6 @@ const MovieDetailPage = () => {
 
     return (
         <div className="min-h-screen bg-slate-950 relative overflow-x-hidden">
-            {/* Background image */}
             {!isPlaying && (
                 <div className="absolute inset-0 h-[50vh] sm:h-[70vh] w-full">
                     <img src={movie.image} alt="" className="w-full h-full object-cover opacity-20 sm:opacity-30" />
@@ -52,7 +51,6 @@ const MovieDetailPage = () => {
             )}
 
             <div className={`relative z-10 px-6 sm:px-12 lg:px-24 xl:px-40 ${isPlaying ? 'pt-20 sm:pt-24' : 'pt-24 sm:pt-32'} pb-20`}>
-                {/* Back button */}
                 <button
                     onClick={() => isPlaying ? setIsPlaying(false) : navigate(-1)}
                     className="mb-6 sm:mb-8 flex items-center gap-2 text-gray-400 hover:text-white transition-colors group px-4 py-2 bg-white/5 rounded-xl backdrop-blur-md border border-white/5 active:scale-95"
