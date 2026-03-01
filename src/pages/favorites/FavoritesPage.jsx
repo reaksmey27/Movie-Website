@@ -1,6 +1,6 @@
 import React from 'react';
-import { useFavorites } from '../../context/FavoritesContext';
-import MovieCard from '../../components/ui/MovieCard';
+import { useFavorites } from '@/hooks';
+import { MovieCard } from '@/components';
 import { HeartIcon } from '@heroicons/react/24/outline';
 import { Link } from 'react-router-dom';
 

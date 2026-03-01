@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
-import { useAuth } from '../../context/AuthContext';
-import { useFavorites } from '../../context/FavoritesContext';
-import { useNotification } from '../../context/NotificationContext';
+import { useAuth, useFavorites, useNotification } from '@/hooks';
 import {
     UserIcon,
     EnvelopeIcon,

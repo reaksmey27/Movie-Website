@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { useNotification } from './NotificationContext';
+import { useNotification } from '@/context/NotificationContext';
 
 const FavoritesContext = createContext();
 

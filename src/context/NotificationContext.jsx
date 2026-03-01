@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useCallback, useEffect } from 'react';
-import { CheckCircleIcon, XCircleIcon, InformationCircleIcon, ExclamationTriangleIcon, XMarkIcon, BellIcon } from '@heroicons/react/24/outline';
+import { CheckCircleIcon, XCircleIcon, InformationCircleIcon, ExclamationTriangleIcon, XMarkIcon } from '@heroicons/react/24/outline';
 
 const NotificationContext = createContext();
 
@@ -11,7 +11,6 @@ export const NotificationProvider = ({ children }) => {
     });
     const [unreadCount, setUnreadCount] = useState(0);
 
-    // Persist history and update unread count
     useEffect(() => {
         localStorage.setItem('cinema_notifications', JSON.stringify(history));
         setUnreadCount(history.filter(n => !n.read).length);
@@ -21,18 +20,13 @@ export const NotificationProvider = ({ children }) => {
         const id = Math.random().toString(36).substr(2, 9);
         const newNotif = { id, message, type, timestamp: new Date().toISOString(), read: false };
 
-        // Add to active toasts
         setNotifications((prev) => [...prev, { ...newNotif, visible: false }]);
+        setHistory(prev => [newNotif, ...prev].slice(0, 50));
 
-        // Add to persistent history
-        setHistory(prev => [newNotif, ...prev].slice(0, 50)); // Keep last 50
-
-        // Trigger entrance animation for toast
         setTimeout(() => {
             setNotifications(prev => prev.map(n => n.id === id ? { ...n, visible: true } : n));
         }, 10);
 
-        // Auto remove toast
         setTimeout(() => {
             setNotifications(prev => prev.map(n => n.id === id ? { ...n, visible: false } : n));
             setTimeout(() => {
@@ -78,8 +72,6 @@ export const NotificationProvider = ({ children }) => {
     return (
         <NotificationContext.Provider value={{ showNotification, history, unreadCount, markAllAsRead, clearHistory, getIcon }}>
             {children}
-
-            {/* Toast Portal */}
             <div className="fixed bottom-8 right-8 z-[2000] flex flex-col gap-4 pointer-events-none">
                 {notifications.map((n) => (
                     <div
