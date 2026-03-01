@@ -1,30 +1,28 @@
 import React from 'react';
 import { useFavorites } from '../../context/FavoritesContext';
-import MovieCard from '../../components/ui/MovieCard';
 import { HeartIcon } from '@heroicons/react/24/outline';
 import { Link } from 'react-router-dom';
+import MovieGrid from '../../components/ui/MovieGrid';
 
 const FavoritesPage = () => {
     const { favorites } = useFavorites();
 
     return (
         <div className="min-h-screen bg-slate-950 pt-40 pb-24 px-4 sm:px-12 lg:px-24 xl:px-40 relative overflow-hidden">
-            {/* Background Decorations */}
             <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-red-600/10 blur-[120px] rounded-full -z-10" />
             <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-purple-600/10 blur-[120px] rounded-full -z-10" />
 
             <div className="max-w-[1400px] mx-auto">
+                {/* Header */}
                 <div className="flex flex-col gap-10 mb-16">
-                    <div className="flex flex-col md:flex-row md:items-end justify-between gap-8">
-                        <div className="space-y-3">
-                            <h1 className="text-3xl md:text-5xl font-black text-white tracking-tighter uppercase leading-none">
-                                Your <span className="text-red-500 text-6xl">❤</span> <br />
-                                <span className="text-purple-500">Favorites</span>
-                            </h1>
-                            <p className="text-gray-400 text-sm max-w-sm font-medium">
-                                Your personal collection of cinematic masterpieces. Ready to watch whenever you are.
-                            </p>
-                        </div>
+                    <div className="space-y-3">
+                        <h1 className="text-3xl md:text-5xl font-black text-white tracking-tighter uppercase leading-none">
+                            Your <span className="text-red-500 text-6xl">❤</span> <br />
+                            <span className="text-purple-500">Favorites</span>
+                        </h1>
+                        <p className="text-gray-400 text-sm max-w-sm font-medium">
+                            Your personal collection of cinematic masterpieces. Ready to watch whenever you are.
+                        </p>
                     </div>
                 </div>
 
@@ -43,17 +41,7 @@ const FavoritesPage = () => {
                         </Link>
                     </div>
                 ) : (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-8 gap-y-12">
-                        {favorites.map((movie, index) => (
-                            <div
-                                key={`${movie.id}-${index}`}
-                                className="animate-in fade-in slide-in-from-bottom-4 duration-500"
-                                style={{ animationDelay: `${index * 50}ms` }}
-                            >
-                                <MovieCard movie={movie} />
-                            </div>
-                        ))}
-                    </div>
+                    <MovieGrid movies={favorites} />
                 )}
             </div>
         </div>

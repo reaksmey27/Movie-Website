@@ -1,7 +1,9 @@
 import React from 'react';
-import MovieCard from '../../components/ui/MovieCard';
 import { FireIcon } from '@heroicons/react/24/outline';
 import useTrendingMovies from '../../hooks/movies/useTrendingMovies';
+import MovieGrid from '../../components/ui/MovieGrid';
+import PageLoader from '../../components/ui/PageLoader';
+import PageError from '../../components/ui/PageError';
 
 const TrendingPage = () => {
     const { movies, loading, error } = useTrendingMovies();
@@ -12,6 +14,7 @@ const TrendingPage = () => {
             <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-purple-600/10 blur-[120px] rounded-full -z-10" />
 
             <div className="max-w-[1400px] mx-auto">
+                {/* Header */}
                 <div className="flex flex-col gap-4 mb-16">
                     <div className="flex items-center gap-3 mb-2">
                         <div className="p-2 bg-orange-500/20 rounded-lg">
@@ -29,36 +32,11 @@ const TrendingPage = () => {
                 </div>
 
                 {error ? (
-                    <div className="flex flex-col items-center justify-center min-h-[400px] text-center border-2 border-orange-500/10 bg-orange-500/5 rounded-3xl p-12">
-                        <div className="w-16 h-16 bg-orange-500/20 rounded-full flex items-center justify-center mb-6">
-                            <FireIcon className="h-8 w-8 text-orange-500" />
-                        </div>
-                        <h3 className="text-2xl font-black text-white mb-2 uppercase italic tracking-tighter">Sync Error</h3>
-                        <p className="text-gray-500 font-medium max-w-sm">{error}</p>
-                        <button
-                            onClick={() => window.location.reload()}
-                            className="mt-8 px-10 py-4 bg-orange-500 text-white rounded-2xl font-black uppercase tracking-widest text-xs hover:bg-orange-600 transition-all shadow-xl shadow-orange-500/20 active:scale-95"
-                        >
-                            Retry Sync
-                        </button>
-                    </div>
+                    <PageError message={error} buttonLabel="Retry Sync" buttonColor="bg-orange-500 text-white hover:bg-orange-600" icon={FireIcon} iconColor="text-orange-500" borderColor="border-orange-500/10 bg-orange-500/5" />
                 ) : loading ? (
-                    <div className="flex flex-col items-center justify-center min-h-[400px] gap-4">
-                        <div className="w-12 h-12 border-4 border-orange-600 border-t-transparent rounded-full animate-spin shadow-[0_0_15px_rgba(249,115,22,0.3)]"></div>
-                        <span className="text-gray-500 font-black uppercase tracking-widest text-[10px]">Lighting the fire...</span>
-                    </div>
+                    <PageLoader color="border-orange-600" label="Lighting the fire..." glow="shadow-[0_0_15px_rgba(249,115,22,0.3)]" />
                 ) : (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-8 gap-y-12">
-                        {movies.map((movie, index) => (
-                            <div
-                                key={`${movie.id}-${index}`}
-                                className="animate-in fade-in slide-in-from-bottom-4 duration-700"
-                                style={{ animationDelay: `${index * 50}ms` }}
-                            >
-                                <MovieCard movie={movie} />
-                            </div>
-                        ))}
-                    </div>
+                    <MovieGrid movies={movies} />
                 )}
             </div>
         </div>

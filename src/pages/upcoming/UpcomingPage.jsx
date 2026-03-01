@@ -1,7 +1,9 @@
 import React from 'react';
-import MovieCard from '../../components/ui/MovieCard';
 import { CalendarDaysIcon, SparklesIcon } from '@heroicons/react/24/outline';
 import useUpcomingMovies from '../../hooks/movies/useUpcomingMovies';
+import MovieGrid from '../../components/ui/MovieGrid';
+import PageLoader from '../../components/ui/PageLoader';
+import PageError from '../../components/ui/PageError';
 
 const UpcomingPage = () => {
     const { movies, loading, error } = useUpcomingMovies();
@@ -12,6 +14,7 @@ const UpcomingPage = () => {
             <div className="absolute bottom-0 left-1/4 w-[500px] h-[500px] bg-emerald-600/10 blur-[120px] rounded-full -z-10" />
 
             <div className="max-w-[1400px] mx-auto">
+                {/* Header */}
                 <div className="flex flex-col gap-4 mb-16 border-l-4 border-blue-500 pl-8">
                     <div className="flex items-center gap-3 mb-2">
                         <div className="p-2 bg-blue-500/20 rounded-lg">
@@ -29,36 +32,11 @@ const UpcomingPage = () => {
                 </div>
 
                 {error ? (
-                    <div className="flex flex-col items-center justify-center min-h-[400px] text-center border-2 border-blue-500/10 bg-blue-500/5 rounded-3xl p-12">
-                        <div className="w-16 h-16 bg-blue-500/20 rounded-full flex items-center justify-center mb-6">
-                            <CalendarDaysIcon className="h-8 w-8 text-blue-500" />
-                        </div>
-                        <h3 className="text-2xl font-black text-white mb-2 uppercase italic tracking-tighter">Timeline Error</h3>
-                        <p className="text-gray-500 font-medium max-w-sm">{error}</p>
-                        <button
-                            onClick={() => window.location.reload()}
-                            className="mt-8 px-10 py-4 bg-blue-500 text-white rounded-2xl font-black uppercase tracking-widest text-xs hover:bg-blue-600 transition-all shadow-xl shadow-blue-500/20 active:scale-95"
-                        >
-                            Retry Loading
-                        </button>
-                    </div>
+                    <PageError message={error} buttonLabel="Retry Loading" buttonColor="bg-blue-500 text-white hover:bg-blue-600" icon={CalendarDaysIcon} iconColor="text-blue-500" borderColor="border-blue-500/10 bg-blue-500/5" />
                 ) : loading ? (
-                    <div className="flex flex-col items-center justify-center min-h-[400px] gap-4">
-                        <div className="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin shadow-[0_0_15px_rgba(37,99,235,0.3)]"></div>
-                        <span className="text-gray-500 font-black uppercase tracking-widest text-[10px]">Consulting the future...</span>
-                    </div>
+                    <PageLoader color="border-blue-600" label="Consulting the future..." glow="shadow-[0_0_15px_rgba(37,99,235,0.3)]" />
                 ) : (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-8 gap-y-12">
-                        {movies.map((movie, index) => (
-                            <div
-                                key={`${movie.id}-${index}`}
-                                className="animate-in fade-in slide-in-from-bottom-4 duration-700"
-                                style={{ animationDelay: `${index * 50}ms` }}
-                            >
-                                <MovieCard movie={movie} />
-                            </div>
-                        ))}
-                    </div>
+                    <MovieGrid movies={movies} />
                 )}
             </div>
         </div>
