@@ -1,7 +1,15 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { useFavorites } from "../../context/FavoritesContext";
-import { PlayCircleIcon, HeartIcon, StarIcon, PlayIcon, XMarkIcon, ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/solid";
+import {
+  PlayCircleIcon,
+  HeartIcon,
+  StarIcon,
+  PlayIcon,
+  XMarkIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon,
+} from "@heroicons/react/24/solid";
 import { HeartIcon as HeartOutline } from "@heroicons/react/24/outline";
 
 const HeroSection = ({ trendingMovies = [] }) => {
@@ -12,6 +20,24 @@ const HeroSection = ({ trendingMovies = [] }) => {
   const [fade, setFade] = useState(true);
   const [showTrailer, setShowTrailer] = useState(false);
 
+  const handleNext = useCallback(() => {
+    setFade(false);
+    setTimeout(() => {
+      setCurrentIndex((prev) => (prev + 1) % FEATURED_MOVIES.length);
+      setFade(true);
+    }, 600);
+  }, [FEATURED_MOVIES.length]);
+
+  const handlePrev = useCallback(() => {
+    setFade(false);
+    setTimeout(() => {
+      setCurrentIndex((prev) =>
+        prev === 0 ? FEATURED_MOVIES.length - 1 : prev - 1,
+      );
+      setFade(true);
+    }, 600);
+  }, [FEATURED_MOVIES.length]);
+
   useEffect(() => {
     if (FEATURED_MOVIES.length === 0 || showTrailer) return;
 
@@ -20,23 +46,7 @@ const HeroSection = ({ trendingMovies = [] }) => {
     }, 8000);
 
     return () => clearInterval(interval);
-  }, [FEATURED_MOVIES.length, showTrailer]);
-
-  const handleNext = () => {
-    setFade(false);
-    setTimeout(() => {
-      setCurrentIndex((prev) => (prev + 1) % FEATURED_MOVIES.length);
-      setFade(true);
-    }, 600);
-  };
-
-  const handlePrev = () => {
-    setFade(false);
-    setTimeout(() => {
-      setCurrentIndex((prev) => (prev === 0 ? FEATURED_MOVIES.length - 1 : prev - 1));
-      setFade(true);
-    }, 600);
-  };
+  }, [FEATURED_MOVIES.length, showTrailer, handleNext]);
 
   if (FEATURED_MOVIES.length === 0) return null;
 
@@ -45,22 +55,28 @@ const HeroSection = ({ trendingMovies = [] }) => {
 
   return (
     <section className="relative min-h-[90vh] sm:h-screen w-full bg-black flex items-center overflow-hidden">
-      <div className={`absolute inset-0 z-0 transition-opacity duration-1000 ${fade ? "opacity-60" : "opacity-0"}`}>
-        <img src={movie.image} alt="" className="w-full h-full object-cover sm:object-center" />
+      <div
+        className={`absolute inset-0 z-0 transition-opacity duration-1000 ${fade ? "opacity-60" : "opacity-0"}`}
+      >
+        <img
+          src={movie.image}
+          alt=""
+          className="w-full h-full object-cover sm:object-center"
+        />
         <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent" />
         <div className="absolute inset-0 bg-gradient-to-r from-slate-950 via-slate-950/20 to-transparent" />
       </div>
 
-      <div className={`relative z-10 px-6 sm:px-12 lg:px-24 xl:px-40 mt-32 sm:mt-16 max-w-7xl transition-all duration-700 ease-out transform 
-        ${fade ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-12"}`}>
-
+      <div
+        className={`relative z-10 px-6 sm:px-12 lg:px-24 xl:px-40 mt-32 sm:mt-16 max-w-7xl transition-all duration-700 ease-out transform 
+        ${fade ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-12"}`}
+      >
         <h2 className="text-3xl sm:text-5xl lg:text-6xl font-black text-white leading-[0.9] tracking-tighter mb-4 sm:mb-6 drop-shadow-2xl">
           {movie.title} <br className="hidden sm:block" />
           <span className="text-white/60 text-lg sm:text-3xl lg:text-4xl font-bold tracking-tight block sm:inline mt-2 sm:mt-0">
             {movie.subtitle}
           </span>
         </h2>
-
 
         <div className="flex flex-wrap items-center gap-3 sm:gap-4 mb-6 sm:mb-8">
           <span className="bg-purple-600 text-white text-[9px] sm:text-[10px] px-2 py-1 rounded-lg font-black uppercase tracking-widest shadow-lg">
@@ -72,7 +88,10 @@ const HeroSection = ({ trendingMovies = [] }) => {
           </div>
           <div className="flex flex-wrap gap-2">
             {movie.genres.slice(0, 2).map((genre) => (
-              <span key={genre} className="bg-white/5 border border-white/10 text-gray-300 px-3 py-0.5 rounded-lg text-[9px] sm:text-[10px] font-black uppercase tracking-widest backdrop-blur-md">
+              <span
+                key={genre}
+                className="bg-white/5 border border-white/10 text-gray-300 px-3 py-0.5 rounded-lg text-[9px] sm:text-[10px] font-black uppercase tracking-widest backdrop-blur-md"
+              >
                 {genre}
               </span>
             ))}
@@ -107,13 +126,20 @@ const HeroSection = ({ trendingMovies = [] }) => {
 
             <button
               onClick={() => toggleFavorite(movie)}
-              className={`flex-shrink-0 flex items-center justify-center gap-4 px-6 sm:px-10 py-4 sm:py-5 rounded-2xl font-black transition-all backdrop-blur-xl active:scale-95 border-2 ${isFav
-                ? "bg-red-500/20 border-red-500 text-red-500 shadow-lg shadow-red-500/20"
-                : "bg-white/5 border-white/10 text-white hover:bg-white/10"
-                }`}
+              className={`flex-shrink-0 flex items-center justify-center gap-4 px-6 sm:px-10 py-4 sm:py-5 rounded-2xl font-black transition-all backdrop-blur-xl active:scale-95 border-2 ${
+                isFav
+                  ? "bg-red-500/20 border-red-500 text-red-500 shadow-lg shadow-red-500/20"
+                  : "bg-white/5 border-white/10 text-white hover:bg-white/10"
+              }`}
             >
-              {isFav ? <HeartIcon className="h-5 w-5 sm:h-6 sm:w-6" /> : <HeartOutline className="h-5 w-5 sm:h-6 sm:w-6" />}
-              <span className="hidden sm:inline uppercase tracking-[0.2em] text-[10px] sm:text-xs">Favorite</span>
+              {isFav ? (
+                <HeartIcon className="h-5 w-5 sm:h-6 sm:w-6" />
+              ) : (
+                <HeartOutline className="h-5 w-5 sm:h-6 sm:w-6" />
+              )}
+              <span className="hidden sm:inline uppercase tracking-[0.2em] text-[10px] sm:text-xs">
+                Favorite
+              </span>
             </button>
           </div>
         </div>
@@ -147,8 +173,11 @@ const HeroSection = ({ trendingMovies = [] }) => {
                 setFade(true);
               }, 400);
             }}
-            className={`h-1.5 transition-all duration-500 rounded-full ${idx === currentIndex ? "w-10 sm:w-14 bg-purple-600 shadow-lg shadow-purple-500/50" : "w-2 sm:w-3 bg-white/20"
-              }`}
+            className={`h-1.5 transition-all duration-500 rounded-full ${
+              idx === currentIndex
+                ? "w-10 sm:w-14 bg-purple-600 shadow-lg shadow-purple-500/50"
+                : "w-2 sm:w-3 bg-white/20"
+            }`}
           />
         ))}
       </div>

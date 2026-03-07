@@ -2,6 +2,11 @@ const API_KEY = import.meta.env.VITE_TMDB_API_KEY;
 const BASE_URL = 'https://api.themoviedb.org/3';
 const IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/original';
 
+// Validate API key on module load
+if (!API_KEY) {
+    console.error('TMDB API Key is missing! Please add VITE_TMDB_API_KEY to your .env file');
+}
+
 const fetchFromTMDB = async (endpoint, params = {}) => {
     const queryParams = new URLSearchParams({
         api_key: API_KEY,

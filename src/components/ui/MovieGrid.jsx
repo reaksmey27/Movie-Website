@@ -1,5 +1,5 @@
 import React from 'react';
-import MovieCard from '../../../components/ui/MovieCard';
+import MovieCard from './MovieCard';
 
 const MovieGrid = ({ movies, onReset }) => {
     if (movies.length === 0) {

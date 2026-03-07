@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
-import { UserIcon, BellIcon, FilmIcon, ArrowLeftOnRectangleIcon, TrashIcon, Bars3Icon, XMarkIcon } from "@heroicons/react/24/solid";
+import { UserIcon, BellIcon, ArrowLeftOnRectangleIcon, TrashIcon, Bars3Icon, XMarkIcon } from "@heroicons/react/24/solid";
 import { useAuth } from "../../context/AuthContext";
 import { useNotification } from "../../context/NotificationContext";
 

@@ -14,6 +14,7 @@ import ProfilePage from "./pages/profile/ProfilePage";
 import { FavoritesProvider } from "./context/FavoritesContext";
 import { AuthProvider } from "./context/AuthContext";
 import { NotificationProvider } from "./context/NotificationContext";
+import ErrorBoundary from "./components/ErrorBoundary";
 import useScrollToTop from "./hooks/useScrollToTop";
 
 const ScrollManager = () => {
@@ -23,32 +24,34 @@ const ScrollManager = () => {
 
 const App = () => {
   return (
-    <NotificationProvider>
-      <AuthProvider>
-        <FavoritesProvider>
-          <Router>
-            <ScrollManager />
-            <div className="min-h-screen bg-slate-950 text-white selection:bg-purple-500/30">
-              <Navbar />
-              <main className="relative">
-                <Routes>
-                  <Route path="/" element={<HomePage />} />
-                  <Route path="/movies" element={<MoviesPage />} />
-                  <Route path="/trending" element={<TrendingPage />} />
-                  <Route path="/upcoming" element={<UpcomingPage />} />
-                  <Route path="/favorites" element={<FavoritesPage />} />
-                  <Route path="/profile" element={<ProfilePage />} />
-                  <Route path="/login" element={<LoginPage />} />
-                  <Route path="/signup" element={<SignupPage />} />
-                  <Route path="/movie/:id" element={<MovieDetailPage />} />
-                </Routes>
-              </main>
-              <Footer />
-            </div>
-          </Router>
-        </FavoritesProvider>
-      </AuthProvider>
-    </NotificationProvider>
+    <ErrorBoundary>
+      <NotificationProvider>
+        <AuthProvider>
+          <FavoritesProvider>
+            <Router>
+              <ScrollManager />
+              <div className="min-h-screen bg-slate-950 text-white selection:bg-purple-500/30">
+                <Navbar />
+                <main className="relative">
+                  <Routes>
+                    <Route path="/" element={<HomePage />} />
+                    <Route path="/movies" element={<MoviesPage />} />
+                    <Route path="/trending" element={<TrendingPage />} />
+                    <Route path="/upcoming" element={<UpcomingPage />} />
+                    <Route path="/favorites" element={<FavoritesPage />} />
+                    <Route path="/profile" element={<ProfilePage />} />
+                    <Route path="/login" element={<LoginPage />} />
+                    <Route path="/signup" element={<SignupPage />} />
+                    <Route path="/movie/:id" element={<MovieDetailPage />} />
+                  </Routes>
+                </main>
+                <Footer />
+              </div>
+            </Router>
+          </FavoritesProvider>
+        </AuthProvider>
+      </NotificationProvider>
+    </ErrorBoundary>
   );
 };
 
