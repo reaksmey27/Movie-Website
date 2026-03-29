@@ -1,16 +1,60 @@
-# React + Vite
+# Movie Website
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A React-based movie website powered by TMDB API.
 
-Currently, two official plugins are available:
+## Setup
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### Prerequisites
 
-## React Compiler
+- Node.js (v16 or higher)
+- npm or yarn
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### Installation
 
-## Expanding the ESLint configuration
+1. Clone the repository
+2. Install dependencies:
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+   ```bash
+   npm install
+   ```
+
+3. **Configure TMDB API Key (Required):**
+
+   The application requires a valid TMDB API key to fetch movie data.
+   - Get your free API key from [TMDB](https://www.themoviedb.org/settings/api)
+   - Open the `.env` file in the root directory
+   - Replace `your_valid_tmdb_api_key_here` with your actual API key:
+     ```
+     VITE_TMDB_API_KEY=your_actual_api_key_here
+     ```
+
+4. Start the development server:
+   ```bash
+   npm run dev
+   ```
+
+## Troubleshooting
+
+### "Failed to sync with cinematic database" Error
+
+This error occurs when the TMDB API key is missing or invalid. To fix:
+
+1. Verify your `.env` file contains a valid `VITE_TMDB_API_KEY`
+2. Ensure the API key is correct and not expired
+3. Restart the development server after updating the `.env` file
+
+### Network Errors
+
+If you encounter network errors:
+
+- Check your internet connection
+- Try using a VPN if TMDB is blocked in your region
+- Verify that `api.themoviedb.org` is accessible
+
+## Tech Stack
+
+- React 18
+- Vite
+- TMDB API
+- React Router
+- Context API for state management

@@ -6,6 +6,9 @@ import useMovieDetail from '../../hooks/movies/useMovieDetail';
 import MovieInfo from './components/MovieInfo';
 import MoviePlayer from './components/MoviePlayer';
 import TrailerModal from './components/TrailerModal';
+import PageLoader from '../../components/ui/PageLoader';
+import PageError from '../../components/ui/PageError';
+import { XMarkIcon } from '@heroicons/react/24/outline';
 
 const MovieDetailPage = () => {
     const { id } = useParams();
@@ -22,20 +25,17 @@ const MovieDetailPage = () => {
     } = useMovieDetail(id);
 
     if (loading) {
-        return (
-            <div className="flex items-center justify-center min-h-screen bg-slate-950">
-                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-purple-500 shadow-[0_0_20px_rgba(168,85,247,0.5)]" />
-            </div>
-        );
+        return <PageLoader color="border-purple-500" label="Loading Movie Details..." />;
     }
 
     if (!movie) {
         return (
-            <div className="flex flex-col items-center justify-center min-h-screen bg-slate-950 text-white p-6 text-center">
-                <h2 className="text-2xl font-black mb-4 uppercase">Movie not found</h2>
-                <button onClick={() => navigate(-1)} className="px-8 py-3 bg-purple-600 rounded-xl font-bold active:scale-95">
-                    Go Back
-                </button>
+            <div className="pt-32 pb-20 px-6 sm:px-12 lg:px-24 xl:px-40 min-h-screen bg-slate-950 flex flex-col items-center justify-center">
+                <PageError 
+                    message="Movie not found" 
+                    buttonLabel="Go Back"
+                    icon={XMarkIcon}
+                />
             </div>
         );
     }

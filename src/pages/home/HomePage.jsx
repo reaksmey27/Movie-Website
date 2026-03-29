@@ -1,17 +1,15 @@
 import React from "react";
-import HeroSection from "./HeroSection";
-import MovieSlider from "./MovieSlider";
+import HeroSection from "./components/HeroSection";
+import MovieSlider from "./components/MovieSlider";
 import useHomeMovies from "../../hooks/movies/useHomeMovies";
+import PageLoader from "../../components/ui/PageLoader";
+import PageError from "../../components/ui/PageError";
 
 const HomePage = () => {
-  const { movies, loading, error } = useHomeMovies();
+  const { movies, loading, error, retry } = useHomeMovies();
 
   if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen bg-slate-950">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-purple-500 shadow-[0_0_20px_rgba(168,85,247,0.5)]"></div>
-      </div>
-    );
+    return <PageLoader color="border-purple-500" label="Loading Movies..." />;
   }
 
   return (
@@ -25,10 +23,7 @@ const HomePage = () => {
       <div className="relative z-30 mt-20 pb-20 space-y-16">
         {error && (
           <div className="mx-4 sm:mx-12 lg:px-24 xl:px-40 py-2">
-            <div className="p-4 bg-red-500/10 border border-red-500/20 rounded-xl text-red-400 text-sm flex items-center gap-3">
-              <span className="w-2 h-2 bg-red-500 rounded-full animate-pulse" />
-              {error}
-            </div>
+            <PageError message={error} buttonLabel="Try Again" onRetry={retry} />
           </div>
         )}
 

@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/outline';
-import MovieCard from "../../components/ui/MovieCard";
+import MovieCard from "../../../components/ui/MovieCard";
 
 const MovieSlider = ({ title, movies = [] }) => {
   const sliderRef = useRef(null);

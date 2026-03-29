@@ -3,8 +3,9 @@ const BASE_URL = 'https://api.themoviedb.org/3';
 const IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/original';
 
 // Validate API key on module load
-if (!API_KEY) {
-    console.error('TMDB API Key is missing! Please add VITE_TMDB_API_KEY to your .env file');
+if (!API_KEY || API_KEY === '332625e9a1fcfb93329932bfebe2ba33') {
+    console.error('TMDB API Key is missing or invalid! Please add a valid VITE_TMDB_API_KEY to your .env file');
+    console.error('Get your API key from: https://www.themoviedb.org/settings/api');
 }
 
 const fetchFromTMDB = async (endpoint, params = {}) => {
@@ -13,11 +14,38 @@ const fetchFromTMDB = async (endpoint, params = {}) => {
         ...params,
     });
 
-    const response = await fetch(`${BASE_URL}${endpoint}?${queryParams}`);
-    if (!response.ok) {
-        throw new Error(`TMDB API Error: ${response.status}`);
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 15000);
+
+    try {
+        const response = await fetch(`${BASE_URL}${endpoint}?${queryParams}`, {
+            signal: controller.signal
+        });
+        clearTimeout(timeoutId);
+
+        if (!response.ok) {
+            if (response.status === 401) {
+                throw new Error('Invalid API key. Please check your TMDB API key in the .env file.');
+            }
+            if (response.status === 429) {
+                throw new Error('API rate limit exceeded. Please try again later.');
+            }
+            if (response.status >= 500) {
+                throw new Error('TMDB service is currently unavailable. Please try again later.');
+            }
+            throw new Error(`TMDB API Error: ${response.status}`);
+        }
+        return await response.json();
+    } catch (error) {
+        clearTimeout(timeoutId);
+        if (error.name === 'AbortError') {
+            throw new Error('Request timed out. Please check your internet connection.');
+        }
+        if (error.message.includes('Failed to fetch') || error.message.includes('NetworkError')) {
+            throw new Error('Network error. Please check your internet connection or try using a VPN.');
+        }
+        throw error;
     }
-    return await response.json();
 };
 
 
