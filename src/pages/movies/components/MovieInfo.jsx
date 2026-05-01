@@ -7,9 +7,11 @@ const MovieInfo = ({ movie, isFav, onPlay, onTrailer, onFavorite }) => {
         <div className="flex flex-col lg:flex-row gap-8 sm:gap-12 lg:gap-16 animate-in slide-in-from-left-6 duration-700">
             <div className="w-full sm:w-[350px] lg:w-96 flex-shrink-0 mx-auto lg:mx-0">
                 <img
-                    src={movie.image}
+                    src={movie.posterImage || movie.image}
                     alt={movie.title}
                     className="w-full rounded-2xl sm:rounded-[2rem] border border-white/10 shadow-2xl transition-transform hover:scale-[1.01] duration-500"
+                    loading="eager"
+                    decoding="async"
                 />
             </div>
 

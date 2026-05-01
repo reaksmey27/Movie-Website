@@ -1,57 +1,83 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
-import { useNotification } from './NotificationContext';
+/* eslint-disable react-refresh/only-export-components */
+import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
+import { useNotification } from "./NotificationContext";
 
 const FavoritesContext = createContext();
 
 export const FavoritesProvider = ({ children }) => {
-    const { showNotification } = useNotification();
-    const [favorites, setFavorites] = useState(() => {
-        const saved = localStorage.getItem('movie_favorites');
-        return saved ? JSON.parse(saved) : [];
-    });
+  const { showNotification } = useNotification();
+  const [favorites, setFavorites] = useState(() => {
+    const saved = localStorage.getItem("movie_favorites");
+    return saved ? JSON.parse(saved) : [];
+  });
 
-    useEffect(() => {
-        localStorage.setItem('movie_favorites', JSON.stringify(favorites));
-    }, [favorites]);
+  useEffect(() => {
+    localStorage.setItem("movie_favorites", JSON.stringify(favorites));
+  }, [favorites]);
 
-    const addToFavorites = (movie) => {
-        if (favorites.some((m) => m.id === movie.id)) return;
+  const favoriteIds = useMemo(
+    () => new Set(favorites.map((movie) => movie.id)),
+    [favorites],
+  );
 
-        setFavorites((prev) => [...prev, movie]);
-        showNotification(`${movie.title} added to your collection!`, 'success');
-    };
+  const addToFavorites = useCallback(
+    (movie) => {
+      if (favoriteIds.has(movie.id)) {
+        return;
+      }
 
-    const removeFromFavorites = (movieId) => {
-        const movie = favorites.find(m => m.id === movieId);
-        if (movie) {
-            setFavorites((prev) => prev.filter((m) => m.id !== movieId));
-            showNotification(`Removed ${movie.title} from favorites.`, 'info');
-        }
-    };
+      setFavorites((prev) => [...prev, movie]);
+      showNotification(`${movie.title} added to your collection!`, "success");
+    },
+    [favoriteIds, showNotification],
+  );
 
-    const isFavorite = (movieId) => {
-        return favorites.some((m) => m.id === movieId);
-    };
+  const removeFromFavorites = useCallback(
+    (movieId) => {
+      const movie = favorites.find((favorite) => favorite.id === movieId);
+      if (!movie) {
+        return;
+      }
 
-    const toggleFavorite = (movie) => {
-        if (isFavorite(movie.id)) {
-            removeFromFavorites(movie.id);
-        } else {
-            addToFavorites(movie);
-        }
-    };
+      setFavorites((prev) => prev.filter((favorite) => favorite.id !== movieId));
+      showNotification(`Removed ${movie.title} from favorites.`, "info");
+    },
+    [favorites, showNotification],
+  );
 
-    return (
-        <FavoritesContext.Provider value={{ favorites, toggleFavorite, isFavorite }}>
-            {children}
-        </FavoritesContext.Provider>
-    );
+  const isFavorite = useCallback(
+    (movieId) => favoriteIds.has(movieId),
+    [favoriteIds],
+  );
+
+  const toggleFavorite = useCallback(
+    (movie) => {
+      if (favoriteIds.has(movie.id)) {
+        removeFromFavorites(movie.id);
+        return;
+      }
+
+      addToFavorites(movie);
+    },
+    [addToFavorites, favoriteIds, removeFromFavorites],
+  );
+
+  const value = useMemo(
+    () => ({
+      favorites,
+      toggleFavorite,
+      isFavorite,
+    }),
+    [favorites, isFavorite, toggleFavorite],
+  );
+
+  return <FavoritesContext.Provider value={value}>{children}</FavoritesContext.Provider>;
 };
 
 export const useFavorites = () => {
-    const context = useContext(FavoritesContext);
-    if (!context) {
-        throw new Error('useFavorites must be used within a FavoritesProvider');
-    }
-    return context;
+  const context = useContext(FavoritesContext);
+  if (!context) {
+    throw new Error("useFavorites must be used within a FavoritesProvider");
+  }
+  return context;
 };

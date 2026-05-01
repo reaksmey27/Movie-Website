@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { tmdbService } from '../../services/tmdbService';
+import { useEffect, useState } from "react";
+import { tmdbService } from "../../services/tmdbService";
 import { Retrier } from "@humanwhocodes/retry";
 
 const retrier = new Retrier((error) => {
@@ -13,15 +13,22 @@ const useUpcomingMovies = () => {
     const [error, setError] = useState(null);
 
     useEffect(() => {
+        let ignore = false;
+
         const fetchUpcoming = async () => {
             setLoading(true);
+            setError(null);
             try {
                 const response = await retrier.retry(() => tmdbService.getUpcomingMovies());
                 const results = Array.isArray(response) ? response : (response?.results || []);
-                if (results.length > 0) {
+                if (!ignore && results.length > 0) {
                     setMovies(results.map(tmdbService.formatMovieData));
                 }
             } catch (err) {
+                if (ignore) {
+                    return;
+                }
+
                 console.error('Error fetching upcoming movies:', err);
                 let errorMessage = "Could not predict the future.";
 
@@ -33,11 +40,16 @@ const useUpcomingMovies = () => {
 
                 setError(errorMessage);
             } finally {
-                setLoading(false);
+                if (!ignore) {
+                    setLoading(false);
+                }
             }
         };
 
         fetchUpcoming();
+        return () => {
+            ignore = true;
+        };
     }, []);
 
     return { movies, loading, error };

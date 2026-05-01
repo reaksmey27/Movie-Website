@@ -1,5 +1,5 @@
-import React from 'react';
-import MovieCard from './MovieCard';
+import React, { memo } from "react";
+import MovieCard from "./MovieCard";
 
 const MovieGrid = ({ movies, onReset }) => {
     if (movies.length === 0) {
@@ -23,7 +23,7 @@ const MovieGrid = ({ movies, onReset }) => {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-8 gap-y-12">
             {movies.map((movie, index) => (
                 <div
-                    key={`${movie.id}-${index}`}
+                    key={movie.id}
                     className="animate-in fade-in slide-in-from-bottom-4 duration-500"
                     style={{ animationDelay: `${index * 50}ms` }}
                 >
@@ -34,4 +34,4 @@ const MovieGrid = ({ movies, onReset }) => {
     );
 };
 
-export default MovieGrid;
+export default memo(MovieGrid);

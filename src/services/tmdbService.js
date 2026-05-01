@@ -1,150 +1,267 @@
 const API_KEY = import.meta.env.VITE_TMDB_API_KEY;
-const BASE_URL = 'https://api.themoviedb.org/3';
-const IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/original';
+const BASE_URL = "https://api.themoviedb.org/3";
+const IMAGE_BASE_URL = "https://image.tmdb.org/t/p";
+const DEFAULT_CACHE_TTL = 5 * 60 * 1000;
+const LONG_CACHE_TTL = 30 * 60 * 1000;
+const GENRE_CACHE_TTL = 24 * 60 * 60 * 1000;
+const responseCache = new Map();
+const pendingRequests = new Map();
 
 // Validate API key on module load
-if (!API_KEY || API_KEY === '332625e9a1fcfb93329932bfebe2ba33') {
-    console.error('TMDB API Key is missing or invalid! Please add a valid VITE_TMDB_API_KEY to your .env file');
-    console.error('Get your API key from: https://www.themoviedb.org/settings/api');
+if (!API_KEY || API_KEY === "332625e9a1fcfb93329932bfebe2ba33") {
+  console.error(
+    "TMDB API Key is missing or invalid! Please add a valid VITE_TMDB_API_KEY to your .env file",
+  );
+  console.error("Get your API key from: https://www.themoviedb.org/settings/api");
 }
 
-const fetchFromTMDB = async (endpoint, params = {}) => {
-    const queryParams = new URLSearchParams({
-        api_key: API_KEY,
-        ...params,
-    });
+const buildCacheKey = (endpoint, params) => {
+  const sortedParams = Object.entries(params)
+    .filter(([, value]) => value !== undefined && value !== null && value !== "")
+    .sort(([a], [b]) => a.localeCompare(b));
 
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 15000);
+  return JSON.stringify([endpoint, sortedParams]);
+};
 
-    try {
-        const response = await fetch(`${BASE_URL}${endpoint}?${queryParams}`, {
-            signal: controller.signal
-        });
-        clearTimeout(timeoutId);
+const getCachedResponse = (cacheKey) => {
+  const cached = responseCache.get(cacheKey);
+  if (!cached) {
+    return null;
+  }
 
-        if (!response.ok) {
-            if (response.status === 401) {
-                throw new Error('Invalid API key. Please check your TMDB API key in the .env file.');
-            }
-            if (response.status === 429) {
-                throw new Error('API rate limit exceeded. Please try again later.');
-            }
-            if (response.status >= 500) {
-                throw new Error('TMDB service is currently unavailable. Please try again later.');
-            }
-            throw new Error(`TMDB API Error: ${response.status}`);
-        }
-        return await response.json();
-    } catch (error) {
-        clearTimeout(timeoutId);
-        if (error.name === 'AbortError') {
-            throw new Error('Request timed out. Please check your internet connection.');
-        }
-        if (error.message.includes('Failed to fetch') || error.message.includes('NetworkError')) {
-            throw new Error('Network error. Please check your internet connection or try using a VPN.');
-        }
-        throw error;
+  if (cached.expiresAt <= Date.now()) {
+    responseCache.delete(cacheKey);
+    return null;
+  }
+
+  return cached.data;
+};
+
+const setCachedResponse = (cacheKey, data, ttl) => {
+  responseCache.set(cacheKey, {
+    data,
+    expiresAt: Date.now() + ttl,
+  });
+};
+
+const fetchFromTMDB = async (
+  endpoint,
+  params = {},
+  { ttl = DEFAULT_CACHE_TTL, forceRefresh = false } = {},
+) => {
+  const cacheKey = buildCacheKey(endpoint, params);
+
+  if (!forceRefresh) {
+    const cached = getCachedResponse(cacheKey);
+    if (cached) {
+      return cached;
     }
+    const pendingRequest = pendingRequests.get(cacheKey);
+    if (pendingRequest) {
+      return pendingRequest;
+    }
+  }
+
+  const queryParams = new URLSearchParams({
+    api_key: API_KEY,
+    ...params,
+  });
+
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 15000);
+
+  const request = (async () => {
+    try {
+      const response = await fetch(`${BASE_URL}${endpoint}?${queryParams}`, {
+        signal: controller.signal,
+      });
+
+      if (!response.ok) {
+        if (response.status === 401) {
+          throw new Error(
+            "Invalid API key. Please check your TMDB API key in the .env file.",
+          );
+        }
+        if (response.status === 429) {
+          throw new Error("API rate limit exceeded. Please try again later.");
+        }
+        if (response.status >= 500) {
+          throw new Error(
+            "TMDB service is currently unavailable. Please try again later.",
+          );
+        }
+        throw new Error(`TMDB API Error: ${response.status}`);
+      }
+
+      const data = await response.json();
+      setCachedResponse(cacheKey, data, ttl);
+      return data;
+    } catch (error) {
+      if (error.name === "AbortError") {
+        throw new Error("Request timed out. Please check your internet connection.");
+      }
+      if (
+        error.message.includes("Failed to fetch") ||
+        error.message.includes("NetworkError")
+      ) {
+        throw new Error(
+          "Network error. Please check your internet connection or try using a VPN.",
+        );
+      }
+      throw error;
+    } finally {
+      clearTimeout(timeoutId);
+      pendingRequests.delete(cacheKey);
+    }
+  })();
+
+  pendingRequests.set(cacheKey, request);
+  return request;
+};
+
+const getImageUrl = (path, size = "w780") => {
+  return path ? `${IMAGE_BASE_URL}/${size}${path}` : null;
+};
+
+const getBackdropImage = (movie) => {
+  return (
+    getImageUrl(movie.backdrop_path, "w1280") ||
+    getImageUrl(movie.poster_path, "w780") ||
+    ""
+  );
+};
+
+const getPosterImage = (movie) => {
+  return (
+    getImageUrl(movie.poster_path, "w780") ||
+    getImageUrl(movie.backdrop_path, "w780") ||
+    ""
+  );
+};
+
+const getReleaseYear = (movie) => {
+  if (movie.release_date) {
+    return new Date(movie.release_date).getFullYear().toString();
+  }
+
+  if (movie.first_air_date) {
+    return new Date(movie.first_air_date).getFullYear().toString();
+  }
+
+  return "";
 };
 
 
 export const tmdbService = {
-    getTrendingMovies: async () => {
-        const data = await fetchFromTMDB('/trending/movie/day');
-        return data?.results || [];
-    },
+  getTrendingMovies: async () => {
+    const data = await fetchFromTMDB("/trending/movie/day", {}, { ttl: DEFAULT_CACHE_TTL });
+    return data?.results || [];
+  },
 
-    getPopularMovies: async () => {
-        const data = await fetchFromTMDB('/movie/popular');
-        return data?.results || [];
-    },
+  getPopularMovies: async () => {
+    const data = await fetchFromTMDB("/movie/popular", {}, { ttl: DEFAULT_CACHE_TTL });
+    return data?.results || [];
+  },
 
-    discoverMovies: async (page = 1) => {
-        return await fetchFromTMDB('/discover/movie', { page });
-    },
+  discoverMovies: async (page = 1) => {
+    return await fetchFromTMDB("/discover/movie", { page }, { ttl: DEFAULT_CACHE_TTL });
+  },
 
-    getMoviesByGenre: async (genreId, page = 1) => {
-        return await fetchFromTMDB('/discover/movie', { with_genres: genreId, page });
-    },
+  getMoviesByGenre: async (genreId, page = 1) => {
+    return await fetchFromTMDB(
+      "/discover/movie",
+      { with_genres: genreId, page },
+      { ttl: DEFAULT_CACHE_TTL },
+    );
+  },
 
-    getGenres: async () => {
-        const data = await fetchFromTMDB('/genre/movie/list');
-        return data.genres;
-    },
+  getGenres: async () => {
+    const data = await fetchFromTMDB("/genre/movie/list", {}, { ttl: GENRE_CACHE_TTL });
+    return data.genres;
+  },
 
-    getUpcomingMovies: async () => {
-        const data = await fetchFromTMDB('/movie/upcoming');
-        return data?.results || [];
-    },
+  getUpcomingMovies: async () => {
+    const data = await fetchFromTMDB("/movie/upcoming", {}, { ttl: LONG_CACHE_TTL });
+    return data?.results || [];
+  },
 
-    getTopRatedMovies: async () => {
-        const data = await fetchFromTMDB('/movie/top_rated');
-        return data?.results || [];
-    },
+  getTopRatedMovies: async () => {
+    const data = await fetchFromTMDB("/movie/top_rated", {}, { ttl: LONG_CACHE_TTL });
+    return data?.results || [];
+  },
 
-    getMovieDetails: async (movieId) => {
-        return await fetchFromTMDB(`/movie/${movieId}`, { append_to_response: 'videos,credits' });
-    },
+  getMovieDetails: async (movieId) => {
+    return await fetchFromTMDB(
+      `/movie/${movieId}`,
+      { append_to_response: "videos,credits" },
+      { ttl: LONG_CACHE_TTL },
+    );
+  },
 
-    searchMovies: async (query, page = 1) => {
-        return await fetchFromTMDB('/search/movie', { query, page });
-    },
+  searchMovies: async (query, page = 1) => {
+    return await fetchFromTMDB(
+      "/search/movie",
+      { query, page },
+      { ttl: DEFAULT_CACHE_TTL },
+    );
+  },
 
-    getMoviesByIds: async (movieIds) => {
-        const fetchPromises = movieIds.map(id =>
-            fetchFromTMDB(`/movie/${id}`).catch(() => null)
-        );
-        const results = await Promise.all(fetchPromises);
-        return results.filter(Boolean);
-    },
+  getMoviesByIds: async (movieIds) => {
+    const fetchPromises = movieIds.map((id) =>
+      fetchFromTMDB(`/movie/${id}`, {}, { ttl: LONG_CACHE_TTL }).catch(() => null),
+    );
+    const results = await Promise.all(fetchPromises);
+    return results.filter(Boolean);
+  },
 
-    getImageUrl: (path) => path ? `${IMAGE_BASE_URL}${path}` : null,
+  getImageUrl,
 
-    GENRE_MAP: {
-        28: "Action",
-        12: "Adventure",
-        16: "Animation",
-        35: "Comedy",
-        80: "Crime",
-        99: "Documentary",
-        18: "Drama",
-        10751: "Family",
-        14: "Fantasy",
-        36: "History",
-        27: "Horror",
-        10402: "Music",
-        9648: "Mystery",
-        10749: "Romance",
-        878: "Sci-Fi",
-        10770: "TV Movie",
-        53: "Thriller",
-        10752: "War",
-        37: "Western",
-    },
+  GENRE_MAP: {
+    28: "Action",
+    12: "Adventure",
+    16: "Animation",
+    35: "Comedy",
+    80: "Crime",
+    99: "Documentary",
+    18: "Drama",
+    10751: "Family",
+    14: "Fantasy",
+    36: "History",
+    27: "Horror",
+    10402: "Music",
+    9648: "Mystery",
+    10749: "Romance",
+    878: "Sci-Fi",
+    10770: "TV Movie",
+    53: "Thriller",
+    10752: "War",
+    37: "Western",
+  },
 
-    formatMovieData: (movie) => {
-        const trailer = movie.videos?.results?.find(
-            vid => vid.type === 'Trailer' && vid.site === 'YouTube'
-        );
+  formatMovieData: (movie) => {
+    const trailer = movie.videos?.results?.find(
+      (vid) => vid.type === "Trailer" && vid.site === "YouTube",
+    );
 
-        return {
-            id: movie.id,
-            title: movie.title || movie.name,
-            subtitle: movie.release_date
-                ? new Date(movie.release_date).getFullYear().toString()
-                : (movie.first_air_date ? new Date(movie.first_air_date).getFullYear().toString() : ''),
-            rating: movie.vote_average?.toFixed(1) || '0.0',
-            duration: movie.runtime ? `${Math.floor(movie.runtime / 60)}h ${movie.runtime % 60}m` : '',
-            genres: movie.genre_ids
-                ? movie.genre_ids.map(id => tmdbService.GENRE_MAP[id]).filter(Boolean)
-                : (movie.genres ? movie.genres.map(g => g.name) : []),
-            description: movie.overview,
-            image: movie.backdrop_path
-                ? `${IMAGE_BASE_URL}${movie.backdrop_path}`
-                : (movie.poster_path ? `${IMAGE_BASE_URL}${movie.poster_path}` : ''),
-            trailerKey: trailer ? trailer.key : null,
-        };
-    }
+    return {
+      id: movie.id,
+      title: movie.title || movie.name,
+      subtitle: getReleaseYear(movie),
+      rating: movie.vote_average?.toFixed(1) || "0.0",
+      duration: movie.runtime
+        ? `${Math.floor(movie.runtime / 60)}h ${movie.runtime % 60}m`
+        : "",
+      genres: movie.genre_ids
+        ? movie.genre_ids.map((id) => tmdbService.GENRE_MAP[id]).filter(Boolean)
+        : movie.genres
+          ? movie.genres.map((genre) => genre.name)
+          : [],
+      description: movie.overview,
+      image: getPosterImage(movie),
+      posterImage: getPosterImage(movie),
+      backdropImage: getBackdropImage(movie),
+      trailerKey: trailer ? trailer.key : null,
+    };
+  },
 };
 

@@ -1,38 +1,48 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
-import { useNotification } from './NotificationContext';
+/* eslint-disable react-refresh/only-export-components */
+import React, { createContext, useCallback, useContext, useMemo, useState } from "react";
+import { useNotification } from "./NotificationContext";
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-    const { showNotification } = useNotification();
-    const [user, setUser] = useState(() => {
-        const savedUser = localStorage.getItem('cinema_user');
-        return savedUser ? JSON.parse(savedUser) : null;
-    });
+  const { showNotification } = useNotification();
+  const [user, setUser] = useState(() => {
+    const savedUser = localStorage.getItem("cinema_user");
+    return savedUser ? JSON.parse(savedUser) : null;
+  });
 
-    const login = (userData) => {
-        setUser(userData);
-        localStorage.setItem('cinema_user', JSON.stringify(userData));
-        showNotification(`Welcome back, ${userData.name}!`, 'success');
-    };
+  const login = useCallback(
+    (userData) => {
+      setUser(userData);
+      localStorage.setItem("cinema_user", JSON.stringify(userData));
+      showNotification(`Welcome back, ${userData.name}!`, "success");
+    },
+    [showNotification],
+  );
 
-    const logout = () => {
-        setUser(null);
-        localStorage.removeItem('cinema_user');
-        showNotification("You've been signed out safely.", 'info');
-    };
+  const logout = useCallback(() => {
+    setUser(null);
+    localStorage.removeItem("cinema_user");
+    showNotification("You've been signed out safely.", "info");
+  }, [showNotification]);
 
-    return (
-        <AuthContext.Provider value={{ user, login, logout, isAuthenticated: !!user }}>
-            {children}
-        </AuthContext.Provider>
-    );
+  const value = useMemo(
+    () => ({
+      user,
+      login,
+      logout,
+      isAuthenticated: !!user,
+    }),
+    [login, logout, user],
+  );
+
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
 
 export const useAuth = () => {
-    const context = useContext(AuthContext);
-    if (!context) {
-        throw new Error('useAuth must be used within an AuthProvider');
-    }
-    return context;
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error("useAuth must be used within an AuthProvider");
+  }
+  return context;
 };

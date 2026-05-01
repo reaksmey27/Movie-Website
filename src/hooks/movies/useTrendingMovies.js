@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { tmdbService } from '../../services/tmdbService';
+import { useEffect, useState } from "react";
+import { tmdbService } from "../../services/tmdbService";
 import { Retrier } from "@humanwhocodes/retry";
 
 const retrier = new Retrier((error) => {
@@ -13,15 +13,22 @@ const useTrendingMovies = () => {
     const [error, setError] = useState(null);
 
     useEffect(() => {
+        let ignore = false;
+
         const fetchTrending = async () => {
             setLoading(true);
+            setError(null);
             try {
                 const response = await retrier.retry(() => tmdbService.getTrendingMovies());
                 const results = Array.isArray(response) ? response : (response?.results || []);
-                if (results.length > 0) {
+                if (!ignore && results.length > 0) {
                     setMovies(results.map(tmdbService.formatMovieData));
                 }
             } catch (err) {
+                if (ignore) {
+                    return;
+                }
+
                 console.error('Error fetching trending movies:', err);
                 let errorMessage = "Unable to spark the trend.";
 
@@ -33,11 +40,16 @@ const useTrendingMovies = () => {
 
                 setError(errorMessage);
             } finally {
-                setLoading(false);
+                if (!ignore) {
+                    setLoading(false);
+                }
             }
         };
 
         fetchTrending();
+        return () => {
+            ignore = true;
+        };
     }, []);
 
     return { movies, loading, error };

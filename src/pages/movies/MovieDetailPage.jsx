@@ -44,7 +44,12 @@ const MovieDetailPage = () => {
         <div className="min-h-screen bg-slate-950 relative overflow-x-hidden">
             {!isPlaying && (
                 <div className="absolute inset-0 h-[50vh] sm:h-[70vh] w-full">
-                    <img src={movie.image} alt="" className="w-full h-full object-cover opacity-20 sm:opacity-30" />
+                    <img
+                        src={movie.backdropImage || movie.image}
+                        alt=""
+                        className="w-full h-full object-cover opacity-20 sm:opacity-30"
+                        decoding="async"
+                    />
                     <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/80 to-transparent" />
                     <div className="absolute inset-0 bg-gradient-to-r from-slate-950 via-transparent to-transparent" />
                 </div>

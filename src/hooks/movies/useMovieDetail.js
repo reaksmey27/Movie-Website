@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { tmdbService } from "../../services/tmdbService";
 
 const SERVERS = [
@@ -18,21 +18,30 @@ const useMovieDetail = (id) => {
   const [playerMessage, setPlayerMessage] = useState("");
 
   useEffect(() => {
+    let ignore = false;
+
     const fetchDetails = async () => {
       setLoading(true);
       try {
         const data = await tmdbService.getMovieDetails(id);
-        if (data) {
+        if (!ignore && data) {
           setMovie(tmdbService.formatMovieData(data));
         }
       } catch (error) {
-        console.error("Error fetching movie details:", error);
+        if (!ignore) {
+          console.error("Error fetching movie details:", error);
+        }
       } finally {
-        setLoading(false);
+        if (!ignore) {
+          setLoading(false);
+        }
       }
     };
 
     fetchDetails();
+    return () => {
+      ignore = true;
+    };
   }, [id]);
 
   useEffect(() => {

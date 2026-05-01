@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { memo, useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useFavorites } from "../../../context/FavoritesContext";
 import {
@@ -59,9 +59,11 @@ const HeroSection = ({ trendingMovies = [] }) => {
         className={`absolute inset-0 z-0 transition-opacity duration-1000 ${fade ? "opacity-60" : "opacity-0"}`}
       >
         <img
-          src={movie.image}
+          src={movie.backdropImage || movie.image}
           alt=""
           className="w-full h-full object-cover sm:object-center"
+          fetchPriority="high"
+          decoding="async"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent" />
         <div className="absolute inset-0 bg-gradient-to-r from-slate-950 via-slate-950/20 to-transparent" />
@@ -206,4 +208,4 @@ const HeroSection = ({ trendingMovies = [] }) => {
   );
 };
 
-export default HeroSection;
+export default memo(HeroSection);

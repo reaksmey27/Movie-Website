@@ -1,8 +1,16 @@
-import React, { useState, useEffect, useRef } from "react";
-import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
-import { UserIcon, BellIcon, ArrowLeftOnRectangleIcon, TrashIcon, Bars3Icon, XMarkIcon } from "@heroicons/react/24/solid";
+import React, { useEffect, useRef, useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { BellIcon, ArrowLeftOnRectangleIcon, TrashIcon, Bars3Icon, XMarkIcon } from "@heroicons/react/24/solid";
 import { useAuth } from "../../context/AuthContext";
 import { useNotification } from "../../context/NotificationContext";
+
+const NAV_LINKS = [
+  { name: "Home", path: "/" },
+  { name: "Movies", path: "/movies" },
+  { name: "Trending", path: "/trending" },
+  { name: "Favorites", path: "/favorites" },
+  { name: "Upcoming", path: "/upcoming" },
+];
 
 const Navbar = () => {
   const location = useLocation();
@@ -10,45 +18,31 @@ const Navbar = () => {
   const { user, logout, isAuthenticated } = useAuth();
   const { history, unreadCount, markAllAsRead, clearHistory, getIcon } = useNotification();
 
-  const [currentHash, setCurrentHash] = useState(window.location.hash);
   const [showNotifPanel, setShowNotifPanel] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const panelRef = useRef(null);
 
   useEffect(() => {
-    const handleHashChange = () => {
-      setCurrentHash(window.location.hash);
-    };
     const handleClickOutside = (event) => {
       if (panelRef.current && !panelRef.current.contains(event.target)) {
         setShowNotifPanel(false);
       }
     };
 
-    window.addEventListener("hashchange", handleHashChange);
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
-      window.removeEventListener("hashchange", handleHashChange);
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
-
-  const navLinks = [
-    { name: "Home", path: "/" },
-    { name: "Movies", path: "/movies" },
-    { name: "Trending", path: "/trending" },
-    { name: "Favorites", path: "/favorites" },
-    { name: "Upcoming", path: "/upcoming" },
-  ];
 
   const checkActive = (linkPath) => {
     if (linkPath.includes("#")) {
       const pathPart = linkPath.split("#")[0] || "/";
       const hashPart = "#" + linkPath.split("#")[1];
-      return location.pathname === pathPart && currentHash === hashPart;
+      return location.pathname === pathPart && location.hash === hashPart;
     }
     if (linkPath === "/") {
-      return location.pathname === "/" && !currentHash;
+      return location.pathname === "/" && !location.hash;
     }
     return location.pathname === linkPath;
   };
@@ -66,11 +60,16 @@ const Navbar = () => {
            ring-1 ring-white/5 text-white shadow-2xl transition-all">
 
         <Link to="/" className="flex items-center gap-2" onClick={() => setIsMenuOpen(false)}>
-          <img src="/images/logo.png" alt="CineMax Logo" className="h-8 w-auto sm:h-10" />
+          <img
+            src="/images/logo.png"
+            alt="CineMax Logo"
+            className="h-8 w-auto sm:h-10"
+            decoding="async"
+          />
         </Link>
 
         <div className="hidden lg:flex gap-10">
-          {navLinks.map((link) => {
+          {NAV_LINKS.map((link) => {
             const isActive = checkActive(link.path);
             return (
               <Link
@@ -185,7 +184,7 @@ const Navbar = () => {
         <div className="fixed inset-0 top-[60px] sm:top-[76px] z-[90] lg:hidden animate-in fade-in slide-in-from-top-4 duration-300">
           <div className="absolute inset-0 bg-slate-950/95 backdrop-blur-3xl" onClick={() => setIsMenuOpen(false)} />
           <div className="relative z-10 p-8 flex flex-col gap-6">
-            {navLinks.map((link) => (
+            {NAV_LINKS.map((link) => (
               <Link
                 key={link.name}
                 to={link.path}
