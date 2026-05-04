@@ -1,6 +1,7 @@
 import React from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useFavorites } from '../../context/FavoritesContext';
+import { useWatchlist } from '../../context/WatchlistContext';
 import { ChevronLeftIcon } from '@heroicons/react/24/solid';
 import useMovieDetail from '../../hooks/movies/useMovieDetail';
 import MovieInfo from './components/MovieInfo';
@@ -14,6 +15,7 @@ const MovieDetailPage = () => {
     const { id } = useParams();
     const navigate = useNavigate();
     const { toggleFavorite, isFavorite } = useFavorites();
+    const { toggleWatchlist, isInWatchlist } = useWatchlist();
 
     const {
         movie, loading, SERVERS,
@@ -82,9 +84,11 @@ const MovieDetailPage = () => {
                     <MovieInfo
                         movie={movie}
                         isFav={isFavorite(movie.id)}
+                        isWatchlisted={isInWatchlist(movie.id)}
                         onPlay={() => setIsPlaying(true)}
                         onTrailer={() => setShowTrailer(true)}
                         onFavorite={() => toggleFavorite(movie)}
+                        onWatchlist={() => toggleWatchlist(movie)}
                     />
                 )}
             </div>

@@ -18,17 +18,26 @@ A React-based movie website powered by TMDB API.
    npm install
    ```
 
-3. **Configure TMDB API Key (Required):**
+3. **Configure environment variables:**
 
-   The application requires a valid TMDB API key to fetch movie data.
-   - Get your free API key from [TMDB](https://www.themoviedb.org/settings/api)
-   - Open the `.env` file in the root directory
-   - Replace `your_valid_tmdb_api_key_here` with your actual API key:
-     ```
-     VITE_TMDB_API_KEY=your_actual_api_key_here
-     ```
+   Create a `.env` file from `.env.example` and fill in the values.
 
-4. Start the development server:
+   Required values:
+   - `VITE_TMDB_API_KEY`: get your free API key from [TMDB](https://www.themoviedb.org/settings/api)
+   - `VITE_FIREBASE_*`: create a Firebase web app and copy its client config from Project Settings
+
+4. **Authorize your app domain in Firebase Authentication:**
+
+   If Google sign-in shows `auth/unauthorized-domain`, add the exact host serving your app in:
+
+   `Firebase Console -> Authentication -> Settings -> Authorized domains`
+
+   Common examples:
+   - `localhost`
+   - your deployed domain, such as `movie-website.vercel.app`
+   - your custom domain, such as `movies.example.com`
+
+5. Start the development server:
    ```bash
    npm run dev
    ```
@@ -50,6 +59,19 @@ If you encounter network errors:
 - Check your internet connection
 - Try using a VPN if TMDB is blocked in your region
 - Verify that `api.themoviedb.org` is accessible
+
+### Firebase `auth/unauthorized-domain`
+
+This happens when the current hostname is not listed in Firebase Authentication.
+
+To fix:
+
+1. Open Firebase Console
+2. Go to `Authentication -> Settings -> Authorized domains`
+3. Add the hostname shown in the app error message
+4. Save and reload the app
+
+If the project is using the fallback Firebase config instead of your own project, set the `VITE_FIREBASE_*` values in `.env` and restart Vite.
 
 ## Tech Stack
 

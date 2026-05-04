@@ -22,6 +22,14 @@ const PROFILE_STORAGE_KEY = "movie_user_profiles";
 const googleProvider = new GoogleAuthProvider();
 googleProvider.setCustomParameters({ prompt: "select_account" });
 
+const getCurrentHostname = () => {
+  if (typeof window === "undefined") {
+    return "current host";
+  }
+
+  return window.location.hostname || "current host";
+};
+
 const readStoredProfiles = () => {
   try {
     const savedProfiles = localStorage.getItem(PROFILE_STORAGE_KEY);
@@ -83,9 +91,9 @@ const getFirebaseErrorMessage = (error) => {
     case "auth/configuration-not-found":
       return "Firebase Authentication can't find a Google sign-in configuration for this project.";
     case "auth/unauthorized-domain":
-      return "This domain is not authorized in Firebase Authentication. Add your current domain in Firebase Console.";
+      return `This domain (${getCurrentHostname()}) is not authorized in Firebase Authentication. Add it in Firebase Console -> Authentication -> Settings -> Authorized domains.`;
     case "auth/app-not-authorized":
-      return "This Firebase app or API key is not authorized for Authentication on this domain.";
+      return `This Firebase app or API key is not authorized for Authentication on ${getCurrentHostname()}.`;
     case "auth/invalid-api-key":
       return "Your Firebase API key is invalid for this project.";
     case "auth/network-request-failed":

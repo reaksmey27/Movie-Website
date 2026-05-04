@@ -1,8 +1,23 @@
 import React from 'react';
-import { PlayIcon, HeartIcon, StarIcon, ClockIcon, CalendarIcon } from '@heroicons/react/24/solid';
-import { HeartIcon as HeartOutline } from '@heroicons/react/24/outline';
+import {
+    PlayIcon,
+    HeartIcon,
+    StarIcon,
+    ClockIcon,
+    CalendarIcon,
+    BookmarkIcon as BookmarkSolidIcon,
+} from '@heroicons/react/24/solid';
+import { HeartIcon as HeartOutline, BookmarkIcon } from '@heroicons/react/24/outline';
 
-const MovieInfo = ({ movie, isFav, onPlay, onTrailer, onFavorite }) => {
+const MovieInfo = ({
+    movie,
+    isFav,
+    isWatchlisted,
+    onPlay,
+    onTrailer,
+    onFavorite,
+    onWatchlist,
+}) => {
     return (
         <div className="flex flex-col lg:flex-row gap-8 sm:gap-12 lg:gap-16 animate-in slide-in-from-left-6 duration-700">
             <div className="w-full sm:w-[350px] lg:w-96 flex-shrink-0 mx-auto lg:mx-0">
@@ -77,6 +92,15 @@ const MovieInfo = ({ movie, isFav, onPlay, onTrailer, onFavorite }) => {
                             }`}
                         >
                             {isFav ? <HeartIcon className="h-5 w-5" /> : <HeartOutline className="h-5 w-5" />}
+                        </button>
+                        <button
+                            onClick={onWatchlist}
+                            className={`flex-shrink-0 flex items-center justify-center px-8 py-5 rounded-2xl transition-all active:scale-95 border-2 ${isWatchlisted
+                                ? 'bg-amber-500/10 border-amber-400 text-amber-400 shadow-lg shadow-amber-500/20'
+                                : 'bg-white/5 border-white/10 text-white hover:bg-white/10'
+                            }`}
+                        >
+                            {isWatchlisted ? <BookmarkSolidIcon className="h-5 w-5" /> : <BookmarkIcon className="h-5 w-5" />}
                         </button>
                     </div>
                 </div>

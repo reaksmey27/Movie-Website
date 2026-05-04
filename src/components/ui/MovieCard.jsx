@@ -1,17 +1,30 @@
 import React, { memo } from "react";
 import { Link } from "react-router-dom";
 import { HeartIcon } from "@heroicons/react/24/solid";
-import { HeartIcon as HeartOutline } from "@heroicons/react/24/outline";
+import {
+  BookmarkIcon,
+  HeartIcon as HeartOutline,
+} from "@heroicons/react/24/outline";
+import { BookmarkIcon as BookmarkSolidIcon } from "@heroicons/react/24/solid";
 import { useFavorites } from "../../context/FavoritesContext";
+import { useWatchlist } from "../../context/WatchlistContext";
 
 const MovieCard = ({ movie }) => {
   const { toggleFavorite, isFavorite } = useFavorites();
+  const { toggleWatchlist, isInWatchlist } = useWatchlist();
   const isFav = isFavorite(movie.id);
+  const isSaved = isInWatchlist(movie.id);
 
   const handleFavoriteClick = (e) => {
     e.preventDefault();
     e.stopPropagation();
     toggleFavorite(movie);
+  };
+
+  const handleWatchlistClick = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    toggleWatchlist(movie);
   };
 
   return (
@@ -27,20 +40,39 @@ const MovieCard = ({ movie }) => {
         decoding="async"
       />
 
-      <button
-        onClick={handleFavoriteClick}
-        className={`absolute top-4 right-4 z-50 p-2.5 rounded-xl backdrop-blur-md border transition-all duration-300 active:scale-90 ${
-          isFav
-            ? "bg-red-500 border-red-400 text-white shadow-[0_0_15px_rgba(239,68,68,0.5)]"
-            : "bg-black/20 border-white/10 text-white hover:bg-white hover:text-black opacity-0 group-hover:opacity-100"
-        }`}
-      >
-        {isFav ? (
-          <HeartIcon className="h-5 w-5" />
-        ) : (
-          <HeartOutline className="h-5 w-5" />
-        )}
-      </button>
+      <div className="absolute right-4 top-4 z-50 flex flex-col gap-3">
+        <button
+          onClick={handleWatchlistClick}
+          className={`p-2.5 rounded-xl backdrop-blur-md border transition-all duration-300 active:scale-90 ${
+            isSaved
+              ? "bg-amber-500 border-amber-400 text-slate-950 shadow-[0_0_15px_rgba(245,158,11,0.45)]"
+              : "bg-black/20 border-white/10 text-white hover:bg-white hover:text-black opacity-0 group-hover:opacity-100"
+          }`}
+          aria-label={isSaved ? "Remove from watchlist" : "Add to watchlist"}
+        >
+          {isSaved ? (
+            <BookmarkSolidIcon className="h-5 w-5" />
+          ) : (
+            <BookmarkIcon className="h-5 w-5" />
+          )}
+        </button>
+
+        <button
+          onClick={handleFavoriteClick}
+          className={`p-2.5 rounded-xl backdrop-blur-md border transition-all duration-300 active:scale-90 ${
+            isFav
+              ? "bg-red-500 border-red-400 text-white shadow-[0_0_15px_rgba(239,68,68,0.5)]"
+              : "bg-black/20 border-white/10 text-white hover:bg-white hover:text-black opacity-0 group-hover:opacity-100"
+          }`}
+          aria-label={isFav ? "Remove from favorites" : "Add to favorites"}
+        >
+          {isFav ? (
+            <HeartIcon className="h-5 w-5" />
+          ) : (
+            <HeartOutline className="h-5 w-5" />
+          )}
+        </button>
+      </div>
 
       <div className="absolute inset-0 bg-gradient-to-t from-black via-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 rounded-2xl flex flex-col justify-end p-6 overflow-hidden">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-all duration-500 scale-50 group-hover:scale-100 delay-100">
