@@ -1,101 +1,56 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { EnvelopeIcon, LockClosedIcon, UserIcon, FilmIcon } from '@heroicons/react/24/outline';
-import useAuthForm from '../../hooks/auth/useAuthForm';
+import React from "react";
+import { FilmIcon } from "@heroicons/react/24/outline";
+import { Link, Navigate } from "react-router-dom";
+import LoginButton from "../../components/auth/LoginButton";
+import { useAuth } from "../../context/AuthContext";
 
 const SignupPage = () => {
-    const { name, setName, email, setEmail, password, setPassword, loading, handleSubmit } = useAuthForm('signup');
+  const { user, loading } = useAuth();
 
-    return (
-        <div className="min-h-screen bg-slate-950 flex items-center justify-center p-4 relative overflow-hidden">
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-blue-600/10 blur-[120px] rounded-full -z-10" />
+  if (!loading && user) {
+    return <Navigate to="/" replace />;
+  }
 
-            <div className="w-full max-w-md animate-in fade-in zoom-in duration-700">
-                <div className="bg-white/5 backdrop-blur-2xl border border-white/10 rounded-[2.5rem] p-10 shadow-2xl">
-                    <div className="flex flex-col items-center mb-10">
-                        <div className="bg-blue-600 p-4 rounded-2xl shadow-xl shadow-blue-600/30 mb-6">
-                            <FilmIcon className="h-8 w-8 text-white" />
-                        </div>
-                        <h1 className="text-3xl font-black text-white uppercase tracking-tighter">Join the Club</h1>
-                        <p className="text-gray-500 font-medium text-sm mt-2 text-center">
-                            Start your journey into the world of cinematic masterpieces.
-                        </p>
-                    </div>
+  return (
+    <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-slate-950 p-4">
+      <div className="absolute left-1/2 top-1/2 -z-10 h-[600px] w-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-blue-600/10 blur-[120px]" />
 
-                    <form onSubmit={handleSubmit} className="space-y-6">
-                        <div className="space-y-2">
-                            <label className="text-xs font-black uppercase tracking-widest text-gray-400 ml-1">Full Name</label>
-                            <div className="relative group">
-                                <UserIcon className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-500 group-focus-within:text-blue-500 transition-colors" />
-                                <input
-                                    type="text"
-                                    required
-                                    value={name}
-                                    onChange={(e) => setName(e.target.value)}
-                                    placeholder="John Doe"
-                                    className="w-full bg-black/40 border-2 border-white/5 focus:border-blue-500/50 outline-none text-white px-12 py-4 rounded-2xl font-bold transition-all placeholder:text-gray-700 focus:bg-black/60"
-                                />
-                            </div>
-                        </div>
-
-                        <div className="space-y-2">
-                            <label className="text-xs font-black uppercase tracking-widest text-gray-400 ml-1">Email Address</label>
-                            <div className="relative group">
-                                <EnvelopeIcon className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-500 group-focus-within:text-blue-500 transition-colors" />
-                                <input
-                                    type="email"
-                                    required
-                                    value={email}
-                                    onChange={(e) => setEmail(e.target.value)}
-                                    placeholder="name@example.com"
-                                    className="w-full bg-black/40 border-2 border-white/5 focus:border-blue-500/50 outline-none text-white px-12 py-4 rounded-2xl font-bold transition-all placeholder:text-gray-700 focus:bg-black/60"
-                                />
-                            </div>
-                        </div>
-
-                        <div className="space-y-2">
-                            <label className="text-xs font-black uppercase tracking-widest text-gray-400 ml-1">Password</label>
-                            <div className="relative group">
-                                <LockClosedIcon className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-500 group-focus-within:text-blue-500 transition-colors" />
-                                <input
-                                    type="password"
-                                    required
-                                    value={password}
-                                    onChange={(e) => setPassword(e.target.value)}
-                                    placeholder="••••••••"
-                                    className="w-full bg-black/40 border-2 border-white/5 focus:border-blue-500/50 outline-none text-white px-12 py-4 rounded-2xl font-bold transition-all placeholder:text-gray-700 focus:bg-black/60"
-                                />
-                            </div>
-                        </div>
-
-                        <button
-                            type="submit"
-                            disabled={loading}
-                            className="w-full bg-blue-600 hover:bg-blue-500 text-white py-5 rounded-2xl font-black uppercase tracking-[0.2em] text-xs transition-all shadow-xl shadow-blue-600/20 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed group"
-                        >
-                            {loading ? (
-                                <div className="flex items-center justify-center gap-3">
-                                    <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                                    <span>Creating Account...</span>
-                                </div>
-                            ) : (
-                                "Create Account"
-                            )}
-                        </button>
-                    </form>
-
-                    <div className="mt-10 text-center">
-                        <p className="text-gray-500 text-sm font-medium">
-                            Already have an account? {' '}
-                            <Link to="/login" className="text-white font-black hover:text-blue-500 transition-colors underline underline-offset-4">
-                                Sign in instead
-                            </Link>
-                        </p>
-                    </div>
-                </div>
+      <div className="w-full max-w-md animate-in fade-in zoom-in duration-700">
+        <div className="rounded-[2.5rem] border border-white/10 bg-white/5 p-10 shadow-2xl backdrop-blur-2xl">
+          <div className="mb-10 flex flex-col items-center">
+            <div className="mb-6 rounded-2xl bg-blue-600 p-4 shadow-xl shadow-blue-600/30">
+              <FilmIcon className="h-8 w-8 text-white" />
             </div>
+            <h1 className="text-center text-3xl font-black uppercase tracking-tighter text-white">
+              Join the Club
+            </h1>
+            <p className="mt-2 text-center text-sm font-medium text-gray-400">
+              Firebase creates your account automatically the first time you continue with Google.
+            </p>
+          </div>
+
+          <div className="space-y-5">
+            <LoginButton label="Sign up with Google" />
+            <p className="text-center text-xs font-bold uppercase tracking-[0.2em] text-gray-500">
+              One-click account creation with popup authentication
+            </p>
+          </div>
+
+          <div className="mt-10 text-center">
+            <p className="text-sm font-medium text-gray-500">
+              Already have access?{" "}
+              <Link
+                to="/login"
+                className="font-black text-white underline underline-offset-4 transition-colors hover:text-blue-400"
+              >
+                Sign in instead
+              </Link>
+            </p>
+          </div>
         </div>
-    );
+      </div>
+    </div>
+  );
 };
 
 export default SignupPage;
