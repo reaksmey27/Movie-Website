@@ -1,10 +1,44 @@
 import { useEffect, useState } from "react";
 import { tmdbService } from "../../services/tmdbService";
 
+const buildUrl = (baseUrl, params = {}) => {
+  const searchParams = new URLSearchParams(
+    Object.entries(params).filter(([, value]) => value !== undefined && value !== null),
+  );
+
+  return searchParams.size ? `${baseUrl}?${searchParams.toString()}` : baseUrl;
+};
+
 const SERVERS = [
-  { name: "Server 1", url: (id) => `https://vidsrc.cc/v2/embed/movie/${id}` },
-  { name: "Server 2", url: (id) => `https://vidsrc.xyz/embed/movie/${id}` },
-  { name: "Server 3", url: (id) => `https://vidsrc.me/embed/movie?tmdb=${id}` },
+  {
+    name: "Server 1",
+    url: (id) =>
+      buildUrl(`https://vidsrc.pm/embed/movie/${id}`, {
+        autoplay: "1",
+      }),
+  },
+  {
+    name: "Server 2",
+    url: (id) =>
+      buildUrl(`https://vidsrc.xyz/embed/movie/${id}`, {
+        autoplay: "1",
+      }),
+  },
+  {
+    name: "Server 3",
+    url: (id) =>
+      buildUrl(`https://vidsrc-embed.ru/embed/movie/${id}`, {
+        autoplay: "1",
+      }),
+  },
+  {
+    name: "Server 4",
+    url: (id) =>
+      buildUrl("https://vidsrc.me/embed/movie", {
+        tmdb: id,
+        autoplay: "1",
+      }),
+  },
 ];
 
 const useMovieDetail = (id) => {
@@ -13,7 +47,7 @@ const useMovieDetail = (id) => {
 
   const [showTrailer, setShowTrailer] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [activeServer, setActiveServer] = useState("Server 1");
+  const [activeServer, setActiveServer] = useState(SERVERS[0].name);
   const [iframeLoading, setIframeLoading] = useState(false);
   const [playerMessage, setPlayerMessage] = useState("");
 
