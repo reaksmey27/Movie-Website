@@ -42,6 +42,33 @@ A React-based movie website powered by TMDB API.
    npm run dev
    ```
 
+## Deploying To Vercel
+
+This app is a Vite single-page app that uses `react-router-dom`, so Vercel needs a rewrite rule for client-side routes. This repo includes that rule in `vercel.json`.
+
+Before you redeploy, make sure these settings are in place:
+
+1. In Vercel, open your project settings and add the same `VITE_*` variables from your local `.env`:
+   - `VITE_TMDB_API_KEY`
+   - `VITE_FIREBASE_API_KEY`
+   - `VITE_FIREBASE_AUTH_DOMAIN`
+   - `VITE_FIREBASE_PROJECT_ID`
+   - `VITE_FIREBASE_STORAGE_BUCKET`
+   - `VITE_FIREBASE_MESSAGING_SENDER_ID`
+   - `VITE_FIREBASE_APP_ID`
+   - `VITE_FIREBASE_MEASUREMENT_ID`
+
+2. In Firebase Console, open the Firebase project used by those variables and add every deployed hostname in:
+
+   `Authentication -> Settings -> Authorized domains`
+
+   Common examples:
+   - `your-project.vercel.app`
+   - `www.smey-dev.site`
+   - `smey-dev.site`
+
+3. Redeploy the project on Vercel after saving the environment variables.
+
 ## Troubleshooting
 
 ### "Failed to sync with cinematic database" Error
