@@ -46,6 +46,11 @@ A React-based movie website powered by TMDB API.
 
 This app is a Vite single-page app that uses `react-router-dom`, so Vercel needs a rewrite rule for client-side routes. This repo includes that rule in `vercel.json`.
 
+Vercel also provides its CDN automatically for deployed projects and custom domains. This repo now adds explicit cache headers in `vercel.json` so the CDN can cache built assets more effectively:
+
+- `/assets/*` is cached for 1 year with `immutable` because Vite fingerprints those files
+- `/images/*` and `/favicon.ico` get shorter CDN caching to stay easy to refresh
+
 Before you redeploy, make sure these settings are in place:
 
 1. In Vercel, open your project settings and add the same `VITE_*` variables from your local `.env`:
@@ -68,6 +73,8 @@ Before you redeploy, make sure these settings are in place:
    - `smey-dev.site`
 
 3. Redeploy the project on Vercel after saving the environment variables.
+
+4. After deployment, verify the domain is actually pointing to Vercel. If a site audit still says there is no CDN, that usually means the production domain is not being served through the Vercel deployment yet.
 
 ## Troubleshooting
 
