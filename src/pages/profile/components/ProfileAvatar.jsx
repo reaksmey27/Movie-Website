@@ -22,7 +22,7 @@ const ProfileAvatar = ({ user, onLogout }) => {
   const locationLabel = user.location || "Add your city or timezone";
 
   return (
-    <div className="group relative overflow-hidden rounded-[2.75rem] border border-white/10 bg-[#131a31]/95 p-8 shadow-[0_30px_90px_rgba(7,10,26,0.55)] backdrop-blur-2xl">
+    <div className="group relative overflow-hidden rounded-[2.75rem] border border-white/10 bg-[#131a31]/95 p-6 shadow-[0_30px_90px_rgba(7,10,26,0.55)] backdrop-blur-2xl sm:p-8">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(172,94,255,0.22),_transparent_40%),linear-gradient(180deg,rgba(98,67,198,0.18)_0%,rgba(15,23,42,0)_40%,rgba(59,130,246,0.1)_100%)]" />
       <div className="absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-white/35 to-transparent" />
       <div className="absolute right-[-68px] top-[-88px] h-44 w-44 rounded-full bg-cyan-400/10 blur-3xl transition-transform duration-700 group-hover:scale-125" />
@@ -38,7 +38,7 @@ const ProfileAvatar = ({ user, onLogout }) => {
         </div>
       </div>
 
-      <div className="relative mx-auto mb-6 mt-7 h-36 w-36">
+      <div className="relative mx-auto mb-6 mt-7 h-32 w-32 sm:h-36 sm:w-36">
         <div className="absolute inset-0 rounded-[2.85rem] bg-gradient-to-br from-cyan-400/25 via-violet-500/25 to-fuchsia-500/25 blur-xl" />
         {user.avatar ? (
           <img
@@ -64,7 +64,7 @@ const ProfileAvatar = ({ user, onLogout }) => {
         CinePass Member
       </div>
 
-      <h2 className="mb-1 text-center text-3xl font-black uppercase tracking-[-0.04em] text-white">
+      <h2 className="mb-1 text-center text-2xl font-black uppercase tracking-[-0.04em] text-white sm:text-3xl">
         {user.name}
       </h2>
       <p className="text-center text-sm font-semibold tracking-wide text-white/45">@{userHandle}</p>

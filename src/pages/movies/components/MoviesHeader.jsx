@@ -28,17 +28,17 @@ const MoviesHeader = ({
   }, [inputValue, onSearch, searchQuery]);
 
   return (
-    <div className="flex flex-col gap-10 mb-16">
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-8">
+    <div className="mb-12 flex flex-col gap-8 sm:mb-16 sm:gap-10">
+      <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end md:gap-8">
         <div className="space-y-3">
-          <h1 className="text-3xl md:text-5xl font-black text-white tracking-tighter uppercase leading-none">
+          <h1 className="text-3xl font-black uppercase leading-none tracking-tighter text-white md:text-5xl">
             {searchQuery ? "Searching" : "Explore"} <br />
             <span className="text-purple-500">
               {searchQuery ? "Results" : "Cinematic"}
             </span>{" "}
             {searchQuery ? "" : "World"}
           </h1>
-          <p className="text-gray-400 text-sm max-w-sm font-medium">
+          <p className="max-w-md text-sm font-medium text-gray-400">
             {searchQuery
               ? `Searching for "${searchQuery}" movies. Page ${page} of ${totalPages}.`
               : "Browse through thousands of movies by your favorite genres. Live updates from the global community."}
@@ -58,7 +58,7 @@ const MoviesHeader = ({
             placeholder="Search movies..."
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
-            className="w-full bg-white/5 border-2 border-white/5 focus:border-purple-500/50 outline-none text-white px-14 py-4 rounded-2xl font-bold transition-all placeholder:text-gray-600 focus:bg-white/10"
+            className="w-full rounded-2xl border-2 border-white/5 bg-white/5 px-14 py-3.5 font-bold text-white outline-none transition-all placeholder:text-gray-600 focus:border-purple-500/50 focus:bg-white/10 sm:py-4"
           />
           {inputValue && (
             <button
@@ -76,7 +76,7 @@ const MoviesHeader = ({
       </div>
 
       {!searchQuery && (
-        <div className="flex gap-2 overflow-x-auto no-scrollbar pb-4 scroll-smooth">
+        <div className="no-scrollbar flex gap-2 overflow-x-auto pb-2 pr-1 scroll-smooth sm:pb-4">
           <button
             onClick={() => onGenreChange(null)}
             className={`px-5 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all whitespace-nowrap border-2 ${

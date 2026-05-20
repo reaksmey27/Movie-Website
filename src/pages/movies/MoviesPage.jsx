@@ -15,7 +15,7 @@ const MoviesPage = () => {
     } = useMovies();
 
     return (
-        <div className="min-h-screen bg-slate-950 pt-40 pb-24 px-4 sm:px-12 lg:px-24 xl:px-40 relative overflow-hidden">
+        <div className="relative min-h-screen overflow-hidden bg-slate-950 px-4 pb-20 pt-24 sm:px-12 sm:pb-24 sm:pt-36 lg:px-24 xl:px-40">
             <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-purple-600/10 blur-[120px] rounded-full -z-10" />
             <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-blue-600/10 blur-[120px] rounded-full -z-10" />
 

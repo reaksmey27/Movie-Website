@@ -19,8 +19,8 @@ const MovieInfo = ({
     onWatchlist,
 }) => {
     return (
-        <div className="flex flex-col lg:flex-row gap-8 sm:gap-12 lg:gap-16 animate-in slide-in-from-left-6 duration-700">
-            <div className="w-full sm:w-[350px] lg:w-96 flex-shrink-0 mx-auto lg:mx-0">
+        <div className="animate-in flex flex-col gap-8 duration-700 slide-in-from-left-6 sm:gap-12 lg:flex-row lg:gap-16">
+            <div className="mx-auto w-full max-w-sm flex-shrink-0 lg:mx-0 lg:w-96 lg:max-w-none">
                 <img
                     src={movie.posterImage || movie.image}
                     alt={movie.title}
@@ -30,28 +30,28 @@ const MovieInfo = ({
                 />
             </div>
 
-            <div className="flex-1 space-y-8">
+            <div className="flex-1 space-y-6 sm:space-y-8">
                 <div className="space-y-4">
-                    <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black text-white leading-[0.9] tracking-tighter">
+                    <h1 className="text-3xl font-black leading-[0.9] tracking-tighter text-white sm:text-5xl lg:text-6xl">
                         {movie.title}
                     </h1>
-                    <div className="flex flex-wrap items-center gap-4 sm:gap-6 text-sm">
-                        <div className="flex items-center gap-2 bg-yellow-500 text-black px-3 py-1 rounded-lg font-black shadow-lg">
+                    <div className="flex flex-wrap items-center gap-3 text-sm sm:gap-6">
+                        <div className="flex items-center gap-2 rounded-lg bg-yellow-500 px-3 py-1 font-black text-black shadow-lg">
                             <StarIcon className="h-4 w-4" />
                             <span>{movie.rating}</span>
                         </div>
-                        <div className="flex items-center gap-2 text-gray-400 font-bold uppercase tracking-widest text-[9px] sm:text-[10px] bg-white/5 px-3 py-1 rounded-lg border border-white/5">
+                        <div className="flex items-center gap-2 rounded-lg border border-white/5 bg-white/5 px-3 py-1 text-[9px] font-bold uppercase tracking-widest text-gray-400 sm:text-[10px]">
                             <CalendarIcon className="h-4 w-4 text-purple-600" />
                             <span>{movie.subtitle}</span>
                         </div>
-                        <div className="flex items-center gap-2 text-gray-400 font-bold uppercase tracking-widest text-[9px] sm:text-[10px] bg-white/5 px-3 py-1 rounded-lg border border-white/5">
+                        <div className="flex items-center gap-2 rounded-lg border border-white/5 bg-white/5 px-3 py-1 text-[9px] font-bold uppercase tracking-widest text-gray-400 sm:text-[10px]">
                             <ClockIcon className="h-4 w-4 text-purple-600" />
                             <span>{movie.duration}</span>
                         </div>
                     </div>
                 </div>
 
-                <div className="flex flex-wrap gap-2 text-nowrap overflow-x-hidden">
+                <div className="flex flex-wrap gap-2">
                     {movie.genres.map((genre) => (
                         <span key={genre} className="px-4 py-1.5 bg-white/5 border border-white/10 text-gray-400 rounded-full text-[9px] sm:text-[10px] font-black uppercase tracking-widest backdrop-blur-md">
                             {genre}
@@ -61,32 +61,32 @@ const MovieInfo = ({
 
                 <div className="space-y-3">
                     <h3 className="text-white font-black uppercase tracking-[0.3em] text-[10px] opacity-40">Storyline</h3>
-                    <p className="text-gray-300 text-base sm:text-lg leading-relaxed font-medium max-w-4xl line-clamp-3 selection:bg-purple-600">
+                    <p className="max-w-4xl text-base font-medium leading-relaxed text-gray-300 selection:bg-purple-600 sm:text-lg">
                         {movie.description}
                     </p>
                 </div>
 
-                <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 pt-4">
+                <div className="flex flex-col gap-4 pt-2 sm:flex-row sm:gap-6 sm:pt-4">
                     <button
                         onClick={onPlay}
-                        className="group flex items-center justify-center gap-4 bg-purple-600 hover:bg-purple-500 text-white px-10 py-5 rounded-2xl font-black uppercase tracking-widest text-xs transition-all shadow-xl shadow-purple-600/30 active:scale-95"
+                        className="group flex min-h-[56px] items-center justify-center gap-4 rounded-2xl bg-purple-600 px-8 py-4 text-[10px] font-black uppercase tracking-[0.2em] text-white shadow-xl shadow-purple-600/30 transition-all hover:bg-purple-500 active:scale-95 sm:px-10 sm:py-5 sm:text-xs"
                     >
                         <PlayIcon className="h-5 w-5 transition-transform group-hover:scale-125" />
                         Play Movie
                     </button>
 
-                    <div className="flex gap-4 sm:gap-6">
+                    <div className="flex flex-wrap gap-3 sm:gap-6">
                         {movie.trailerKey && (
                             <button
                                 onClick={onTrailer}
-                                className="flex-1 flex items-center justify-center gap-3 bg-white/5 border border-white/10 hover:bg-white/10 text-white px-8 py-5 rounded-2xl font-black uppercase tracking-widest text-xs transition-all backdrop-blur-md active:scale-95"
+                                className="flex min-h-[56px] min-w-[140px] flex-1 items-center justify-center gap-3 rounded-2xl border border-white/10 bg-white/5 px-6 py-4 text-[10px] font-black uppercase tracking-[0.2em] text-white transition-all backdrop-blur-md hover:bg-white/10 active:scale-95 sm:px-8 sm:py-5 sm:text-xs"
                             >
-                                Archives
+                                Watch Trailer
                             </button>
                         )}
                         <button
                             onClick={onFavorite}
-                            className={`flex-shrink-0 flex items-center justify-center px-8 py-5 rounded-2xl transition-all active:scale-95 border-2 ${isFav
+                            className={`flex min-h-[56px] flex-1 items-center justify-center rounded-2xl border-2 px-5 py-4 transition-all active:scale-95 sm:min-h-0 sm:flex-none sm:px-8 sm:py-5 ${isFav
                                 ? 'bg-red-500/10 border-red-500 text-red-500 shadow-lg shadow-red-500/20'
                                 : 'bg-white/5 border-white/10 text-white hover:bg-white/10'
                             }`}
@@ -95,7 +95,7 @@ const MovieInfo = ({
                         </button>
                         <button
                             onClick={onWatchlist}
-                            className={`flex-shrink-0 flex items-center justify-center px-8 py-5 rounded-2xl transition-all active:scale-95 border-2 ${isWatchlisted
+                            className={`flex min-h-[56px] flex-1 items-center justify-center rounded-2xl border-2 px-5 py-4 transition-all active:scale-95 sm:min-h-0 sm:flex-none sm:px-8 sm:py-5 ${isWatchlisted
                                 ? 'bg-amber-500/10 border-amber-400 text-amber-400 shadow-lg shadow-amber-500/20'
                                 : 'bg-white/5 border-white/10 text-white hover:bg-white/10'
                             }`}

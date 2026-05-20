@@ -59,7 +59,7 @@ const ProfileStats = ({ user }) => {
   ];
 
   return (
-    <div className="rounded-[2.5rem] border border-white/10 bg-white/5 p-8 shadow-xl backdrop-blur-2xl">
+    <div className="rounded-[2.5rem] border border-white/10 bg-white/5 p-5 shadow-xl backdrop-blur-2xl sm:p-8">
       <div className="mb-6">
         <p className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-500">
           Account Snapshot

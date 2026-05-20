@@ -57,10 +57,10 @@ const MovieDetailPage = () => {
                 </div>
             )}
 
-            <div className={`relative z-10 px-6 sm:px-12 lg:px-24 xl:px-40 ${isPlaying ? 'pt-20 sm:pt-24' : 'pt-24 sm:pt-32'} pb-20`}>
+            <div className={`relative z-10 px-4 sm:px-12 lg:px-24 xl:px-40 ${isPlaying ? 'pt-20 sm:pt-24' : 'pt-24 sm:pt-32'} pb-16 sm:pb-20`}>
                 <button
                     onClick={() => isPlaying ? setIsPlaying(false) : navigate(-1)}
-                    className="mb-6 sm:mb-8 flex items-center gap-2 text-gray-400 hover:text-white transition-colors group px-4 py-2 bg-white/5 rounded-xl backdrop-blur-md border border-white/5 active:scale-95"
+                    className="mb-6 flex items-center gap-2 rounded-xl border border-white/5 bg-white/5 px-4 py-2 text-gray-400 transition-colors group backdrop-blur-md hover:text-white active:scale-95 sm:mb-8"
                 >
                     <ChevronLeftIcon className="h-4 w-4 sm:h-5 sm:w-5 transition-transform group-hover:-translate-x-1" />
                     <span className="font-bold uppercase tracking-widest text-[10px] sm:text-xs">

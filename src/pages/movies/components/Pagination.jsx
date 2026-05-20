@@ -14,19 +14,19 @@ const Pagination = ({ page, totalPages, onPageChange }) => {
     for (let i = startPage; i <= endPage; i++) pageNumbers.push(i);
 
     return (
-        <div className="flex items-center justify-center gap-3 mt-24">
+        <div className="no-scrollbar mt-12 flex items-center justify-start gap-2 overflow-x-auto px-1 pb-2 sm:mt-24 sm:justify-center sm:gap-3">
             <button
                 onClick={() => onPageChange(page - 1)}
                 disabled={page === 1}
-                className={`p-3 rounded-xl border-2 border-white/10 transition-all ${page === 1 ? 'opacity-20 cursor-not-allowed' : 'opacity-100 hover:bg-white/10 text-white hover:border-white/20'}`}
+                className={`rounded-xl border-2 border-white/10 p-2.5 transition-all sm:p-3 ${page === 1 ? 'cursor-not-allowed opacity-20' : 'opacity-100 text-white hover:border-white/20 hover:bg-white/10'}`}
             >
-                <ChevronLeftIcon className="h-6 w-6" />
+                <ChevronLeftIcon className="h-5 w-5 sm:h-6 sm:w-6" />
             </button>
 
             {startPage > 1 && (
                 <>
-                    <button onClick={() => onPageChange(1)} className="w-14 h-14 rounded-xl border-2 border-white/10 text-white hover:border-white/20 hover:bg-white/10 transition-all text-lg font-black">1</button>
-                    {startPage > 2 && <span className="text-gray-500 font-black px-2 text-xl">...</span>}
+                    <button onClick={() => onPageChange(1)} className="h-10 w-10 rounded-xl border-2 border-white/10 text-sm font-black text-white transition-all hover:border-white/20 hover:bg-white/10 sm:h-14 sm:w-14 sm:text-lg">1</button>
+                    {startPage > 2 && <span className="px-1 text-lg font-black text-gray-500 sm:px-2 sm:text-xl">...</span>}
                 </>
             )}
 
@@ -34,9 +34,9 @@ const Pagination = ({ page, totalPages, onPageChange }) => {
                 <button
                     key={num}
                     onClick={() => onPageChange(num)}
-                    className={`w-14 h-14 rounded-xl font-black transition-all text-lg ${page === num
-                        ? 'bg-purple-600 text-white shadow-2xl shadow-purple-600/40 border-2 border-purple-500 scale-110 z-10'
-                        : 'border-2 border-white/10 text-white hover:bg-white/10 hover:border-white/20'
+                    className={`h-10 w-10 rounded-xl text-sm font-black transition-all sm:h-14 sm:w-14 sm:text-lg ${page === num
+                        ? 'z-10 scale-105 border-2 border-purple-500 bg-purple-600 text-white shadow-2xl shadow-purple-600/40 sm:scale-110'
+                        : 'border-2 border-white/10 text-white hover:border-white/20 hover:bg-white/10'
                     }`}
                 >
                     {num}
@@ -45,17 +45,17 @@ const Pagination = ({ page, totalPages, onPageChange }) => {
 
             {endPage < totalPages && (
                 <>
-                    {endPage < totalPages - 1 && <span className="text-gray-500 font-black px-2 text-xl">...</span>}
-                    <button onClick={() => onPageChange(totalPages)} className="w-14 h-14 rounded-xl border-2 border-white/10 text-white hover:border-white/20 hover:bg-white/10 transition-all text-lg font-black">{totalPages}</button>
+                    {endPage < totalPages - 1 && <span className="px-1 text-lg font-black text-gray-500 sm:px-2 sm:text-xl">...</span>}
+                    <button onClick={() => onPageChange(totalPages)} className="h-10 w-10 rounded-xl border-2 border-white/10 text-sm font-black text-white transition-all hover:border-white/20 hover:bg-white/10 sm:h-14 sm:w-14 sm:text-lg">{totalPages}</button>
                 </>
             )}
 
             <button
                 onClick={() => onPageChange(page + 1)}
                 disabled={page === totalPages}
-                className={`p-3 rounded-xl border-2 border-white/10 transition-all ${page === totalPages ? 'opacity-20 cursor-not-allowed' : 'opacity-100 hover:bg-white/10 text-white hover:border-white/20'}`}
+                className={`rounded-xl border-2 border-white/10 p-2.5 transition-all sm:p-3 ${page === totalPages ? 'cursor-not-allowed opacity-20' : 'opacity-100 text-white hover:border-white/20 hover:bg-white/10'}`}
             >
-                <ChevronRightIcon className="h-6 w-6" />
+                <ChevronRightIcon className="h-5 w-5 sm:h-6 sm:w-6" />
             </button>
         </div>
     );

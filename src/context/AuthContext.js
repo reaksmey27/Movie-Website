@@ -8,10 +8,13 @@ import {
   useState,
 } from "react";
 import {
+  createUserWithEmailAndPassword,
   GoogleAuthProvider,
   onAuthStateChanged,
+  signInWithEmailAndPassword,
   signInWithPopup,
   signOut,
+  updateProfile as updateFirebaseProfile,
 } from "firebase/auth";
 import { auth } from "../firebase/config";
 import { useNotification } from "./NotificationContext";
@@ -80,6 +83,22 @@ const mergeUserProfile = (authUser, savedProfile) => {
 
 const getFirebaseErrorMessage = (error) => {
   switch (error?.code) {
+    case "auth/invalid-credential":
+      return "That email or password doesn't look right.";
+    case "auth/invalid-email":
+      return "Please enter a valid email address.";
+    case "auth/missing-password":
+      return "Please enter your password before continuing.";
+    case "auth/email-already-in-use":
+      return "That email is already registered. Try signing in instead.";
+    case "auth/weak-password":
+      return "Use a stronger password with at least 6 characters.";
+    case "auth/user-not-found":
+      return "We couldn't find an account with that email yet.";
+    case "auth/wrong-password":
+      return "That password is incorrect. Please try again.";
+    case "auth/too-many-requests":
+      return "Too many attempts were made. Please wait a moment and try again.";
     case "auth/popup-closed-by-user":
       return "Google sign-in was closed before it finished.";
     case "auth/cancelled-popup-request":
@@ -87,7 +106,7 @@ const getFirebaseErrorMessage = (error) => {
     case "auth/popup-blocked":
       return "Your browser blocked the Google popup. Please allow popups and try again.";
     case "auth/operation-not-allowed":
-      return "Google sign-in is not enabled in your Firebase Authentication settings yet.";
+      return "This sign-in method is not enabled in your Firebase Authentication settings yet.";
     case "auth/configuration-not-found":
       return "Firebase Authentication can't find a Google sign-in configuration for this project.";
     case "auth/unauthorized-domain":
@@ -137,20 +156,82 @@ export const AuthProvider = ({ children }) => {
     setUser(mergeUserProfile(authUser, profileOverrides[authUser.uid]));
   }, [authUser, profileOverrides]);
 
+  const syncSignedInUser = useCallback((firebaseUser) => {
+    const nextAuthUser = normalizeUser(firebaseUser);
+
+    if (!nextAuthUser) {
+      setAuthUser(null);
+      setUser(null);
+      return null;
+    }
+
+    const nextUser = mergeUserProfile(
+      nextAuthUser,
+      profileOverrides[nextAuthUser.uid],
+    );
+
+    setAuthUser(nextAuthUser);
+    setUser(nextUser);
+
+    return nextUser;
+  }, [profileOverrides]);
+
+  const login = useCallback(async ({ email, password }) => {
+    setAuthenticating(true);
+
+    try {
+      const result = await signInWithEmailAndPassword(auth, email, password);
+      const nextUser = syncSignedInUser(result.user);
+
+      if (nextUser) {
+        showNotification(`Welcome back, ${nextUser.name}!`, "success");
+      }
+
+      return nextUser;
+    } catch (error) {
+      showNotification(getFirebaseErrorMessage(error), "error");
+      return null;
+    } finally {
+      setAuthenticating(false);
+    }
+  }, [showNotification, syncSignedInUser]);
+
+  const register = useCallback(async ({ name, email, password }) => {
+    setAuthenticating(true);
+
+    try {
+      const result = await createUserWithEmailAndPassword(auth, email, password);
+      const trimmedName = name.trim();
+
+      if (trimmedName) {
+        await updateFirebaseProfile(result.user, { displayName: trimmedName });
+      }
+
+      const nextUser = syncSignedInUser(result.user);
+
+      if (nextUser) {
+        showNotification(`Account created for ${nextUser.name}!`, "success");
+      }
+
+      return nextUser;
+    } catch (error) {
+      showNotification(getFirebaseErrorMessage(error), "error");
+      return null;
+    } finally {
+      setAuthenticating(false);
+    }
+  }, [showNotification, syncSignedInUser]);
+
   const signInWithGoogle = useCallback(async () => {
     setAuthenticating(true);
 
     try {
       const result = await signInWithPopup(auth, googleProvider);
-      const nextAuthUser = normalizeUser(result.user);
-      const nextUser = mergeUserProfile(
-        nextAuthUser,
-        profileOverrides[nextAuthUser.uid],
-      );
+      const nextUser = syncSignedInUser(result.user);
 
-      setAuthUser(nextAuthUser);
-      setUser(nextUser);
-      showNotification(`Welcome back, ${nextUser.name}!`, "success");
+      if (nextUser) {
+        showNotification(`Welcome back, ${nextUser.name}!`, "success");
+      }
 
       return nextUser;
     } catch (error) {
@@ -165,7 +246,7 @@ export const AuthProvider = ({ children }) => {
     } finally {
       setAuthenticating(false);
     }
-  }, [profileOverrides, showNotification]);
+  }, [showNotification, syncSignedInUser]);
 
   const updateProfile = useCallback((updates) => {
     if (!authUser?.uid) {
@@ -183,6 +264,12 @@ export const AuthProvider = ({ children }) => {
       ...prev,
       [authUser.uid]: nextSavedProfile,
     }));
+
+    if (updates.name?.trim() && auth.currentUser) {
+      updateFirebaseProfile(auth.currentUser, {
+        displayName: updates.name.trim(),
+      }).catch(() => {});
+    }
 
     return mergeUserProfile(authUser, nextSavedProfile);
   }, [authUser, profileOverrides]);
@@ -205,12 +292,23 @@ export const AuthProvider = ({ children }) => {
       user,
       loading,
       authenticating,
+      login,
+      register,
       signInWithGoogle,
       logout,
       updateProfile,
       isAuthenticated: Boolean(user),
     }),
-    [authenticating, loading, logout, signInWithGoogle, updateProfile, user],
+    [
+      authenticating,
+      loading,
+      login,
+      logout,
+      register,
+      signInWithGoogle,
+      updateProfile,
+      user,
+    ],
   );
 
   return createElement(AuthContext.Provider, { value }, children);

@@ -28,13 +28,13 @@ const ProfilePage = () => {
 
   if (!user) {
     return (
-      <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-slate-950 px-4 pb-24 pt-32 sm:px-8">
+      <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-slate-950 px-4 pb-20 pt-28 sm:px-8 sm:pb-24 sm:pt-32">
         <div className="absolute left-[-120px] top-24 -z-10 h-[420px] w-[420px] rounded-full bg-purple-600/15 blur-[120px]" />
         <div className="absolute bottom-[-120px] right-[-40px] -z-10 h-[420px] w-[420px] rounded-full bg-blue-500/15 blur-[120px]" />
 
         <div className="w-full max-w-4xl overflow-hidden rounded-[2.5rem] border border-white/10 bg-white/5 shadow-2xl backdrop-blur-2xl">
           <div className="grid gap-0 lg:grid-cols-[1.1fr_0.9fr]">
-            <div className="border-b border-white/10 p-10 lg:border-b-0 lg:border-r">
+            <div className="border-b border-white/10 p-6 sm:p-8 lg:border-b-0 lg:border-r lg:p-10">
               <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-[10px] font-black uppercase tracking-[0.3em] text-purple-300">
                 <SparklesIcon className="h-4 w-4" />
                 Profile Hub
@@ -44,8 +44,8 @@ const ProfilePage = () => {
                 Build a profile that feels like your taste.
               </h1>
               <p className="mt-5 max-w-xl text-sm font-medium leading-7 text-gray-300">
-                Sign in with Google to unlock your avatar, keep favorites close, and shape a
-                movie identity that stays ready for every visit.
+                Create an account, sign in, or use Google to unlock your avatar, keep
+                favorites close, and shape a movie identity that stays ready for every visit.
               </p>
 
               <div className="mt-8 flex flex-wrap gap-3">
@@ -61,20 +61,21 @@ const ProfilePage = () => {
               </div>
             </div>
 
-            <div className="p-10">
+            <div className="p-6 sm:p-8 lg:p-10">
               <h2 className="text-2xl font-black uppercase tracking-tighter text-white">
                 Unlock your account
               </h2>
               <p className="mt-3 text-sm font-medium text-gray-400">
-                One sign-in gives you access to synced identity, personalized details, and a
-                smoother favorites experience.
+                One quick sign-in gives you access to synced identity, personalized details,
+                and a smoother favorites experience.
               </p>
 
               <div className="mt-8 space-y-4">
                 <div className="rounded-[1.75rem] border border-white/10 bg-black/30 p-5">
-                  <p className="text-sm font-bold text-white">Google-powered account card</p>
+                  <p className="text-sm font-bold text-white">Flexible account access</p>
                   <p className="mt-2 text-sm text-gray-400">
-                    Pull in your name and avatar instantly, then refine the rest locally.
+                    Sign in with email and password or pull in your name and avatar with
+                    Google, then refine the rest locally.
                   </p>
                 </div>
                 <div className="rounded-[1.75rem] border border-white/10 bg-black/30 p-5">
@@ -118,7 +119,7 @@ const ProfilePage = () => {
   ];
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-slate-950 px-4 pb-24 pt-40 sm:px-12 lg:px-24 xl:px-40">
+    <div className="relative min-h-screen overflow-hidden bg-slate-950 px-4 pb-20 pt-28 sm:px-12 sm:pb-24 sm:pt-36 lg:px-24 xl:px-40">
       <div className="absolute right-0 top-0 -z-10 h-[600px] w-[600px] rounded-full bg-purple-600/10 blur-[120px]" />
       <div className="absolute bottom-0 left-0 -z-10 h-[500px] w-[500px] rounded-full bg-blue-600/10 blur-[120px]" />
       <div className="absolute left-1/2 top-40 -z-10 h-[420px] w-[420px] -translate-x-1/2 rounded-full bg-cyan-400/5 blur-[140px]" />
@@ -126,7 +127,7 @@ const ProfilePage = () => {
 
       <div className="mx-auto max-w-7xl space-y-8">
         <section className="overflow-hidden rounded-[2.75rem] border border-white/10 bg-[linear-gradient(135deg,rgba(255,255,255,0.07),rgba(255,255,255,0.03))] shadow-2xl backdrop-blur-2xl">
-          <div className="grid gap-8 px-8 py-10 sm:px-10 lg:grid-cols-[1.35fr_0.65fr] lg:items-center">
+          <div className="grid gap-8 px-5 py-8 sm:px-8 sm:py-10 lg:grid-cols-[1.35fr_0.65fr] lg:items-center lg:px-10">
             <div className="animate-in slide-in-from-left-6 duration-700">
               <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-black/20 px-4 py-2 text-[10px] font-black uppercase tracking-[0.3em] text-purple-200">
                 <SparklesIcon className="h-4 w-4" />

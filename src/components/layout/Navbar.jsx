@@ -31,6 +31,14 @@ const Navbar = () => {
   const panelRef = useRef(null);
 
   useEffect(() => {
+    document.body.style.overflow = isMenuOpen ? "hidden" : "";
+
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isMenuOpen]);
+
+  useEffect(() => {
     const handleClickOutside = (event) => {
       if (panelRef.current && !panelRef.current.contains(event.target)) {
         setShowNotifPanel(false);
@@ -89,8 +97,12 @@ const Navbar = () => {
 
   return (
     <div className="fixed left-0 top-0 z-[100] w-full px-0 sm:top-6 sm:px-12 lg:px-24 xl:px-40">
-      <nav className="flex items-center justify-between border-b border-white/10 bg-black/60 px-6 py-3 text-white shadow-2xl ring-1 ring-white/5 backdrop-blur-md transition-all sm:rounded-full sm:border sm:px-8">
-        <Link to="/" className="flex items-center gap-2" onClick={() => setIsMenuOpen(false)}>
+      <nav className="flex items-center justify-between border-b border-white/10 bg-black/60 px-4 py-3 text-white shadow-2xl ring-1 ring-white/5 backdrop-blur-md transition-all sm:rounded-full sm:border sm:px-8">
+        <Link
+          to="/"
+          className="flex items-center gap-2"
+          onClick={() => setIsMenuOpen(false)}
+        >
           <img
             src="/images/logo.png"
             alt="CineMax Logo"
@@ -148,7 +160,7 @@ const Navbar = () => {
             </button>
 
             {showNotifPanel && (
-              <div className="absolute right-[-80px] mt-6 w-[280px] overflow-hidden rounded-2xl border border-white/10 bg-slate-900/95 shadow-2xl backdrop-blur-2xl duration-300 animate-in fade-in slide-in-from-top-4 sm:right-0 sm:w-80 sm:rounded-[2rem]">
+              <div className="fixed left-3 right-3 top-[72px] overflow-hidden rounded-2xl border border-white/10 bg-slate-900/95 shadow-2xl backdrop-blur-2xl duration-300 animate-in fade-in slide-in-from-top-4 sm:absolute sm:left-auto sm:right-0 sm:top-auto sm:mt-6 sm:w-80 sm:rounded-[2rem]">
                 <div className="flex items-center justify-between border-b border-white/5 px-6 py-5">
                   <h3 className="text-sm font-black uppercase tracking-tighter italic">
                     Notifications
@@ -231,7 +243,8 @@ const Navbar = () => {
 
           <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="p-1 text-white transition-colors hover:text-purple-500 lg:hidden"
+            className="rounded-full p-1 text-white transition-colors hover:text-purple-500 lg:hidden"
+            aria-label={isMenuOpen ? "Close navigation menu" : "Open navigation menu"}
           >
             {isMenuOpen ? <XMarkIcon className="h-7 w-7" /> : <Bars3Icon className="h-7 w-7" />}
           </button>
@@ -239,18 +252,18 @@ const Navbar = () => {
       </nav>
 
       {isMenuOpen && (
-        <div className="fixed inset-0 top-[60px] z-[90] duration-300 animate-in fade-in slide-in-from-top-4 sm:top-[76px] lg:hidden">
+        <div className="fixed inset-0 top-[61px] z-[90] duration-300 animate-in fade-in slide-in-from-top-4 sm:top-[76px] lg:hidden">
           <div
             className="absolute inset-0 bg-slate-950/95 backdrop-blur-3xl"
             onClick={() => setIsMenuOpen(false)}
           />
-          <div className="relative z-10 flex flex-col gap-6 p-8">
+          <div className="relative z-10 flex max-h-full flex-col gap-6 overflow-y-auto p-6 sm:p-8">
             {NAV_LINKS.map((link) => (
               <Link
                 key={link.name}
                 to={link.path}
                 onClick={() => setIsMenuOpen(false)}
-                className={`text-2xl font-black uppercase tracking-tighter ${
+                className={`text-xl font-black uppercase tracking-tighter sm:text-2xl ${
                   checkActive(link.path)
                     ? "border-l-4 border-purple-500 px-4 text-purple-500"
                     : "text-gray-400 hover:text-white"

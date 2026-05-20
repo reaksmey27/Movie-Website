@@ -1,5 +1,15 @@
 @import "tailwindcss";
 
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    overflow-x: hidden;
+  }
+}
+
 @layer utilities {
   .no-scrollbar {
     &::-webkit-scrollbar {
@@ -7,5 +17,6 @@
     }
 
     -ms-overflow-style: none;
+    scrollbar-width: none;
   }
 }

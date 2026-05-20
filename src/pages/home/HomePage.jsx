@@ -13,16 +13,16 @@ const HomePage = () => {
   }
 
   return (
-    <div id="home" className="bg-slate-950 min-h-screen">
+    <div id="home" className="min-h-screen bg-slate-950">
       <HeroSection
         trendingMovies={
           movies.featured.length > 0 ? movies.featured : movies.trending
         }
       />
 
-      <div className="relative z-30 mt-20 pb-20 space-y-16">
+      <div className="relative z-30 mt-10 space-y-12 pb-16 sm:mt-20 sm:space-y-16 sm:pb-20">
         {error && (
-          <div className="mx-4 sm:mx-12 lg:px-24 xl:px-40 py-2">
+          <div className="mx-4 py-2 sm:mx-12 lg:px-24 xl:px-40">
             <PageError message={error} buttonLabel="Try Again" onRetry={retry} />
           </div>
         )}

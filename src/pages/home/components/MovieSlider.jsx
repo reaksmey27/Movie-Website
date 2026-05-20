@@ -40,9 +40,9 @@ const MovieSlider = ({ title, movies = [] }) => {
   );
 
   return (
-    <div className="bg-transparent py-12 relative group/slider overflow-hidden">
-      <div className="px-4 sm:px-12 lg:px-24 mb-8">
-        <h2 className="text-white text-2xl md:text-4xl font-black tracking-tight flex items-center gap-3">
+    <div className="group/slider relative overflow-hidden bg-transparent py-6 sm:py-12">
+      <div className="mb-5 px-4 sm:mb-8 sm:px-12 lg:px-24">
+        <h2 className="flex items-center gap-3 text-2xl font-black tracking-tight text-white md:text-4xl">
           {title}
           <span className="h-[2px] w-12 bg-purple-600 rounded-full mt-2 hidden md:block" />
         </h2>
@@ -52,7 +52,7 @@ const MovieSlider = ({ title, movies = [] }) => {
         <button
           type="button"
           onClick={() => handleScroll("left")}
-          className="absolute left-0 top-[100px] bottom-10 w-16 md:w-24 z-40 flex items-center justify-center cursor-pointer opacity-0 group-hover/slider:opacity-100 transition-opacity duration-300"
+          className="absolute bottom-10 left-0 top-[92px] z-40 hidden w-16 cursor-pointer items-center justify-center opacity-0 transition-opacity duration-300 group-hover/slider:opacity-100 md:flex md:w-24"
           aria-label={`Scroll ${title} left`}
         >
           <div className="p-3 rounded-full bg-black/20 backdrop-blur-md border border-white/10 text-white hover:bg-white hover:text-black transition-all">
@@ -65,7 +65,7 @@ const MovieSlider = ({ title, movies = [] }) => {
         <button
           type="button"
           onClick={() => handleScroll("right")}
-          className="absolute right-0 top-[100px] bottom-10 w-16 md:w-24 z-40 flex items-center justify-center cursor-pointer opacity-0 group-hover/slider:opacity-100 transition-opacity duration-300"
+          className="absolute bottom-10 right-0 top-[92px] z-40 hidden w-16 cursor-pointer items-center justify-center opacity-0 transition-opacity duration-300 group-hover/slider:opacity-100 md:flex md:w-24"
           aria-label={`Scroll ${title} right`}
         >
           <div className="p-3 rounded-full bg-black/20 backdrop-blur-md border border-white/10 text-white hover:bg-white hover:text-black transition-all">
@@ -77,12 +77,12 @@ const MovieSlider = ({ title, movies = [] }) => {
       <div
         ref={sliderRef}
         onScroll={checkScroll}
-        className="flex gap-6 overflow-x-auto no-scrollbar scroll-smooth pb-12 px-4 sm:px-12 lg:px-24"
+        className="no-scrollbar flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-8 scroll-smooth sm:gap-6 sm:px-12 sm:pb-12 lg:px-24"
       >
         {movies.map((movie) => (
           <div
             key={movie.id}
-            className="flex-shrink-0 w-[260px] md:w-[calc((100%-72px)/4)]"
+            className="w-[72vw] max-w-[220px] flex-shrink-0 snap-start min-[420px]:w-[220px] lg:w-[calc((100%-72px)/4)]"
           >
             <MovieCard movie={movie} />
           </div>

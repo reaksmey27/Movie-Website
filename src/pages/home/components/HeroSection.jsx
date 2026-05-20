@@ -54,7 +54,7 @@ const HeroSection = ({ trendingMovies = [] }) => {
   const isFav = isFavorite(movie.id);
 
   return (
-    <section className="relative min-h-[90vh] sm:h-screen w-full bg-black flex items-center overflow-hidden">
+    <section className="relative flex min-h-[100svh] w-full items-end overflow-hidden bg-black pb-20 pt-24 sm:items-center sm:pb-0 sm:pt-0">
       <div
         className={`absolute inset-0 z-0 transition-opacity duration-1000 ${fade ? "opacity-60" : "opacity-0"}`}
       >
@@ -70,21 +70,21 @@ const HeroSection = ({ trendingMovies = [] }) => {
       </div>
 
       <div
-        className={`relative z-10 px-6 sm:px-12 lg:px-24 xl:px-40 mt-32 sm:mt-16 max-w-7xl transition-all duration-700 ease-out transform 
+        className={`relative z-10 w-full max-w-7xl px-4 pb-8 pr-4 transition-all duration-700 ease-out transform sm:mt-16 sm:px-12 sm:pb-0 lg:px-24 xl:px-40
         ${fade ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-12"}`}
       >
-        <h2 className="text-3xl sm:text-5xl lg:text-6xl font-black text-white leading-[0.9] tracking-tighter mb-4 sm:mb-6 drop-shadow-2xl">
+        <h2 className="mb-4 text-3xl font-black leading-[0.9] tracking-tighter text-white drop-shadow-2xl sm:mb-6 sm:text-5xl lg:text-6xl">
           {movie.title} <br className="hidden sm:block" />
-          <span className="text-white/60 text-lg sm:text-3xl lg:text-4xl font-bold tracking-tight block sm:inline mt-2 sm:mt-0">
+          <span className="mt-2 block text-lg font-bold tracking-tight text-white/60 sm:mt-0 sm:inline sm:text-3xl lg:text-4xl">
             {movie.subtitle}
           </span>
         </h2>
 
-        <div className="flex flex-wrap items-center gap-3 sm:gap-4 mb-6 sm:mb-8">
-          <span className="bg-purple-600 text-white text-[9px] sm:text-[10px] px-2 py-1 rounded-lg font-black uppercase tracking-widest shadow-lg">
+        <div className="mb-6 flex flex-wrap items-center gap-2.5 sm:mb-8 sm:gap-4">
+          <span className="rounded-lg bg-purple-600 px-2 py-1 text-[9px] font-black uppercase tracking-widest text-white shadow-lg sm:text-[10px]">
             Featured
           </span>
-          <div className="flex items-center gap-1 bg-yellow-500 text-black px-2 py-0.5 rounded-lg text-[10px] sm:text-xs font-black">
+          <div className="flex items-center gap-1 rounded-lg bg-yellow-500 px-2 py-0.5 text-[10px] font-black text-black sm:text-xs">
             <StarIcon className="h-3 w-3 sm:h-4 sm:w-4" />
             <span>{movie.rating}</span>
           </div>
@@ -92,7 +92,7 @@ const HeroSection = ({ trendingMovies = [] }) => {
             {movie.genres.slice(0, 2).map((genre) => (
               <span
                 key={genre}
-                className="bg-white/5 border border-white/10 text-gray-300 px-3 py-0.5 rounded-lg text-[9px] sm:text-[10px] font-black uppercase tracking-widest backdrop-blur-md"
+                className="rounded-lg border border-white/10 bg-white/5 px-3 py-0.5 text-[9px] font-black uppercase tracking-widest text-gray-300 backdrop-blur-md sm:text-[10px]"
               >
                 {genre}
               </span>
@@ -100,26 +100,26 @@ const HeroSection = ({ trendingMovies = [] }) => {
           </div>
         </div>
 
-        <p className="text-gray-400 text-base sm:text-xl max-w-2xl mb-8 sm:mb-12 leading-relaxed font-medium line-clamp-3">
+        <p className="mb-8 max-w-2xl text-sm font-medium leading-relaxed text-gray-300 line-clamp-5 sm:mb-12 sm:text-xl sm:text-gray-400">
           {movie.description}
         </p>
 
-        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 sm:gap-6">
+        <div className="flex flex-col items-stretch gap-4 sm:flex-row sm:items-center sm:gap-6">
           <Link
             to={`/movie/${movie.id}`}
-            className="group flex items-center justify-center gap-4 bg-purple-600 hover:bg-purple-500 text-white px-8 sm:px-10 py-4 sm:py-5 rounded-2xl font-black uppercase tracking-[0.2em] text-[10px] sm:text-xs transition-all shadow-xl shadow-purple-600/20 active:scale-95"
+            className="group flex min-h-[56px] items-center justify-center gap-4 rounded-2xl bg-purple-600 px-6 py-4 text-[10px] font-black uppercase tracking-[0.18em] text-white shadow-xl shadow-purple-600/20 transition-all hover:bg-purple-500 active:scale-95 sm:px-10 sm:py-5 sm:text-xs sm:tracking-[0.2em]"
           >
             <PlayCircleIcon className="h-5 w-5 sm:h-6 sm:w-6 transition-transform group-hover:scale-110" />
             <span>Watch Now</span>
           </Link>
 
-          <div className="flex items-center gap-4">
+          <div className="flex w-full flex-wrap items-stretch gap-3 sm:w-auto sm:flex-nowrap sm:items-center sm:gap-4">
             {movie.trailerKey && (
               <button
                 onClick={() => setShowTrailer(true)}
-                className="flex-1 group flex items-center justify-center gap-3 sm:gap-4 bg-white/5 hover:bg-white/10 border border-white/10 text-white px-6 sm:px-10 py-4 sm:py-5 rounded-2xl font-black uppercase tracking-[0.2em] text-[10px] sm:text-xs transition-all backdrop-blur-xl active:scale-95"
+                className="group flex min-h-[56px] min-w-0 flex-1 items-center justify-center gap-3 rounded-2xl border border-white/10 bg-white/5 px-4 py-4 text-[10px] font-black uppercase tracking-[0.18em] text-white transition-all backdrop-blur-xl hover:bg-white/10 active:scale-95 sm:flex-none sm:gap-4 sm:px-10 sm:py-5 sm:text-xs sm:tracking-[0.2em]"
               >
-                <div className="bg-purple-600/20 p-1.5 sm:p-2 rounded-full">
+                <div className="rounded-full bg-purple-600/20 p-1.5 sm:p-2">
                   <PlayIcon className="h-3 w-3 sm:h-4 sm:w-4 text-purple-500 transition-transform group-hover:scale-125" />
                 </div>
                 <span>Trailer</span>
@@ -128,10 +128,10 @@ const HeroSection = ({ trendingMovies = [] }) => {
 
             <button
               onClick={() => toggleFavorite(movie)}
-              className={`flex-shrink-0 flex items-center justify-center gap-4 px-6 sm:px-10 py-4 sm:py-5 rounded-2xl font-black transition-all backdrop-blur-xl active:scale-95 border-2 ${
+              className={`flex min-h-[56px] flex-1 items-center justify-center gap-3 rounded-2xl border-2 px-4 py-4 font-black transition-all backdrop-blur-xl active:scale-95 sm:flex-none sm:gap-4 sm:px-10 sm:py-5 ${
                 isFav
-                  ? "bg-red-500/20 border-red-500 text-red-500 shadow-lg shadow-red-500/20"
-                  : "bg-white/5 border-white/10 text-white hover:bg-white/10"
+                  ? "border-red-500 bg-red-500/20 text-red-500 shadow-lg shadow-red-500/20"
+                  : "border-white/10 bg-white/5 text-white hover:bg-white/10"
               }`}
             >
               {isFav ? (
@@ -139,7 +139,7 @@ const HeroSection = ({ trendingMovies = [] }) => {
               ) : (
                 <HeartOutline className="h-5 w-5 sm:h-6 sm:w-6" />
               )}
-              <span className="hidden sm:inline uppercase tracking-[0.2em] text-[10px] sm:text-xs">
+              <span className="text-[10px] uppercase tracking-[0.18em] sm:text-xs sm:tracking-[0.2em]">
                 Favorite
               </span>
             </button>
@@ -164,7 +164,7 @@ const HeroSection = ({ trendingMovies = [] }) => {
         </button>
       </div>
 
-      <div className="absolute bottom-8 sm:bottom-12 left-1/2 -translate-x-1/2 z-20 flex items-center gap-3 sm:gap-4">
+      <div className="absolute bottom-6 left-1/2 z-20 flex -translate-x-1/2 items-center gap-3 sm:bottom-12 sm:gap-4">
         {FEATURED_MOVIES.map((_, idx) => (
           <button
             key={idx}
@@ -175,10 +175,10 @@ const HeroSection = ({ trendingMovies = [] }) => {
                 setFade(true);
               }, 400);
             }}
-            className={`h-1.5 transition-all duration-500 rounded-full ${
+            className={`h-2 rounded-full transition-all duration-500 ${
               idx === currentIndex
                 ? "w-10 sm:w-14 bg-purple-600 shadow-lg shadow-purple-500/50"
-                : "w-2 sm:w-3 bg-white/20"
+                : "w-3 bg-white/30 sm:w-3"
             }`}
           />
         ))}

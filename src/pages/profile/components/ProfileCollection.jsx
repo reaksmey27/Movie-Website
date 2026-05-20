@@ -16,7 +16,7 @@ const ProfileCollection = () => {
 
   if (favorites.length === 0) {
     return (
-      <div className="rounded-[2.5rem] border border-white/10 bg-gradient-to-br from-white/8 via-white/5 to-purple-500/10 p-10 shadow-2xl backdrop-blur-2xl">
+      <div className="rounded-[2.5rem] border border-white/10 bg-gradient-to-br from-white/8 via-white/5 to-purple-500/10 p-5 shadow-2xl backdrop-blur-2xl sm:p-10">
         <div className="flex items-center gap-3 text-purple-300">
           <HeartIcon className="h-6 w-6" />
           <p className="text-[10px] font-black uppercase tracking-[0.3em]">
@@ -53,7 +53,7 @@ const ProfileCollection = () => {
   }
 
   return (
-    <div className="rounded-[2.5rem] border border-white/10 bg-white/5 p-10 shadow-2xl backdrop-blur-2xl">
+    <div className="rounded-[2.5rem] border border-white/10 bg-white/5 p-5 shadow-2xl backdrop-blur-2xl sm:p-10">
       <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
         <div>
           <p className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-500">

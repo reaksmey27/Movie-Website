@@ -9,19 +9,19 @@ const TrendingPage = () => {
     const { movies, loading, error } = useTrendingMovies();
 
     return (
-        <div className="min-h-screen bg-slate-950 pt-40 pb-24 px-4 sm:px-12 lg:px-24 xl:px-40 relative overflow-hidden">
+        <div className="relative min-h-screen overflow-hidden bg-slate-950 px-4 pb-20 pt-24 sm:px-12 sm:pb-24 sm:pt-36 lg:px-24 xl:px-40">
             <div className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-orange-600/10 blur-[120px] rounded-full -z-10 animate-pulse" />
             <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-purple-600/10 blur-[120px] rounded-full -z-10" />
 
             <div className="max-w-[1400px] mx-auto">
-                <div className="flex flex-col gap-4 mb-16">
-                    <div className="flex items-center gap-3 mb-2">
+                <div className="mb-12 flex flex-col gap-4 sm:mb-16">
+                    <div className="mb-2 flex items-center gap-3">
                         <div className="p-2 bg-orange-500/20 rounded-lg">
                             <FireIcon className="h-6 w-6 text-orange-500" />
                         </div>
                         <span className="text-orange-500 font-black uppercase tracking-[0.3em] text-[10px]">On Fire Today</span>
                     </div>
-                    <h1 className="text-4xl md:text-6xl font-black text-white tracking-tighter uppercase leading-none">
+                    <h1 className="text-3xl font-black uppercase leading-none tracking-tighter text-white sm:text-4xl md:text-6xl">
                         Trending <br />
                         <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-purple-500">Masterpieces</span>
                     </h1>

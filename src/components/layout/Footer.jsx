@@ -7,24 +7,24 @@ const Footer = () => {
 
   return (
     <footer className="border-t border-white/5 bg-slate-950">
-      <div className="max-w-7xl mx-auto px-6 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-10 mb-12">
-          <div className="space-y-4">
+      <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 sm:py-12">
+        <div className="mb-10 grid grid-cols-1 gap-8 sm:mb-12 sm:gap-10 md:grid-cols-4">
+          <div className="space-y-4 text-center md:text-left">
             <img
               src="/images/logo.png"
               alt="CineMax Logo"
-              className="h-8 w-auto sm:h-10"
+              className="mx-auto h-8 w-auto sm:h-10 md:mx-0"
               loading="lazy"
               decoding="async"
             />
-            <p className="text-gray-400 text-sm leading-relaxed">
+            <p className="text-sm leading-relaxed text-gray-400">
               Your ultimate destination for the latest blockbusters and timeless
               classics. Explore, discover, and enjoy the world of cinema.
             </p>
           </div>
 
-          <div className="flex flex-col space-y-2 text-sm text-gray-400">
-            <h3 className="text-white font-semibold mb-2">Explore</h3>
+          <div className="flex flex-col space-y-2 text-center text-sm text-gray-400 md:text-left">
+            <h3 className="mb-2 font-semibold text-white">Explore</h3>
             <Link to="/" className="hover:text-purple-400">
               Home
             </Link>
@@ -42,8 +42,8 @@ const Footer = () => {
             </Link>
           </div>
 
-          <div className="flex flex-col space-y-2 text-sm text-gray-400">
-            <h3 className="text-white font-semibold mb-2">Legal</h3>
+          <div className="flex flex-col space-y-2 text-center text-sm text-gray-400 md:text-left">
+            <h3 className="mb-2 font-semibold text-white">Legal</h3>
             <Link to="/privacy" className="hover:text-purple-400">
               Privacy Policy
             </Link>
@@ -53,8 +53,13 @@ const Footer = () => {
           </div>
 
           <div className="space-y-4">
-            <h3 className="text-white font-semibold">Stay Updated</h3>
-            <form className="flex gap-2" onSubmit={(e) => e.preventDefault()}>
+            <h3 className="text-center font-semibold text-white md:text-left">
+              Stay Updated
+            </h3>
+            <form
+              className="flex flex-col gap-2 sm:flex-row"
+              onSubmit={(e) => e.preventDefault()}
+            >
               <label htmlFor="email" className="sr-only">
                 Email
               </label>
@@ -63,11 +68,11 @@ const Footer = () => {
                 type="email"
                 required
                 placeholder="Email address"
-                className="bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-purple-500 w-full"
+                className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-purple-500"
               />
               <button
                 type="submit"
-                className="bg-purple-600 hover:bg-purple-700 px-4 py-2 rounded-lg text-sm font-medium transition"
+                className="rounded-lg bg-purple-600 px-4 py-2 text-sm font-medium transition hover:bg-purple-700"
               >
                 Join
               </button>
@@ -75,9 +80,9 @@ const Footer = () => {
           </div>
         </div>
 
-        <div className="pt-6 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-xs text-gray-500">
-            © {currentYear} CineMax. All rights reserved.
+        <div className="flex flex-col items-center justify-between gap-4 border-t border-white/5 pt-6 md:flex-row">
+          <p className="text-center text-xs text-gray-500 md:text-left">
+            &copy; {currentYear} CineMax. All rights reserved.
           </p>
 
           <div className="flex space-x-5 text-gray-500">

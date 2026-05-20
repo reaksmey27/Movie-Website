@@ -20,8 +20,8 @@ const ProfileForm = ({
   onSubmit,
 }) => {
   return (
-    <div className="rounded-[2.5rem] border border-white/10 bg-white/5 p-10 shadow-2xl backdrop-blur-2xl">
-      <div className="mb-10 flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+    <div className="rounded-[2.5rem] border border-white/10 bg-white/5 p-5 shadow-2xl backdrop-blur-2xl sm:p-10">
+      <div className="mb-8 flex flex-col gap-5 sm:mb-10 lg:flex-row lg:items-center lg:justify-between">
         <div>
           <p className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-500">
             Profile Studio
@@ -38,7 +38,7 @@ const ProfileForm = ({
         <button
           type="button"
           onClick={isEditing ? onCancelEditing : onStartEditing}
-          className={`rounded-2xl px-6 py-3 text-[10px] font-black uppercase tracking-[0.25em] transition-all ${
+          className={`w-full rounded-2xl px-6 py-3 text-[10px] font-black uppercase tracking-[0.2em] transition-all sm:w-auto sm:tracking-[0.25em] ${
             isEditing
               ? "bg-white text-black hover:bg-gray-200"
               : "bg-purple-600 text-white shadow-lg shadow-purple-600/20 hover:bg-purple-500"
@@ -150,7 +150,7 @@ const ProfileForm = ({
             <button
               type="submit"
               disabled={!isDirty}
-              className="rounded-2xl bg-purple-600 px-8 py-4 text-[10px] font-black uppercase tracking-[0.25em] text-white shadow-xl shadow-purple-600/20 transition-all hover:bg-purple-500 disabled:cursor-not-allowed disabled:bg-white/10 disabled:text-gray-500"
+              className="w-full rounded-2xl bg-purple-600 px-8 py-4 text-[10px] font-black uppercase tracking-[0.2em] text-white shadow-xl shadow-purple-600/20 transition-all hover:bg-purple-500 disabled:cursor-not-allowed disabled:bg-white/10 disabled:text-gray-500 sm:w-auto sm:tracking-[0.25em]"
             >
               Save Profile
             </button>
