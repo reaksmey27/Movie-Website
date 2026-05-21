@@ -127,11 +127,11 @@ export const NotificationProvider = ({ children }) => {
     <NotificationContext.Provider value={value}>
       {children}
 
-      <div className="fixed bottom-8 right-8 z-[2000] flex flex-col gap-4 pointer-events-none">
+      <div className="pointer-events-none fixed bottom-4 left-4 right-4 z-[2000] flex flex-col gap-3 sm:bottom-8 sm:left-auto sm:right-8 sm:max-w-sm sm:gap-4">
         {notifications.map((notification) => (
           <div
             key={notification.id}
-            className={`pointer-events-auto flex items-center gap-4 px-6 py-4 rounded-2xl border backdrop-blur-xl shadow-2xl min-w-[320px] transition-all duration-500 transform ${
+            className={`pointer-events-auto flex w-full items-center gap-3 rounded-2xl border px-4 py-3 backdrop-blur-xl shadow-2xl transition-all duration-500 transform sm:min-w-[320px] sm:gap-4 sm:px-6 sm:py-4 ${
               notification.visible
                 ? "opacity-100 translate-x-0"
                 : "opacity-0 translate-x-12"

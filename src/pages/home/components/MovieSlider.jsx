@@ -2,10 +2,17 @@ import React, { memo, useCallback, useEffect, useRef, useState } from "react";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 import MovieCard from "../../../components/ui/MovieCard";
 
+const getHeadingId = (title) =>
+  `slider-${title
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "")}`;
+
 const MovieSlider = ({ title, movies = [] }) => {
   const sliderRef = useRef(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);
+  const headingId = getHeadingId(title);
 
   const checkScroll = useCallback(() => {
     if (!sliderRef.current) {
@@ -40,11 +47,17 @@ const MovieSlider = ({ title, movies = [] }) => {
   );
 
   return (
-    <div className="group/slider relative overflow-hidden bg-transparent py-5 sm:py-10">
+    <section
+      aria-labelledby={headingId}
+      className="group/slider relative overflow-hidden bg-transparent py-4 sm:py-10"
+    >
       <div className="mb-4 px-4 sm:mb-8 sm:px-6 lg:px-24">
-        <h2 className="flex items-center gap-3 text-xl font-black tracking-tight text-white sm:text-2xl md:text-4xl">
+        <h2
+          id={headingId}
+          className="flex items-center gap-2.5 text-lg font-black tracking-tight text-white sm:gap-3 sm:text-2xl md:text-4xl"
+        >
           {title}
-          <span className="h-0.5 w-12 bg-purple-600 rounded-full mt-2 hidden md:block" />
+          <span className="mt-2 hidden h-0.5 w-12 rounded-full bg-purple-600 md:block" />
         </h2>
       </div>
 
@@ -77,18 +90,18 @@ const MovieSlider = ({ title, movies = [] }) => {
       <div
         ref={sliderRef}
         onScroll={checkScroll}
-        className="no-scrollbar flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-8 scroll-smooth sm:gap-5 sm:px-6 sm:pb-12 lg:px-24"
+        className="no-scrollbar flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-6 scroll-px-4 scroll-smooth sm:gap-5 sm:px-6 sm:pb-12 sm:scroll-px-6 lg:px-24 lg:scroll-px-24"
       >
         {movies.map((movie) => (
           <div
             key={movie.id}
-            className="w-[72vw] min-w-[15rem] max-w-[17rem] shrink-0 snap-start min-[420px]:w-[15.5rem] lg:w-[16rem] xl:w-[17rem]"
+            className="w-[58vw] min-w-[11rem] max-w-[13rem] shrink-0 snap-start min-[360px]:w-[11.5rem] min-[420px]:w-[12.5rem] sm:min-w-[15rem] sm:max-w-[17rem] sm:w-[15.5rem] lg:w-[16rem] xl:w-[17rem]"
           >
-            <MovieCard movie={movie} />
+            <MovieCard movie={movie} headingLevel="h3" />
           </div>
         ))}
       </div>
-    </div>
+    </section>
   );
 };
 

@@ -12,11 +12,12 @@ import {
 import { useFavorites } from "../../context/FavoritesContext";
 import { useWatchlist } from "../../context/WatchlistContext";
 
-const MovieCard = ({ movie }) => {
+const MovieCard = ({ movie, headingLevel = "h2" }) => {
   const { toggleFavorite, isFavorite } = useFavorites();
   const { toggleWatchlist, isInWatchlist } = useWatchlist();
   const isFav = isFavorite(movie.id);
   const isSaved = isInWatchlist(movie.id);
+  const TitleTag = headingLevel;
 
   const handleFavoriteClick = (e) => {
     e.preventDefault();
@@ -33,7 +34,7 @@ const MovieCard = ({ movie }) => {
   return (
     <Link
       to={`/movie/${movie.id}`}
-      className="group relative block h-88 w-full shrink-0 cursor-pointer touch-manipulation transition-all duration-500 hover:z-50 hover:scale-[1.02] min-[420px]:h-[24rem] sm:h-[26rem] md:h-[30rem] lg:h-[32rem]"
+      className="group relative block h-[18.5rem] w-full shrink-0 cursor-pointer touch-manipulation transition-all duration-500 hover:z-50 hover:scale-[1.02] min-[380px]:h-[21rem] min-[420px]:h-[24rem] sm:h-[26rem] md:h-[30rem] lg:h-[32rem]"
     >
       <img
         src={movie.posterImage || movie.image}
@@ -43,7 +44,7 @@ const MovieCard = ({ movie }) => {
         decoding="async"
       />
 
-      <div className="absolute right-2.5 top-2.5 z-50 flex flex-col gap-2 sm:right-4 sm:top-4 sm:gap-3">
+      <div className="absolute right-2 top-2 z-50 flex flex-col gap-2 sm:right-4 sm:top-4 sm:gap-3">
         <button
           onClick={handleWatchlistClick}
           className={`rounded-xl border p-2 backdrop-blur-md transition-all duration-300 active:scale-90 sm:p-2.5 ${
@@ -54,15 +55,15 @@ const MovieCard = ({ movie }) => {
           aria-label={isSaved ? "Remove from watchlist" : "Add to watchlist"}
         >
           {isSaved ? (
-            <BookmarkSolidIcon className="h-5 w-5" />
+            <BookmarkSolidIcon className="h-4 w-4 sm:h-5 sm:w-5" />
           ) : (
-            <BookmarkIcon className="h-5 w-5" />
+            <BookmarkIcon className="h-4 w-4 sm:h-5 sm:w-5" />
           )}
         </button>
 
         <button
           onClick={handleFavoriteClick}
-          className={`rounded-xl border p-2.5 backdrop-blur-md transition-all duration-300 active:scale-90 ${
+          className={`rounded-xl border p-2 backdrop-blur-md transition-all duration-300 active:scale-90 sm:p-2.5 ${
             isFav
               ? "border-red-400 bg-red-500 text-white shadow-[0_0_15px_rgba(239,68,68,0.5)]"
               : "border-white/10 bg-black/20 text-white opacity-100 hover:bg-white hover:text-black sm:opacity-0 sm:group-hover:opacity-100"
@@ -70,9 +71,9 @@ const MovieCard = ({ movie }) => {
           aria-label={isFav ? "Remove from favorites" : "Add to favorites"}
         >
           {isFav ? (
-            <HeartIcon className="h-5 w-5" />
+            <HeartIcon className="h-4 w-4 sm:h-5 sm:w-5" />
           ) : (
-            <HeartOutline className="h-5 w-5" />
+            <HeartOutline className="h-4 w-4 sm:h-5 sm:w-5" />
           )}
         </button>
       </div>
@@ -96,9 +97,9 @@ const MovieCard = ({ movie }) => {
         </div>
 
         <div className="relative z-10 space-y-2 transition-transform duration-500 sm:translate-y-4 sm:group-hover:translate-y-0">
-          <h4 className="line-clamp-2 text-[0.95rem] font-black leading-tight text-white transition-transform duration-500 ease-out sm:text-xl sm:translate-y-4 sm:group-hover:translate-y-0 md:text-2xl">
+          <TitleTag className="line-clamp-2 text-sm font-black leading-tight text-white transition-transform duration-500 ease-out min-[420px]:text-[0.95rem] sm:text-xl sm:translate-y-4 sm:group-hover:translate-y-0 md:text-2xl">
             {movie.title}
-          </h4>
+          </TitleTag>
 
           <div className="flex flex-wrap items-center gap-2 transition-transform duration-500 delay-75 ease-out sm:translate-y-4 sm:group-hover:translate-y-0">
             <span className="flex items-center gap-1 rounded-md bg-yellow-500 px-1.5 py-0.5 text-[10px] font-black text-black shadow-md">
@@ -108,7 +109,7 @@ const MovieCard = ({ movie }) => {
             <span className="rounded border border-white/10 bg-white/10 px-2 py-1 text-[10px] font-bold uppercase tracking-widest text-white backdrop-blur-md">
               {movie.genres?.[0] || "Movie"}
             </span>
-            <span className="w-full text-[10px] font-bold text-gray-300 min-[420px]:w-auto sm:ml-auto">
+            <span className="w-full truncate text-[10px] font-bold text-gray-300 min-[420px]:w-auto sm:ml-auto">
               {movie.subtitle}
             </span>
           </div>

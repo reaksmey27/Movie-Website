@@ -14,7 +14,11 @@ const HomePage = () => {
   }
 
   return (
-    <div id="home" className="min-h-screen bg-slate-950">
+    <main id="home" className="min-h-screen bg-slate-950">
+      <h1 className="sr-only">
+        CineMax home: discover trending, upcoming, and top-rated movies
+      </h1>
+
       <HeroSection
         trendingMovies={
           movies.featured.length > 0 ? movies.featured : movies.trending
@@ -58,7 +62,7 @@ const HomePage = () => {
 
         <HomeContentSection />
       </div>
-    </div>
+    </main>
   );
 };
 
