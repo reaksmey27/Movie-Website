@@ -33,7 +33,7 @@ const MovieCard = ({ movie }) => {
   return (
     <Link
       to={`/movie/${movie.id}`}
-      className="group relative block h-70 w-full shrink-0 cursor-pointer transition-all duration-500 hover:z-50 hover:scale-[1.02] min-[420px]:h-82.5 sm:h-90 md:h-107.5 lg:h-112.5"
+      className="group relative block h-88 w-full shrink-0 cursor-pointer touch-manipulation transition-all duration-500 hover:z-50 hover:scale-[1.02] min-[420px]:h-[24rem] sm:h-[26rem] md:h-[30rem] lg:h-[32rem]"
     >
       <img
         src={movie.posterImage || movie.image}
@@ -43,7 +43,7 @@ const MovieCard = ({ movie }) => {
         decoding="async"
       />
 
-      <div className="absolute right-3 top-3 z-50 flex flex-col gap-2.5 sm:right-4 sm:top-4 sm:gap-3">
+      <div className="absolute right-2.5 top-2.5 z-50 flex flex-col gap-2 sm:right-4 sm:top-4 sm:gap-3">
         <button
           onClick={handleWatchlistClick}
           className={`rounded-xl border p-2 backdrop-blur-md transition-all duration-300 active:scale-90 sm:p-2.5 ${
@@ -77,7 +77,7 @@ const MovieCard = ({ movie }) => {
         </button>
       </div>
 
-      <div className="absolute inset-0 flex flex-col justify-end overflow-hidden rounded-2xl bg-linear-to-t from-black via-black/80 to-transparent p-3.5 opacity-100 transition-all duration-500 sm:p-6 sm:opacity-0 sm:group-hover:opacity-100">
+      <div className="absolute inset-0 flex flex-col justify-end overflow-hidden rounded-2xl bg-linear-to-t from-black via-black/80 to-transparent p-3 opacity-100 transition-all duration-500 sm:p-6 sm:opacity-0 sm:group-hover:opacity-100">
         <div className="absolute left-1/2 top-1/2 hidden -translate-x-1/2 -translate-y-1/2 scale-50 opacity-0 transition-all duration-500 delay-100 sm:block sm:group-hover:scale-100 sm:group-hover:opacity-100">
           <div className="flex h-14 w-14 items-center justify-center rounded-full border border-white/20 bg-purple-600 shadow-[0_0_30px_rgba(168,85,247,0.5)]">
             <svg
@@ -96,7 +96,7 @@ const MovieCard = ({ movie }) => {
         </div>
 
         <div className="relative z-10 space-y-2 transition-transform duration-500 sm:translate-y-4 sm:group-hover:translate-y-0">
-          <h4 className="line-clamp-2 text-base font-black leading-tight text-white transition-transform duration-500 ease-out sm:text-xl sm:translate-y-4 sm:group-hover:translate-y-0 md:text-2xl">
+          <h4 className="line-clamp-2 text-[0.95rem] font-black leading-tight text-white transition-transform duration-500 ease-out sm:text-xl sm:translate-y-4 sm:group-hover:translate-y-0 md:text-2xl">
             {movie.title}
           </h4>
 

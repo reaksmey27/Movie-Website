@@ -28,10 +28,10 @@ const MoviesHeader = ({
   }, [inputValue, onSearch, searchQuery]);
 
   return (
-    <div className="mb-12 flex flex-col gap-8 sm:mb-16 sm:gap-10">
-      <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end md:gap-8">
+    <div className="mb-10 flex flex-col gap-6 sm:mb-16 sm:gap-10">
+      <div className="flex flex-col justify-between gap-5 md:flex-row md:items-end md:gap-8">
         <div className="space-y-3">
-          <h1 className="text-3xl font-black uppercase leading-none tracking-tighter text-white md:text-5xl">
+          <h1 className="text-3xl font-black uppercase leading-none tracking-tighter text-white sm:text-4xl md:text-5xl">
             {searchQuery ? "Searching" : "Explore"} <br />
             <span className="text-purple-500">
               {searchQuery ? "Results" : "Cinematic"}
@@ -45,7 +45,7 @@ const MoviesHeader = ({
           </p>
         </div>
 
-        <div className="relative w-full md:w-96 group">
+        <div className="group relative w-full md:w-96">
           <MagnifyingGlassIcon
             className={`absolute left-5 top-1/2 -translate-y-1/2 h-5 w-5 transition-colors duration-300 ${
               inputValue

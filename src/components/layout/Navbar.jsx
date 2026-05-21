@@ -96,8 +96,8 @@ const Navbar = () => {
   };
 
   return (
-    <div className="fixed left-0 top-0 z-100 w-full px-0 sm:top-6 sm:px-12 lg:px-24 xl:px-40">
-      <nav className="flex items-center justify-between border-b border-white/10 bg-black/60 px-4 py-3 text-white shadow-2xl ring-1 ring-white/5 backdrop-blur-md transition-all sm:rounded-full sm:border sm:px-8">
+    <div className="fixed left-0 top-0 z-100 w-full px-2 sm:top-6 sm:px-6 lg:px-24 xl:px-40">
+      <nav className="flex items-center justify-between border-b border-white/10 bg-black/60 px-3 py-2.5 text-white shadow-2xl ring-1 ring-white/5 backdrop-blur-md transition-all sm:rounded-full sm:border sm:px-6 sm:py-3">
         <Link
           to="/"
           className="flex items-center gap-2"
@@ -138,7 +138,7 @@ const Navbar = () => {
           })}
         </div>
 
-        <div className="flex items-center gap-3 sm:gap-5">
+        <div className="flex items-center gap-2 sm:gap-5">
           <div className="relative" ref={panelRef}>
             <button
               onClick={() => {
@@ -160,7 +160,7 @@ const Navbar = () => {
             </button>
 
             {showNotifPanel && (
-              <div className="fixed left-3 right-3 top-18 overflow-hidden rounded-2xl border border-white/10 bg-slate-900/95 shadow-2xl backdrop-blur-2xl duration-300 animate-in fade-in slide-in-from-top-4 sm:absolute sm:left-auto sm:right-0 sm:top-auto sm:mt-6 sm:w-80 sm:rounded-4xl">
+              <div className="fixed left-2 right-2 top-16 overflow-hidden rounded-2xl border border-white/10 bg-slate-900/95 shadow-2xl backdrop-blur-2xl duration-300 animate-in fade-in slide-in-from-top-4 sm:absolute sm:left-auto sm:right-0 sm:top-auto sm:mt-4 sm:w-80 sm:rounded-4xl">
                 <div className="flex items-center justify-between border-b border-white/5 px-6 py-5">
                   <h3 className="text-sm font-black uppercase tracking-tighter italic">
                     Notifications
@@ -243,7 +243,7 @@ const Navbar = () => {
 
           <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="rounded-full p-1 text-white transition-colors hover:text-purple-500 lg:hidden"
+            className="rounded-full p-2 text-white transition-colors hover:text-purple-500 lg:hidden"
             aria-label={isMenuOpen ? "Close navigation menu" : "Open navigation menu"}
           >
             {isMenuOpen ? <XMarkIcon className="h-7 w-7" /> : <Bars3Icon className="h-7 w-7" />}
@@ -252,7 +252,7 @@ const Navbar = () => {
       </nav>
 
       {isMenuOpen && (
-        <div className="fixed inset-0 top-15.25 z-90 duration-300 animate-in fade-in slide-in-from-top-4 sm:top-19 lg:hidden">
+        <div className="fixed inset-0 top-14.5 z-90 duration-300 animate-in fade-in slide-in-from-top-4 sm:top-19 lg:hidden">
           <div
             className="absolute inset-0 bg-slate-950/95 backdrop-blur-3xl"
             onClick={() => setIsMenuOpen(false)}

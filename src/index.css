@@ -5,8 +5,18 @@
     scroll-behavior: smooth;
   }
 
+  body,
+  #root {
+    min-height: 100svh;
+  }
+
   body {
     overflow-x: hidden;
+  }
+
+  img {
+    display: block;
+    max-width: 100%;
   }
 }
 

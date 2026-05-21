@@ -2,9 +2,9 @@ import React from 'react';
 
 const PageLoader = ({ color = 'border-purple-600', label = 'Loading...', glow = '' }) => {
     return (
-        <div className="flex flex-col items-center justify-center min-h-100 gap-4">
-            <div className={`w-12 h-12 border-4 ${color} border-t-transparent rounded-full animate-spin ${glow}`} />
-            <span className="text-gray-500 font-black uppercase tracking-widest text-[10px]">{label}</span>
+        <div className="flex min-h-[20rem] flex-col items-center justify-center gap-4 sm:min-h-[25rem]">
+            <div className={`h-12 w-12 rounded-full border-4 ${color} border-t-transparent animate-spin ${glow}`} />
+            <span className="px-4 text-center text-[10px] font-black uppercase tracking-widest text-gray-500">{label}</span>
         </div>
     );
 };

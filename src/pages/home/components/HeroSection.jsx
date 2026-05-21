@@ -54,7 +54,7 @@ const HeroSection = ({ trendingMovies = [] }) => {
   const isFav = isFavorite(movie.id);
 
   return (
-    <section className="relative flex min-h-svh w-full items-end overflow-hidden bg-black pb-20 pt-24 sm:items-center sm:pb-0 sm:pt-0">
+    <section className="relative flex min-h-svh w-full items-end overflow-hidden bg-black pb-24 pt-28 sm:items-center sm:pb-0 sm:pt-0">
       <div
         className={`absolute inset-0 z-0 transition-opacity duration-1000 ${fade ? "opacity-60" : "opacity-0"}`}
       >
@@ -70,12 +70,12 @@ const HeroSection = ({ trendingMovies = [] }) => {
       </div>
 
       <div
-        className={`relative z-10 w-full max-w-7xl px-4 pb-8 pr-4 transition-all duration-700 ease-out transform sm:mt-16 sm:px-12 sm:pb-0 lg:px-24 xl:px-40
+        className={`relative z-10 w-full max-w-7xl px-4 pb-10 transition-all duration-700 ease-out transform sm:mt-16 sm:px-6 sm:pb-0 lg:px-24 xl:px-40
         ${fade ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-12"}`}
       >
-        <h2 className="mb-4 text-3xl font-black leading-[0.9] tracking-tighter text-white drop-shadow-2xl sm:mb-6 sm:text-5xl lg:text-6xl">
+        <h2 className="mb-4 text-4xl font-black leading-[0.9] tracking-tighter text-white drop-shadow-2xl sm:mb-6 sm:text-5xl lg:text-6xl">
           {movie.title} <br className="hidden sm:block" />
-          <span className="mt-2 block text-lg font-bold tracking-tight text-white/60 sm:mt-0 sm:inline sm:text-3xl lg:text-4xl">
+          <span className="mt-2 block text-base font-bold tracking-tight text-white/60 sm:mt-0 sm:inline sm:text-3xl lg:text-4xl">
             {movie.subtitle}
           </span>
         </h2>
@@ -100,7 +100,7 @@ const HeroSection = ({ trendingMovies = [] }) => {
           </div>
         </div>
 
-        <p className="mb-8 max-w-2xl text-sm font-medium leading-relaxed text-gray-300 line-clamp-5 sm:mb-12 sm:text-xl sm:text-gray-400">
+        <p className="mb-8 max-w-2xl text-sm font-medium leading-relaxed text-gray-300 line-clamp-4 sm:mb-12 sm:text-lg sm:line-clamp-5 sm:text-gray-400 lg:text-xl">
           {movie.description}
         </p>
 
@@ -164,7 +164,7 @@ const HeroSection = ({ trendingMovies = [] }) => {
         </button>
       </div>
 
-      <div className="absolute bottom-6 left-1/2 z-20 flex -translate-x-1/2 items-center gap-3 sm:bottom-12 sm:gap-4">
+      <div className="absolute bottom-5 left-1/2 z-20 flex -translate-x-1/2 items-center gap-3 sm:bottom-12 sm:gap-4">
         {FEATURED_MOVIES.map((_, idx) => (
           <button
             key={idx}

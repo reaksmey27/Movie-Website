@@ -1,6 +1,7 @@
 import React from "react";
 import HeroSection from "./components/HeroSection";
 import MovieSlider from "./components/MovieSlider";
+import HomeContentSection from "./components/HomeContentSection";
 import useHomeMovies from "../../hooks/movies/useHomeMovies";
 import PageLoader from "../../components/ui/PageLoader";
 import PageError from "../../components/ui/PageError";
@@ -20,9 +21,9 @@ const HomePage = () => {
         }
       />
 
-      <div className="relative z-30 mt-10 space-y-12 pb-16 sm:mt-20 sm:space-y-16 sm:pb-20">
+      <div className="relative z-30 mt-8 space-y-10 pb-14 sm:mt-16 sm:space-y-14 sm:pb-20">
         {error && (
-          <div className="mx-4 py-2 sm:mx-12 lg:px-24 xl:px-40">
+          <div className="mx-4 py-2 sm:mx-6 lg:px-24 xl:px-40">
             <PageError message={error} buttonLabel="Try Again" onRetry={retry} />
           </div>
         )}
@@ -54,6 +55,8 @@ const HomePage = () => {
         {movies.fantasy.length > 0 && (
           <MovieSlider title="Fantasy" movies={movies.fantasy} />
         )}
+
+        <HomeContentSection />
       </div>
     </div>
   );

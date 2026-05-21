@@ -40,9 +40,9 @@ const MovieSlider = ({ title, movies = [] }) => {
   );
 
   return (
-    <div className="group/slider relative overflow-hidden bg-transparent py-6 sm:py-12">
-      <div className="mb-5 px-4 sm:mb-8 sm:px-12 lg:px-24">
-        <h2 className="flex items-center gap-3 text-2xl font-black tracking-tight text-white md:text-4xl">
+    <div className="group/slider relative overflow-hidden bg-transparent py-5 sm:py-10">
+      <div className="mb-4 px-4 sm:mb-8 sm:px-6 lg:px-24">
+        <h2 className="flex items-center gap-3 text-xl font-black tracking-tight text-white sm:text-2xl md:text-4xl">
           {title}
           <span className="h-0.5 w-12 bg-purple-600 rounded-full mt-2 hidden md:block" />
         </h2>
@@ -77,12 +77,12 @@ const MovieSlider = ({ title, movies = [] }) => {
       <div
         ref={sliderRef}
         onScroll={checkScroll}
-        className="no-scrollbar flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-8 scroll-smooth sm:gap-6 sm:px-12 sm:pb-12 lg:px-24"
+        className="no-scrollbar flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-8 scroll-smooth sm:gap-5 sm:px-6 sm:pb-12 lg:px-24"
       >
         {movies.map((movie) => (
           <div
             key={movie.id}
-            className="w-[72vw] max-w-55 shrink-0 snap-start min-[420px]:w-55 lg:w-[calc((100%-72px)/4)]"
+            className="w-[72vw] min-w-[15rem] max-w-[17rem] shrink-0 snap-start min-[420px]:w-[15.5rem] lg:w-[16rem] xl:w-[17rem]"
           >
             <MovieCard movie={movie} />
           </div>

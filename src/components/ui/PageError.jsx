@@ -11,15 +11,15 @@ const PageError = ({ message, buttonLabel = 'Retry', onRetry, buttonColor = 'bg-
     };
 
     return (
-        <div className={`flex flex-col items-center justify-center min-h-100 text-center border-2 ${borderColor} rounded-3xl p-12`}>
-            <div className="w-16 h-16 bg-white/10 rounded-full flex items-center justify-center mb-6">
+        <div className={`flex min-h-[20rem] flex-col items-center justify-center rounded-3xl border-2 p-6 text-center sm:min-h-[25rem] sm:p-12 ${borderColor}`}>
+            <div className="mb-6 flex h-14 w-14 items-center justify-center rounded-full bg-white/10 sm:h-16 sm:w-16">
                 {Icon ? <Icon className={`h-8 w-8 ${iconColor}`} /> : <XMarkIcon className="h-8 w-8 text-red-500" />}
             </div>
             <h3 className="text-2xl font-black text-white mb-2 uppercase italic tracking-tighter">Error</h3>
             <p className="text-gray-500 font-medium max-w-sm">{message}</p>
             <button
                 onClick={handleClick}
-                className={`mt-8 px-10 py-4 text-black ${buttonColor} rounded-2xl font-black uppercase tracking-widest text-xs transition-all shadow-xl active:scale-95`}
+                className={`mt-8 w-full rounded-2xl px-6 py-4 text-xs font-black uppercase tracking-widest text-black transition-all shadow-xl active:scale-95 sm:w-auto sm:px-10 ${buttonColor}`}
             >
                 {buttonLabel}
             </button>

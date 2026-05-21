@@ -20,13 +20,13 @@ const WatchlistPage = () => {
   }
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-slate-950 px-4 pb-20 pt-24 sm:px-12 sm:pb-24 sm:pt-36 lg:px-24 xl:px-40">
-      <div className="absolute right-0 top-0 -z-10 h-125 w-125 rounded-full bg-amber-500/10 blur-[120px]" />
-      <div className="absolute bottom-0 left-0 -z-10 h-125 w-125 rounded-full bg-purple-600/10 blur-[120px]" />
+    <div className="relative min-h-screen overflow-hidden bg-slate-950 px-4 pb-16 pt-22 sm:px-6 sm:pb-24 sm:pt-28 lg:px-24 lg:pt-36 xl:px-40">
+      <div className="absolute right-0 top-0 -z-10 h-[24rem] w-[24rem] rounded-full bg-amber-500/10 blur-[120px] sm:h-[31rem] sm:w-[31rem]" />
+      <div className="absolute bottom-0 left-0 -z-10 h-[24rem] w-[24rem] rounded-full bg-purple-600/10 blur-[120px] sm:h-[31rem] sm:w-[31rem]" />
 
-      <div className="mx-auto max-w-350">
-        <div className="mb-12 flex flex-col gap-4 sm:mb-16">
-          <h1 className="text-3xl font-black uppercase leading-none tracking-tighter text-white md:text-5xl">
+      <div className="mx-auto max-w-[1400px]">
+        <div className="mb-10 flex flex-col gap-4 sm:mb-16">
+          <h1 className="text-3xl font-black uppercase leading-none tracking-tighter text-white sm:text-4xl md:text-5xl">
             Your <span className="text-amber-400">Watchlist</span>
           </h1>
           <p className="max-w-lg text-sm font-medium text-gray-400">
@@ -36,7 +36,7 @@ const WatchlistPage = () => {
         </div>
 
         {!isAuthenticated ? (
-          <div className="flex min-h-100 flex-col items-center justify-center rounded-3xl border-2 border-white/5 bg-white/5 p-8 text-center backdrop-blur-sm sm:p-12">
+          <div className="flex min-h-[20rem] flex-col items-center justify-center rounded-3xl border-2 border-white/5 bg-white/5 p-6 text-center backdrop-blur-sm sm:min-h-[25rem] sm:p-12">
             <BookmarkIcon className="mb-6 h-16 w-16 text-gray-600" />
             <h3 className="mb-2 text-2xl font-black uppercase tracking-tighter text-white">
               Sign in to use your watchlist
@@ -47,13 +47,13 @@ const WatchlistPage = () => {
             </p>
             <Link
               to="/login"
-              className="rounded-2xl bg-amber-500 px-10 py-4 text-xs font-black uppercase tracking-widest text-slate-950 shadow-xl shadow-amber-500/20 transition-all hover:bg-amber-400 active:scale-95"
+              className="w-full rounded-2xl bg-amber-500 px-6 py-4 text-center text-xs font-black uppercase tracking-widest text-slate-950 shadow-xl shadow-amber-500/20 transition-all hover:bg-amber-400 active:scale-95 sm:w-auto sm:px-10"
             >
               Sign In
             </Link>
           </div>
         ) : watchlist.length === 0 ? (
-          <div className="flex min-h-100 flex-col items-center justify-center rounded-3xl border-2 border-white/5 bg-white/5 p-8 text-center backdrop-blur-sm sm:p-12">
+          <div className="flex min-h-[20rem] flex-col items-center justify-center rounded-3xl border-2 border-white/5 bg-white/5 p-6 text-center backdrop-blur-sm sm:min-h-[25rem] sm:p-12">
             <BookmarkIcon className="mb-6 h-16 w-16 text-gray-600" />
             <h3 className="mb-2 text-2xl font-black uppercase tracking-tighter text-white">
               Your watchlist is empty
@@ -64,7 +64,7 @@ const WatchlistPage = () => {
             </p>
             <Link
               to="/movies"
-              className="rounded-2xl bg-purple-600 px-10 py-4 text-xs font-black uppercase tracking-widest text-white shadow-xl shadow-purple-600/20 transition-all hover:bg-purple-500 active:scale-95"
+              className="w-full rounded-2xl bg-purple-600 px-6 py-4 text-center text-xs font-black uppercase tracking-widest text-white shadow-xl shadow-purple-600/20 transition-all hover:bg-purple-500 active:scale-95 sm:w-auto sm:px-10"
             >
               Explore Movies
             </Link>
