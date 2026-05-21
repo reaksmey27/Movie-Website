@@ -33,7 +33,7 @@ const MovieCard = ({ movie }) => {
   return (
     <Link
       to={`/movie/${movie.id}`}
-      className="group relative block h-[280px] w-full flex-shrink-0 cursor-pointer transition-all duration-500 hover:z-50 hover:scale-[1.02] min-[420px]:h-[330px] sm:h-[360px] md:h-[430px] lg:h-[450px]"
+      className="group relative block h-70 w-full shrink-0 cursor-pointer transition-all duration-500 hover:z-50 hover:scale-[1.02] min-[420px]:h-82.5 sm:h-90 md:h-107.5 lg:h-112.5"
     >
       <img
         src={movie.posterImage || movie.image}
@@ -77,7 +77,7 @@ const MovieCard = ({ movie }) => {
         </button>
       </div>
 
-      <div className="absolute inset-0 flex flex-col justify-end overflow-hidden rounded-2xl bg-gradient-to-t from-black via-black/80 to-transparent p-3.5 opacity-100 transition-all duration-500 sm:p-6 sm:opacity-0 sm:group-hover:opacity-100">
+      <div className="absolute inset-0 flex flex-col justify-end overflow-hidden rounded-2xl bg-linear-to-t from-black via-black/80 to-transparent p-3.5 opacity-100 transition-all duration-500 sm:p-6 sm:opacity-0 sm:group-hover:opacity-100">
         <div className="absolute left-1/2 top-1/2 hidden -translate-x-1/2 -translate-y-1/2 scale-50 opacity-0 transition-all duration-500 delay-100 sm:block sm:group-hover:scale-100 sm:group-hover:opacity-100">
           <div className="flex h-14 w-14 items-center justify-center rounded-full border border-white/20 bg-purple-600 shadow-[0_0_30px_rgba(168,85,247,0.5)]">
             <svg

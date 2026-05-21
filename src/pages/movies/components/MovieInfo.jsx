@@ -20,11 +20,11 @@ const MovieInfo = ({
 }) => {
     return (
         <div className="animate-in flex flex-col gap-8 duration-700 slide-in-from-left-6 sm:gap-12 lg:flex-row lg:gap-16">
-            <div className="mx-auto w-full max-w-sm flex-shrink-0 lg:mx-0 lg:w-96 lg:max-w-none">
+            <div className="mx-auto w-full max-w-sm shrink-0 lg:mx-0 lg:w-96 lg:max-w-none">
                 <img
                     src={movie.posterImage || movie.image}
                     alt={movie.title}
-                    className="w-full rounded-2xl sm:rounded-[2rem] border border-white/10 shadow-2xl transition-transform hover:scale-[1.01] duration-500"
+                    className="w-full rounded-2xl sm:rounded-4xl border border-white/10 shadow-2xl transition-transform hover:scale-[1.01] duration-500"
                     loading="eager"
                     decoding="async"
                 />
@@ -69,7 +69,7 @@ const MovieInfo = ({
                 <div className="flex flex-col gap-4 pt-2 sm:flex-row sm:gap-6 sm:pt-4">
                     <button
                         onClick={onPlay}
-                        className="group flex min-h-[56px] items-center justify-center gap-4 rounded-2xl bg-purple-600 px-8 py-4 text-[10px] font-black uppercase tracking-[0.2em] text-white shadow-xl shadow-purple-600/30 transition-all hover:bg-purple-500 active:scale-95 sm:px-10 sm:py-5 sm:text-xs"
+                        className="group flex min-h-14 items-center justify-center gap-4 rounded-2xl bg-purple-600 px-8 py-4 text-[10px] font-black uppercase tracking-[0.2em] text-white shadow-xl shadow-purple-600/30 transition-all hover:bg-purple-500 active:scale-95 sm:px-10 sm:py-5 sm:text-xs"
                     >
                         <PlayIcon className="h-5 w-5 transition-transform group-hover:scale-125" />
                         Play Movie
@@ -79,14 +79,14 @@ const MovieInfo = ({
                         {movie.trailerKey && (
                             <button
                                 onClick={onTrailer}
-                                className="flex min-h-[56px] min-w-[140px] flex-1 items-center justify-center gap-3 rounded-2xl border border-white/10 bg-white/5 px-6 py-4 text-[10px] font-black uppercase tracking-[0.2em] text-white transition-all backdrop-blur-md hover:bg-white/10 active:scale-95 sm:px-8 sm:py-5 sm:text-xs"
+                                className="flex min-h-14 min-w-35 flex-1 items-center justify-center gap-3 rounded-2xl border border-white/10 bg-white/5 px-6 py-4 text-[10px] font-black uppercase tracking-[0.2em] text-white transition-all backdrop-blur-md hover:bg-white/10 active:scale-95 sm:px-8 sm:py-5 sm:text-xs"
                             >
                                 Watch Trailer
                             </button>
                         )}
                         <button
                             onClick={onFavorite}
-                            className={`flex min-h-[56px] flex-1 items-center justify-center rounded-2xl border-2 px-5 py-4 transition-all active:scale-95 sm:min-h-0 sm:flex-none sm:px-8 sm:py-5 ${isFav
+                            className={`flex min-h-14 flex-1 items-center justify-center rounded-2xl border-2 px-5 py-4 transition-all active:scale-95 sm:min-h-0 sm:flex-none sm:px-8 sm:py-5 ${isFav
                                 ? 'bg-red-500/10 border-red-500 text-red-500 shadow-lg shadow-red-500/20'
                                 : 'bg-white/5 border-white/10 text-white hover:bg-white/10'
                             }`}
@@ -95,7 +95,7 @@ const MovieInfo = ({
                         </button>
                         <button
                             onClick={onWatchlist}
-                            className={`flex min-h-[56px] flex-1 items-center justify-center rounded-2xl border-2 px-5 py-4 transition-all active:scale-95 sm:min-h-0 sm:flex-none sm:px-8 sm:py-5 ${isWatchlisted
+                            className={`flex min-h-14 flex-1 items-center justify-center rounded-2xl border-2 px-5 py-4 transition-all active:scale-95 sm:min-h-0 sm:flex-none sm:px-8 sm:py-5 ${isWatchlisted
                                 ? 'bg-amber-500/10 border-amber-400 text-amber-400 shadow-lg shadow-amber-500/20'
                                 : 'bg-white/5 border-white/10 text-white hover:bg-white/10'
                             }`}

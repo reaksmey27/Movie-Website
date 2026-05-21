@@ -20,8 +20,8 @@ const SignupPage = () => {
   return (
     <div className="relative min-h-screen overflow-hidden bg-slate-950 px-4 pb-10 pt-24 sm:px-6 sm:pb-16 sm:pt-28 lg:px-10">
       <div className="absolute inset-x-0 top-0 -z-10 h-72 bg-[radial-gradient(circle_at_top,rgba(59,130,246,0.22),rgba(15,23,42,0))]" />
-      <div className="absolute left-[-120px] top-24 -z-10 h-[420px] w-[420px] rounded-full bg-sky-500/15 blur-[140px]" />
-      <div className="absolute bottom-[-120px] right-[-40px] -z-10 h-[420px] w-[420px] rounded-full bg-indigo-500/15 blur-[140px]" />
+      <div className="absolute -left-30 top-24 -z-10 h-105] w-105 rounded-full bg-sky-500/15 blur-[140px]" />
+      <div className="absolute -bottom-30 -right-10 -z-10 h-105 w-105 rounded-full bg-indigo-500/15 blur-[140px]" />
 
       <div className="mx-auto grid w-full max-w-6xl gap-8 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
         <section className="max-w-2xl pt-6 lg:pt-0">

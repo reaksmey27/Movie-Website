@@ -4,7 +4,7 @@ import MovieCard from "./MovieCard";
 const MovieGrid = ({ movies, onReset }) => {
     if (movies.length === 0) {
         return (
-            <div className="flex min-h-[320px] flex-col items-center justify-center px-4 text-center sm:min-h-[400px]">
+            <div className="flex min-h-80 flex-col items-center justify-center px-4 text-center sm:min-h-100">
                 <h3 className="mb-2 text-2xl font-black uppercase italic tracking-tighter text-white">No Movies Found</h3>
                 <p className="text-gray-500 font-medium">Try searching for something else or browse categories.</p>
                 {onReset && (

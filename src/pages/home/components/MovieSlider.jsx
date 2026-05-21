@@ -44,7 +44,7 @@ const MovieSlider = ({ title, movies = [] }) => {
       <div className="mb-5 px-4 sm:mb-8 sm:px-12 lg:px-24">
         <h2 className="flex items-center gap-3 text-2xl font-black tracking-tight text-white md:text-4xl">
           {title}
-          <span className="h-[2px] w-12 bg-purple-600 rounded-full mt-2 hidden md:block" />
+          <span className="h-0.5 w-12 bg-purple-600 rounded-full mt-2 hidden md:block" />
         </h2>
       </div>
 
@@ -52,7 +52,7 @@ const MovieSlider = ({ title, movies = [] }) => {
         <button
           type="button"
           onClick={() => handleScroll("left")}
-          className="absolute bottom-10 left-0 top-[92px] z-40 hidden w-16 cursor-pointer items-center justify-center opacity-0 transition-opacity duration-300 group-hover/slider:opacity-100 md:flex md:w-24"
+          className="absolute bottom-10 left-0 top-23 z-40 hidden w-16 cursor-pointer items-center justify-center opacity-0 transition-opacity duration-300 group-hover/slider:opacity-100 md:flex md:w-24"
           aria-label={`Scroll ${title} left`}
         >
           <div className="p-3 rounded-full bg-black/20 backdrop-blur-md border border-white/10 text-white hover:bg-white hover:text-black transition-all">
@@ -65,7 +65,7 @@ const MovieSlider = ({ title, movies = [] }) => {
         <button
           type="button"
           onClick={() => handleScroll("right")}
-          className="absolute bottom-10 right-0 top-[92px] z-40 hidden w-16 cursor-pointer items-center justify-center opacity-0 transition-opacity duration-300 group-hover/slider:opacity-100 md:flex md:w-24"
+          className="absolute bottom-10 right-0 top-23 z-40 hidden w-16 cursor-pointer items-center justify-center opacity-0 transition-opacity duration-300 group-hover/slider:opacity-100 md:flex md:w-24"
           aria-label={`Scroll ${title} right`}
         >
           <div className="p-3 rounded-full bg-black/20 backdrop-blur-md border border-white/10 text-white hover:bg-white hover:text-black transition-all">
@@ -82,7 +82,7 @@ const MovieSlider = ({ title, movies = [] }) => {
         {movies.map((movie) => (
           <div
             key={movie.id}
-            className="w-[72vw] max-w-[220px] flex-shrink-0 snap-start min-[420px]:w-[220px] lg:w-[calc((100%-72px)/4)]"
+            className="w-[72vw] max-w-55 shrink-0 snap-start min-[420px]:w-55 lg:w-[calc((100%-72px)/4)]"
           >
             <MovieCard movie={movie} />
           </div>

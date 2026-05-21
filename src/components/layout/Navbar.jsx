@@ -96,7 +96,7 @@ const Navbar = () => {
   };
 
   return (
-    <div className="fixed left-0 top-0 z-[100] w-full px-0 sm:top-6 sm:px-12 lg:px-24 xl:px-40">
+    <div className="fixed left-0 top-0 z-100 w-full px-0 sm:top-6 sm:px-12 lg:px-24 xl:px-40">
       <nav className="flex items-center justify-between border-b border-white/10 bg-black/60 px-4 py-3 text-white shadow-2xl ring-1 ring-white/5 backdrop-blur-md transition-all sm:rounded-full sm:border sm:px-8">
         <Link
           to="/"
@@ -160,7 +160,7 @@ const Navbar = () => {
             </button>
 
             {showNotifPanel && (
-              <div className="fixed left-3 right-3 top-[72px] overflow-hidden rounded-2xl border border-white/10 bg-slate-900/95 shadow-2xl backdrop-blur-2xl duration-300 animate-in fade-in slide-in-from-top-4 sm:absolute sm:left-auto sm:right-0 sm:top-auto sm:mt-6 sm:w-80 sm:rounded-[2rem]">
+              <div className="fixed left-3 right-3 top-18 overflow-hidden rounded-2xl border border-white/10 bg-slate-900/95 shadow-2xl backdrop-blur-2xl duration-300 animate-in fade-in slide-in-from-top-4 sm:absolute sm:left-auto sm:right-0 sm:top-auto sm:mt-6 sm:w-80 sm:rounded-4xl">
                 <div className="flex items-center justify-between border-b border-white/5 px-6 py-5">
                   <h3 className="text-sm font-black uppercase tracking-tighter italic">
                     Notifications
@@ -174,7 +174,7 @@ const Navbar = () => {
                   </button>
                 </div>
 
-                <div className="no-scrollbar max-h-[400px] overflow-y-auto">
+                <div className="no-scrollbar max-h-100 overflow-y-auto">
                   {history.length === 0 ? (
                     <div className="p-10 text-center">
                       <BellIcon className="mx-auto mb-3 h-8 w-8 text-gray-700 opacity-50" />
@@ -189,7 +189,7 @@ const Navbar = () => {
                           key={notif.id}
                           className="flex gap-4 border-b border-white/5 px-6 py-4 transition-colors hover:bg-white/5"
                         >
-                          <div className="mt-1 flex-shrink-0">{getIcon(notif.type, true)}</div>
+                          <div className="mt-1 shrink-0">{getIcon(notif.type, true)}</div>
                           <div className="min-w-0 flex-1">
                             <p className="mb-1 text-[10px] font-bold leading-relaxed text-white/90 sm:text-xs">
                               {notif.message}
@@ -222,7 +222,7 @@ const Navbar = () => {
                     "h-6 w-6 rounded-full object-cover",
                     "flex h-6 w-6 items-center justify-center rounded-full bg-gradient-to-br from-purple-600 to-blue-600 text-[10px] font-black uppercase",
                   )}
-                  <span className="max-w-[100px] truncate text-sm font-bold">{user?.name}</span>
+                  <span className="max-w-25 truncate text-sm font-bold">{user?.name}</span>
                 </Link>
                 <button
                   onClick={handleLogout}
@@ -252,7 +252,7 @@ const Navbar = () => {
       </nav>
 
       {isMenuOpen && (
-        <div className="fixed inset-0 top-[61px] z-[90] duration-300 animate-in fade-in slide-in-from-top-4 sm:top-[76px] lg:hidden">
+        <div className="fixed inset-0 top-15.25 z-90 duration-300 animate-in fade-in slide-in-from-top-4 sm:top-19 lg:hidden">
           <div
             className="absolute inset-0 bg-slate-950/95 backdrop-blur-3xl"
             onClick={() => setIsMenuOpen(false)}

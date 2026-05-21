@@ -54,7 +54,7 @@ const HeroSection = ({ trendingMovies = [] }) => {
   const isFav = isFavorite(movie.id);
 
   return (
-    <section className="relative flex min-h-[100svh] w-full items-end overflow-hidden bg-black pb-20 pt-24 sm:items-center sm:pb-0 sm:pt-0">
+    <section className="relative flex min-h-svh w-full items-end overflow-hidden bg-black pb-20 pt-24 sm:items-center sm:pb-0 sm:pt-0">
       <div
         className={`absolute inset-0 z-0 transition-opacity duration-1000 ${fade ? "opacity-60" : "opacity-0"}`}
       >
@@ -65,8 +65,8 @@ const HeroSection = ({ trendingMovies = [] }) => {
           fetchPriority="high"
           decoding="async"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent" />
-        <div className="absolute inset-0 bg-gradient-to-r from-slate-950 via-slate-950/20 to-transparent" />
+        <div className="absolute inset-0 bg-linear-to-t from-slate-950 via-slate-950/40 to-transparent" />
+        <div className="absolute inset-0 bg-linear-to-r from-slate-950 via-slate-950/20 to-transparent" />
       </div>
 
       <div
@@ -107,7 +107,7 @@ const HeroSection = ({ trendingMovies = [] }) => {
         <div className="flex flex-col items-stretch gap-4 sm:flex-row sm:items-center sm:gap-6">
           <Link
             to={`/movie/${movie.id}`}
-            className="group flex min-h-[56px] items-center justify-center gap-4 rounded-2xl bg-purple-600 px-6 py-4 text-[10px] font-black uppercase tracking-[0.18em] text-white shadow-xl shadow-purple-600/20 transition-all hover:bg-purple-500 active:scale-95 sm:px-10 sm:py-5 sm:text-xs sm:tracking-[0.2em]"
+            className="group flex min-h-14 items-center justify-center gap-4 rounded-2xl bg-purple-600 px-6 py-4 text-[10px] font-black uppercase tracking-[0.18em] text-white shadow-xl shadow-purple-600/20 transition-all hover:bg-purple-500 active:scale-95 sm:px-10 sm:py-5 sm:text-xs sm:tracking-[0.2em]"
           >
             <PlayCircleIcon className="h-5 w-5 sm:h-6 sm:w-6 transition-transform group-hover:scale-110" />
             <span>Watch Now</span>
@@ -117,7 +117,7 @@ const HeroSection = ({ trendingMovies = [] }) => {
             {movie.trailerKey && (
               <button
                 onClick={() => setShowTrailer(true)}
-                className="group flex min-h-[56px] min-w-0 flex-1 items-center justify-center gap-3 rounded-2xl border border-white/10 bg-white/5 px-4 py-4 text-[10px] font-black uppercase tracking-[0.18em] text-white transition-all backdrop-blur-xl hover:bg-white/10 active:scale-95 sm:flex-none sm:gap-4 sm:px-10 sm:py-5 sm:text-xs sm:tracking-[0.2em]"
+                className="group flex min-h-14 min-w-0 flex-1 items-center justify-center gap-3 rounded-2xl border border-white/10 bg-white/5 px-4 py-4 text-[10px] font-black uppercase tracking-[0.18em] text-white transition-all backdrop-blur-xl hover:bg-white/10 active:scale-95 sm:flex-none sm:gap-4 sm:px-10 sm:py-5 sm:text-xs sm:tracking-[0.2em]"
               >
                 <div className="rounded-full bg-purple-600/20 p-1.5 sm:p-2">
                   <PlayIcon className="h-3 w-3 sm:h-4 sm:w-4 text-purple-500 transition-transform group-hover:scale-125" />
@@ -128,7 +128,7 @@ const HeroSection = ({ trendingMovies = [] }) => {
 
             <button
               onClick={() => toggleFavorite(movie)}
-              className={`flex min-h-[56px] flex-1 items-center justify-center gap-3 rounded-2xl border-2 px-4 py-4 font-black transition-all backdrop-blur-xl active:scale-95 sm:flex-none sm:gap-4 sm:px-10 sm:py-5 ${
+              className={`flex min-h-14 flex-1 items-center justify-center gap-3 rounded-2xl border-2 px-4 py-4 font-black transition-all backdrop-blur-xl active:scale-95 sm:flex-none sm:gap-4 sm:px-10 sm:py-5 ${
                 isFav
                   ? "border-red-500 bg-red-500/20 text-red-500 shadow-lg shadow-red-500/20"
                   : "border-white/10 bg-white/5 text-white hover:bg-white/10"
@@ -185,11 +185,11 @@ const HeroSection = ({ trendingMovies = [] }) => {
       </div>
 
       {showTrailer && movie.trailerKey && (
-        <div className="fixed inset-0 z-[200] flex items-center justify-center p-2 sm:p-10 bg-black/95 backdrop-blur-2xl animate-in fade-in duration-300">
+        <div className="fixed inset-0 z-200 flex items-center justify-center p-2 sm:p-10 bg-black/95 backdrop-blur-2xl animate-in fade-in duration-300">
           <div className="relative w-full max-w-6xl aspect-video bg-black rounded-xl sm:rounded-3xl overflow-hidden shadow-[0_0_100px_rgba(168,85,247,0.3)] border border-white/10 animate-in zoom-in duration-500">
             <button
               onClick={() => setShowTrailer(false)}
-              className="absolute top-4 right-4 sm:top-6 sm:right-6 z-[210] p-2 sm:p-3 bg-black/40 hover:bg-red-500 text-white rounded-full transition-all active:scale-90 backdrop-blur-md border border-white/10 group"
+              className="absolute top-4 right-4 sm:top-6 sm:right-6 z-210 p-2 sm:p-3 bg-black/40 hover:bg-red-500 text-white rounded-full transition-all active:scale-90 backdrop-blur-md border border-white/10 group"
             >
               <XMarkIcon className="h-5 w-5 sm:h-6 sm:w-6 group-hover:rotate-90 transition-transform duration-300" />
             </button>

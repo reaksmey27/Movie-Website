@@ -11,7 +11,7 @@ const PageError = ({ message, buttonLabel = 'Retry', onRetry, buttonColor = 'bg-
     };
 
     return (
-        <div className={`flex flex-col items-center justify-center min-h-[400px] text-center border-2 ${borderColor} rounded-3xl p-12`}>
+        <div className={`flex flex-col items-center justify-center min-h-100 text-center border-2 ${borderColor} rounded-3xl p-12`}>
             <div className="w-16 h-16 bg-white/10 rounded-full flex items-center justify-center mb-6">
                 {Icon ? <Icon className={`h-8 w-8 ${iconColor}`} /> : <XMarkIcon className="h-8 w-8 text-red-500" />}
             </div>

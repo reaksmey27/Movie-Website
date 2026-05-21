@@ -29,8 +29,8 @@ const ProfilePage = () => {
   if (!user) {
     return (
       <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-slate-950 px-4 pb-20 pt-28 sm:px-8 sm:pb-24 sm:pt-32">
-        <div className="absolute left-[-120px] top-24 -z-10 h-[420px] w-[420px] rounded-full bg-purple-600/15 blur-[120px]" />
-        <div className="absolute bottom-[-120px] right-[-40px] -z-10 h-[420px] w-[420px] rounded-full bg-blue-500/15 blur-[120px]" />
+        <div className="absolute -left-30 top-24 -z-10 h-105 w-105 rounded-full bg-purple-600/15 blur-[120px]" />
+        <div className="absolute -bottom-30 -right-10 -z-10 h-105 w-105 rounded-full bg-blue-500/15 blur-[120px]" />
 
         <div className="w-full max-w-4xl overflow-hidden rounded-[2.5rem] border border-white/10 bg-white/5 shadow-2xl backdrop-blur-2xl">
           <div className="grid gap-0 lg:grid-cols-[1.1fr_0.9fr]">
@@ -120,9 +120,9 @@ const ProfilePage = () => {
 
   return (
     <div className="relative min-h-screen overflow-hidden bg-slate-950 px-4 pb-20 pt-28 sm:px-12 sm:pb-24 sm:pt-36 lg:px-24 xl:px-40">
-      <div className="absolute right-0 top-0 -z-10 h-[600px] w-[600px] rounded-full bg-purple-600/10 blur-[120px]" />
-      <div className="absolute bottom-0 left-0 -z-10 h-[500px] w-[500px] rounded-full bg-blue-600/10 blur-[120px]" />
-      <div className="absolute left-1/2 top-40 -z-10 h-[420px] w-[420px] -translate-x-1/2 rounded-full bg-cyan-400/5 blur-[140px]" />
+      <div className="absolute right-0 top-0 -z-10 h-150 w-150 rounded-full bg-purple-600/10 blur-[120px]" />
+      <div className="absolute bottom-0 left-0 -z-10 h-125 w-125 rounded-full bg-blue-600/10 blur-[120px]" />
+      <div className="absolute left-1/2 top-40 -z-10 h-105 w-105 -translate-x-1/2 rounded-full bg-cyan-400/5 blur-[140px]" />
       <div className="absolute inset-x-0 top-0 -z-10 h-72 bg-[linear-gradient(180deg,rgba(124,58,237,0.14),rgba(15,23,42,0))]" />
 
       <div className="mx-auto max-w-7xl space-y-8">
@@ -174,14 +174,14 @@ const ProfilePage = () => {
             </div>
 
             <div className="grid gap-4 animate-in slide-in-from-right-6 duration-700">
-              <div className="rounded-[2rem] border border-white/10 bg-slate-950/45 p-6">
+              <div className="rounded-4xl border border-white/10 bg-slate-950/45 p-6">
                 <p className="text-[10px] font-black uppercase tracking-[0.3em] text-white/40">
                   Profile Complete
                 </p>
                 <p className="mt-2 text-4xl font-black text-white">{profileCompletion}%</p>
                 <div className="mt-4 h-3 overflow-hidden rounded-full bg-white/10">
                   <div
-                    className="h-full rounded-full bg-gradient-to-r from-purple-500 via-fuchsia-400 to-cyan-400"
+                    className="h-full rounded-full bg-linear-to-r from-purple-500 via-fuchsia-400 to-cyan-400"
                     style={{ width: `${profileCompletion}%` }}
                   />
                 </div>
@@ -190,7 +190,7 @@ const ProfilePage = () => {
                 </p>
               </div>
 
-              <div className="rounded-[2rem] border border-white/10 bg-slate-950/45 p-6">
+              <div className="rounded-4xl border border-white/10 bg-slate-950/45 p-6">
                 <div className="flex items-center gap-3 text-cyan-200">
                   <div className="rounded-2xl bg-cyan-400/10 p-3">
                     <FilmIcon className="h-5 w-5" />
@@ -207,7 +207,7 @@ const ProfilePage = () => {
                 </p>
               </div>
 
-              <div className="rounded-[2rem] border border-white/10 bg-[linear-gradient(135deg,rgba(59,130,246,0.14),rgba(168,85,247,0.12))] p-6">
+              <div className="rounded-4xl border border-white/10 bg-[linear-gradient(135deg,rgba(59,130,246,0.14),rgba(168,85,247,0.12))] p-6">
                 <p className="text-[10px] font-black uppercase tracking-[0.3em] text-cyan-100/70">
                   Next Move
                 </p>
