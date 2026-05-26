@@ -1,6 +1,20 @@
 import React from 'react';
 
-const MoviePlayer = ({ SERVERS, activeServer, currentServerUrl, iframeLoading, playerMessage, onServerChange, onIframeLoad, onIframeError, onNextServer }) => {
+const MoviePlayer = ({
+    SERVERS,
+    activeServer,
+    currentServer,
+    currentServerUrl,
+    iframeLoading,
+    playerMessage,
+    playerInstance,
+    nextServerName,
+    onServerChange,
+    onIframeLoad,
+    onIframeError,
+    onNextServer,
+    onReloadPlayer,
+}) => {
     return (
         <div className="space-y-6">
             <div className="flex flex-nowrap sm:flex-wrap gap-3 overflow-x-auto pb-2 sm:pb-0 no-scrollbar">
@@ -20,24 +34,41 @@ const MoviePlayer = ({ SERVERS, activeServer, currentServerUrl, iframeLoading, p
 
             <div className="mx-auto w-full max-w-5xl space-y-3">
                 <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-white/10 bg-white/5 px-4 py-3">
-                    <p className="text-[10px] font-black uppercase tracking-widest text-white">
-                        Now playing on {activeServer}
-                    </p>
-                    <p className="text-[10px] font-bold uppercase tracking-widest text-emerald-300">
-                        Best quality depends on the source stream
-                    </p>
+                    <div className="space-y-1">
+                        <p className="text-[10px] font-black uppercase tracking-widest text-white">
+                            Now playing on {activeServer}
+                        </p>
+                        <p className="text-[10px] font-bold uppercase tracking-widest text-gray-400">
+                            {currentServer.description}
+                        </p>
+                    </div>
+
+                    <div className="flex items-center gap-3">
+                        <span className="rounded-full border border-emerald-400/30 bg-emerald-400/10 px-3 py-1 text-[9px] font-black uppercase tracking-[0.25em] text-emerald-300">
+                            {currentServer.qualityLabel}
+                        </span>
+                        <button
+                            onClick={onReloadPlayer}
+                            className="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-[10px] font-black uppercase tracking-widest text-white transition-colors hover:bg-white/10 active:scale-95"
+                        >
+                            Reload Player
+                        </button>
+                    </div>
                 </div>
 
                 <div className="relative w-full overflow-hidden rounded-xl border border-white/10 bg-black shadow-2xl sm:rounded-3xl">
                     <div className="aspect-video bg-black">
                         <iframe
+                            key={`${currentServerUrl}-${playerInstance}`}
                             src={currentServerUrl}
                             className="h-full w-full bg-black"
                             frameBorder="0"
                             scrolling="no"
                             allow="autoplay; fullscreen; picture-in-picture; encrypted-media"
                             allowFullScreen
-                            referrerPolicy="origin-when-cross-origin"
+                            sandbox="allow-same-origin allow-scripts allow-presentation"
+                            loading="eager"
+                            referrerPolicy="strict-origin-when-cross-origin"
                             title="Cinema Player"
                             onLoad={onIframeLoad}
                             onError={onIframeError}
@@ -65,12 +96,20 @@ const MoviePlayer = ({ SERVERS, activeServer, currentServerUrl, iframeLoading, p
             {playerMessage && (
                 <div className="p-4 bg-red-500/10 border border-red-500/30 rounded-2xl flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                     <p className="text-[10px] text-red-300 font-bold uppercase tracking-widest">{playerMessage}</p>
-                    <button
-                        onClick={onNextServer}
-                        className="px-4 py-2 rounded-lg bg-red-500 hover:bg-red-400 text-white text-[10px] font-black uppercase tracking-widest active:scale-95"
-                    >
-                        Try Next Server
-                    </button>
+                    <div className="flex flex-wrap gap-2">
+                        <button
+                            onClick={onReloadPlayer}
+                            className="px-4 py-2 rounded-lg border border-white/10 bg-white/5 hover:bg-white/10 text-white text-[10px] font-black uppercase tracking-widest active:scale-95"
+                        >
+                            Reload
+                        </button>
+                        <button
+                            onClick={onNextServer}
+                            className="px-4 py-2 rounded-lg bg-red-500 hover:bg-red-400 text-white text-[10px] font-black uppercase tracking-widest active:scale-95"
+                        >
+                            Try {nextServerName}
+                        </button>
+                    </div>
                 </div>
             )}
         </div>

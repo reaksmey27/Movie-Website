@@ -22,8 +22,16 @@ const MovieDetailPage = () => {
         showTrailer, setShowTrailer,
         isPlaying, setIsPlaying,
         activeServer, setActiveServer,
-        iframeLoading, setIframeLoading,
-        playerMessage, currentServerUrl, goToNextServer,
+        currentServer,
+        iframeLoading,
+        playerMessage,
+        currentServerUrl,
+        playerInstance,
+        nextServerName,
+        goToNextServer,
+        reloadPlayer,
+        handleIframeLoad,
+        handleIframeError,
     } = useMovieDetail(id);
 
     if (loading) {
@@ -72,13 +80,17 @@ const MovieDetailPage = () => {
                     <MoviePlayer
                         SERVERS={SERVERS}
                         activeServer={activeServer}
+                        currentServer={currentServer}
                         currentServerUrl={currentServerUrl}
                         iframeLoading={iframeLoading}
                         playerMessage={playerMessage}
+                        playerInstance={playerInstance}
+                        nextServerName={nextServerName}
                         onServerChange={setActiveServer}
-                        onIframeLoad={() => setIframeLoading(false)}
-                        onIframeError={() => { setIframeLoading(false); }}
+                        onIframeLoad={handleIframeLoad}
+                        onIframeError={handleIframeError}
                         onNextServer={goToNextServer}
+                        onReloadPlayer={reloadPlayer}
                     />
                 ) : (
                     <MovieInfo
