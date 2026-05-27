@@ -6,9 +6,12 @@ import {
   TrashIcon,
   Bars3Icon,
   XMarkIcon,
+  SunIcon,
+  MoonIcon,
 } from "@heroicons/react/24/solid";
 import { useAuth } from "../../context/AuthContext";
 import { useNotification } from "../../context/NotificationContext";
+import { THEMES } from "../../utils/theme";
 
 const NAV_LINKS = [
   { name: "Home", path: "/" },
@@ -19,7 +22,7 @@ const NAV_LINKS = [
   { name: "Upcoming", path: "/upcoming" },
 ];
 
-const Navbar = () => {
+const Navbar = ({ theme, onToggleTheme }) => {
   const location = useLocation();
   const navigate = useNavigate();
   const { user, logout, isAuthenticated } = useAuth();
@@ -95,9 +98,15 @@ const Navbar = () => {
     navigate("/");
   };
 
+  const isLightTheme = theme === THEMES.LIGHT;
+  const ThemeIcon = isLightTheme ? MoonIcon : SunIcon;
+  const themeButtonLabel = isLightTheme
+    ? "Switch to dark mode"
+    : "Switch to light mode";
+
   return (
     <div className="fixed left-0 top-0 z-100 w-full px-2 sm:top-6 sm:px-6 lg:px-24 xl:px-40">
-      <nav className="flex items-center justify-between border-b border-white/10 bg-black/60 px-3 py-2.5 text-white shadow-2xl ring-1 ring-white/5 backdrop-blur-md transition-all sm:rounded-full sm:border sm:px-6 sm:py-3">
+      <nav className="flex items-center justify-between border-b border-[var(--color-border)] bg-[var(--color-nav-bg)] px-3 py-2.5 text-[var(--color-text)] shadow-2xl ring-1 ring-[var(--color-ring)] backdrop-blur-md transition-all sm:rounded-full sm:border sm:px-6 sm:py-3">
         <Link
           to="/"
           className="flex items-center gap-2"
@@ -122,7 +131,7 @@ const Navbar = () => {
                 className={`group relative py-1 font-bold tracking-wide transition-all duration-300 ${
                   isActive
                     ? "scale-105 text-purple-500"
-                    : "text-white/80 hover:scale-105 hover:text-white"
+                    : "text-[var(--color-text-soft)] hover:scale-105 hover:text-[var(--color-text)]"
                 }`}
               >
                 {link.name}
@@ -139,16 +148,29 @@ const Navbar = () => {
         </div>
 
         <div className="flex items-center gap-2 sm:gap-5">
+          <button
+            type="button"
+            onClick={onToggleTheme}
+            className="rounded-full border border-[var(--color-border)] bg-[var(--color-surface-2)] p-2 text-[var(--color-text)] transition-all hover:border-purple-500/50 hover:text-purple-400 active:scale-95"
+            aria-label={themeButtonLabel}
+            title={themeButtonLabel}
+          >
+            <ThemeIcon className="h-5 w-5 sm:h-6 sm:w-6" />
+          </button>
+
           <div className="relative" ref={panelRef}>
             <button
+              type="button"
               onClick={() => {
                 setShowNotifPanel(!showNotifPanel);
                 if (!showNotifPanel) {
                   markAllAsRead();
                 }
               }}
-              className={`relative rounded-full bg-white/10 p-2 text-white transition-all active:scale-90 hover:text-purple-400 ${
-                showNotifPanel ? "bg-white/20 text-purple-400" : ""
+              className={`relative rounded-full border border-transparent bg-[var(--color-surface-2)] p-2 text-[var(--color-text)] transition-all active:scale-90 hover:text-purple-400 ${
+                showNotifPanel
+                  ? "border-purple-500/40 bg-[var(--color-surface-3)] text-purple-400"
+                  : ""
               }`}
             >
               <BellIcon className="h-5 w-5 sm:h-6 sm:w-6" />
@@ -160,14 +182,15 @@ const Navbar = () => {
             </button>
 
             {showNotifPanel && (
-              <div className="fixed left-2 right-2 top-16 overflow-hidden rounded-2xl border border-white/10 bg-slate-900/95 shadow-2xl backdrop-blur-2xl duration-300 animate-in fade-in slide-in-from-top-4 sm:absolute sm:left-auto sm:right-0 sm:top-auto sm:mt-4 sm:w-80 sm:rounded-4xl">
-                <div className="flex items-center justify-between border-b border-white/5 px-6 py-5">
+              <div className="fixed left-2 right-2 top-16 overflow-hidden rounded-2xl border border-[var(--color-border)] bg-[var(--color-panel-bg)] shadow-2xl backdrop-blur-2xl duration-300 animate-in fade-in slide-in-from-top-4 sm:absolute sm:left-auto sm:right-0 sm:top-auto sm:mt-4 sm:w-80 sm:rounded-4xl">
+                <div className="flex items-center justify-between border-b border-[var(--color-border-soft)] px-6 py-5">
                   <h3 className="text-sm font-black uppercase tracking-tighter italic">
                     Notifications
                   </h3>
                   <button
+                    type="button"
                     onClick={clearHistory}
-                    className="rounded-lg p-1.5 text-gray-500 hover:bg-white/5 hover:text-red-400"
+                    className="rounded-lg p-1.5 text-gray-500 hover:bg-[var(--color-surface-1)] hover:text-red-400"
                     title="Clear All"
                   >
                     <TrashIcon className="h-4 w-4" />
@@ -187,11 +210,11 @@ const Navbar = () => {
                       {history.map((notif) => (
                         <div
                           key={notif.id}
-                          className="flex gap-4 border-b border-white/5 px-6 py-4 transition-colors hover:bg-white/5"
+                          className="flex gap-4 border-b border-[var(--color-border-soft)] px-6 py-4 transition-colors hover:bg-[var(--color-surface-1)]"
                         >
                           <div className="mt-1 shrink-0">{getIcon(notif.type, true)}</div>
                           <div className="min-w-0 flex-1">
-                            <p className="mb-1 text-[10px] font-bold leading-relaxed text-white/90 sm:text-xs">
+                            <p className="mb-1 text-[10px] font-bold leading-relaxed text-[var(--color-text)] sm:text-xs">
                               {notif.message}
                             </p>
                             <span className="text-[10px] font-black uppercase tracking-widest text-gray-600">
@@ -212,10 +235,10 @@ const Navbar = () => {
               <>
                 <Link
                   to="/profile"
-                  className={`flex items-center gap-2 rounded-full border px-4 py-1.5 transition-all hover:bg-white/10 ${
+                  className={`flex items-center gap-2 rounded-full border px-4 py-1.5 transition-all hover:bg-[var(--color-surface-2)] ${
                     location.pathname === "/profile"
-                      ? "border-purple-500/50 bg-white/10"
-                      : "border-white/10 bg-white/5"
+                      ? "border-purple-500/50 bg-[var(--color-surface-3)]"
+                      : "border-[var(--color-border)] bg-[var(--color-surface-1)]"
                   }`}
                 >
                   {renderUserAvatar(
@@ -242,8 +265,9 @@ const Navbar = () => {
           </div>
 
           <button
+            type="button"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="rounded-full p-2 text-white transition-colors hover:text-purple-500 lg:hidden"
+            className="rounded-full p-2 text-[var(--color-text)] transition-colors hover:text-purple-500 lg:hidden"
             aria-label={isMenuOpen ? "Close navigation menu" : "Open navigation menu"}
           >
             {isMenuOpen ? <XMarkIcon className="h-7 w-7" /> : <Bars3Icon className="h-7 w-7" />}
@@ -254,7 +278,7 @@ const Navbar = () => {
       {isMenuOpen && (
         <div className="fixed inset-0 top-14.5 z-90 duration-300 animate-in fade-in slide-in-from-top-4 sm:top-19 lg:hidden">
           <div
-            className="absolute inset-0 bg-slate-950/95 backdrop-blur-3xl"
+            className="absolute inset-0 bg-[var(--color-overlay)] backdrop-blur-3xl"
             onClick={() => setIsMenuOpen(false)}
           />
           <div className="relative z-10 flex max-h-full flex-col gap-6 overflow-y-auto p-6 sm:p-8">
@@ -266,14 +290,14 @@ const Navbar = () => {
                 className={`text-xl font-black uppercase tracking-tighter sm:text-2xl ${
                   checkActive(link.path)
                     ? "border-l-4 border-purple-500 px-4 text-purple-500"
-                    : "text-gray-400 hover:text-white"
+                    : "text-gray-400 hover:text-[var(--color-text)]"
                 }`}
               >
                 {link.name}
               </Link>
             ))}
 
-            <div className="my-4 h-px bg-white/5" />
+            <div className="my-4 h-px bg-[var(--color-border-soft)]" />
 
             {isAuthenticated ? (
               <div className="flex flex-col gap-6">

@@ -2,7 +2,7 @@ import React from 'react';
 import { CalendarDaysIcon, SparklesIcon } from '@heroicons/react/24/outline';
 import useUpcomingMovies from '../../hooks/movies/useUpcomingMovies';
 import MovieGrid from '../../components/ui/MovieGrid';
-import PageLoader from '../../components/ui/PageLoader';
+import MovieGridSkeleton from '../../components/ui/MovieGridSkeleton';
 import PageError from '../../components/ui/PageError';
 
 const UpcomingPage = () => {
@@ -33,7 +33,7 @@ const UpcomingPage = () => {
                 {error ? (
                     <PageError message={error} buttonLabel="Retry Loading" buttonColor="bg-blue-500 text-white hover:bg-blue-600" icon={CalendarDaysIcon} iconColor="text-blue-500" borderColor="border-blue-500/10 bg-blue-500/5" />
                 ) : loading ? (
-                    <PageLoader color="border-blue-600" label="Consulting the future..." glow="shadow-[0_0_15px_rgba(37,99,235,0.3)]" />
+                    <MovieGridSkeleton />
                 ) : (
                     <MovieGrid movies={movies} />
                 )}

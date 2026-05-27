@@ -22,7 +22,7 @@ const MoviePlayer = ({
                     <button
                         key={server.name}
                         onClick={() => onServerChange(server.name)}
-                        className={`flex-shrink-0 px-6 py-2 rounded-full text-[10px] font-black uppercase tracking-widest transition-all ${activeServer === server.name
+                        className={`shrink-0 px-6 py-2 rounded-full text-[10px] font-black uppercase tracking-widest transition-all ${activeServer === server.name
                             ? 'bg-purple-600 text-white shadow-lg shadow-purple-600/40'
                             : 'bg-white/5 text-gray-400 hover:bg-white/10 hover:text-white border border-white/5'
                         }`}

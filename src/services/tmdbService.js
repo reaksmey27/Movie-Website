@@ -23,6 +23,13 @@ const buildCacheKey = (endpoint, params) => {
   return JSON.stringify([endpoint, sortedParams]);
 };
 
+const cleanParams = (params) =>
+  Object.fromEntries(
+    Object.entries(params).filter(
+      ([, value]) => value !== undefined && value !== null && value !== "",
+    ),
+  );
+
 const getCachedResponse = (cacheKey) => {
   const cached = responseCache.get(cacheKey);
   if (!cached) {
@@ -64,7 +71,7 @@ const fetchFromTMDB = async (
 
   const queryParams = new URLSearchParams({
     api_key: API_KEY,
-    ...params,
+    ...cleanParams(params),
   });
 
   const controller = new AbortController();
@@ -163,16 +170,22 @@ export const tmdbService = {
     return data?.results || [];
   },
 
-  discoverMovies: async (page = 1) => {
-    return await fetchFromTMDB("/discover/movie", { page }, { ttl: DEFAULT_CACHE_TTL });
+  discoverMovies: async (page = 1, filters = {}) => {
+    return await fetchFromTMDB(
+      "/discover/movie",
+      {
+        page,
+        sort_by: filters.sortBy,
+        with_genres: filters.genreId,
+        primary_release_year: filters.releaseYear,
+        "vote_average.gte": filters.minRating,
+      },
+      { ttl: DEFAULT_CACHE_TTL },
+    );
   },
 
   getMoviesByGenre: async (genreId, page = 1) => {
-    return await fetchFromTMDB(
-      "/discover/movie",
-      { with_genres: genreId, page },
-      { ttl: DEFAULT_CACHE_TTL },
-    );
+    return await tmdbService.discoverMovies(page, { genreId });
   },
 
   getGenres: async () => {

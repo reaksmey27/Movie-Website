@@ -1,18 +1,24 @@
 import React, { memo } from "react";
 import MovieCard from "./MovieCard";
 
-const MovieGrid = ({ movies, onReset }) => {
+const MovieGrid = ({
+    movies,
+    onReset,
+    resetLabel = "Reset Results",
+    emptyTitle = "No Movies Found",
+    emptyMessage = "Try adjusting your search or filters to explore more titles.",
+}) => {
     if (movies.length === 0) {
         return (
             <div className="flex min-h-[18rem] flex-col items-center justify-center px-4 text-center sm:min-h-[25rem]">
-                <h3 className="mb-2 text-2xl font-black uppercase italic tracking-tighter text-white">No Movies Found</h3>
-                <p className="max-w-sm text-gray-500 font-medium">Try searching for something else or browse categories.</p>
+                <h3 className="mb-2 text-2xl font-black uppercase italic tracking-tighter text-white">{emptyTitle}</h3>
+                <p className="max-w-sm text-gray-500 font-medium">{emptyMessage}</p>
                 {onReset && (
                     <button
                         onClick={onReset}
                         className="mt-6 w-full rounded-xl bg-purple-600 px-6 py-3 font-bold text-white shadow-xl shadow-purple-600/20 transition-all hover:bg-purple-500 sm:w-auto sm:px-8"
                     >
-                        Reset Search
+                        {resetLabel}
                     </button>
                 )}
             </div>

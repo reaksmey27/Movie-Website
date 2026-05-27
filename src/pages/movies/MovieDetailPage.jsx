@@ -7,7 +7,7 @@ import useMovieDetail from '../../hooks/movies/useMovieDetail';
 import MovieInfo from './components/MovieInfo';
 import MoviePlayer from './components/MoviePlayer';
 import TrailerModal from './components/TrailerModal';
-import PageLoader from '../../components/ui/PageLoader';
+import MovieDetailSkeleton from './components/MovieDetailSkeleton';
 import PageError from '../../components/ui/PageError';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 
@@ -35,12 +35,12 @@ const MovieDetailPage = () => {
     } = useMovieDetail(id);
 
     if (loading) {
-        return <PageLoader color="border-purple-500" label="Loading Movie Details..." />;
+        return <MovieDetailSkeleton />;
     }
 
     if (!movie) {
         return (
-            <div className="pt-32 pb-20 px-6 sm:px-12 lg:px-24 xl:px-40 min-h-screen bg-slate-950 flex flex-col items-center justify-center">
+            <div className="pt-32 pb-20 px-6 sm:px-12 lg:px-24 xl:px-40 min-h-screen bg-[var(--color-bg)] flex flex-col items-center justify-center">
                 <PageError 
                     message="Movie not found" 
                     buttonLabel="Go Back"
@@ -51,24 +51,31 @@ const MovieDetailPage = () => {
     }
 
     return (
-        <div className="min-h-screen bg-slate-950 relative overflow-x-hidden">
+        <div className="relative min-h-screen overflow-x-hidden bg-[var(--color-bg)]">
             {!isPlaying && (
                 <div className="absolute inset-0 h-[50vh] sm:h-[70vh] w-full">
                     <img
                         src={movie.backdropImage || movie.image}
                         alt=""
-                        className="w-full h-full object-cover opacity-20 sm:opacity-30"
+                        className="h-full w-full object-cover"
+                        style={{ opacity: "var(--movie-backdrop-opacity)" }}
                         decoding="async"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/80 to-transparent" />
-                    <div className="absolute inset-0 bg-gradient-to-r from-slate-950 via-transparent to-transparent" />
+                    <div
+                        className="absolute inset-0"
+                        style={{ background: "var(--movie-hero-gradient-vertical)" }}
+                    />
+                    <div
+                        className="absolute inset-0"
+                        style={{ background: "var(--movie-hero-gradient-horizontal)" }}
+                    />
                 </div>
             )}
 
             <div className={`relative z-10 px-4 sm:px-12 lg:px-24 xl:px-40 ${isPlaying ? 'pt-20 sm:pt-24' : 'pt-24 sm:pt-32'} pb-16 sm:pb-20`}>
                 <button
                     onClick={() => isPlaying ? setIsPlaying(false) : navigate(-1)}
-                    className="mb-6 flex items-center gap-2 rounded-xl border border-white/5 bg-white/5 px-4 py-2 text-gray-400 transition-colors group backdrop-blur-md hover:text-white active:scale-95 sm:mb-8"
+                    className="group mb-6 flex items-center gap-2 rounded-xl border border-[var(--color-hero-border)] bg-[var(--color-hero-surface)] px-4 py-2 text-[var(--color-hero-muted)] transition-colors backdrop-blur-md hover:bg-[var(--color-hero-surface-strong)] hover:text-[var(--color-hero-text)] active:scale-95 sm:mb-8"
                 >
                     <ChevronLeftIcon className="h-4 w-4 sm:h-5 sm:w-5 transition-transform group-hover:-translate-x-1" />
                     <span className="font-bold uppercase tracking-widest text-[10px] sm:text-xs">

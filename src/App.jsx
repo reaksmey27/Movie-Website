@@ -1,4 +1,4 @@
-import React, { Suspense, lazy, useEffect } from "react";
+import React, { Suspense, lazy, useEffect, useState } from "react";
 import {
   BrowserRouter as Router,
   Routes,
@@ -14,6 +14,7 @@ import { WatchlistProvider } from "./context/WatchlistContext";
 import ErrorBoundary from "./components/ErrorBoundary";
 import PageLoader from "./components/ui/PageLoader";
 import useScrollToTop from "./hooks/useScrollToTop";
+import { applyTheme, getStoredTheme, persistTheme, THEMES } from "./utils/theme";
 
 const HomePage = lazy(() => import("./pages/home/HomePage"));
 const MoviesPage = lazy(() => import("./pages/movies/MoviesPage"));
@@ -102,6 +103,19 @@ const RouteTitleManager = () => {
 };
 
 const App = () => {
+  const [theme, setTheme] = useState(() => getStoredTheme());
+
+  useEffect(() => {
+    applyTheme(theme);
+    persistTheme(theme);
+  }, [theme]);
+
+  const toggleTheme = () => {
+    setTheme((currentTheme) =>
+      currentTheme === THEMES.DARK ? THEMES.LIGHT : THEMES.DARK,
+    );
+  };
+
   return (
     <ErrorBoundary>
       <NotificationProvider>
@@ -111,8 +125,8 @@ const App = () => {
               <Router>
                 <ScrollManager />
                 <RouteTitleManager />
-                <div className="min-h-screen bg-slate-950 text-white selection:bg-purple-500/30">
-                  <Navbar />
+                <div className="min-h-screen bg-[var(--color-bg)] text-[var(--color-text)]">
+                  <Navbar theme={theme} onToggleTheme={toggleTheme} />
                   <main className="relative">
                     <Suspense
                       fallback={

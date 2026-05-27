@@ -1,21 +1,35 @@
 import { useCallback, useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { tmdbService } from "../../services/tmdbService";
+import { DEFAULT_DISCOVER_SORT, DISCOVER_SORT_OPTIONS } from "../../pages/movies/constants";
+
+const DISCOVER_SORT_VALUES = new Set(DISCOVER_SORT_OPTIONS.map((option) => option.value));
 
 const useMovies = () => {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const page = parseInt(searchParams.get("page") || "1", 10);
-  const selectedGenre = searchParams.get("genre")
-    ? parseInt(searchParams.get("genre"), 10)
-    : null;
+  const genreParam = searchParams.get("genre");
+  const parsedGenre = genreParam ? parseInt(genreParam, 10) : null;
+  const selectedGenre = Number.isNaN(parsedGenre) ? null : parsedGenre;
   const searchQuery = searchParams.get("q") || "";
+  const releaseYearParam = searchParams.get("year") || "";
+  const minRatingParam = searchParams.get("rating") || "";
+  const sortParam = searchParams.get("sort") || DEFAULT_DISCOVER_SORT;
+  const releaseYear = /^\d{4}$/.test(releaseYearParam) ? releaseYearParam : "";
+  const minRating = /^\d+(\.\d+)?$/.test(minRatingParam) ? minRatingParam : "";
+  const sortBy = DISCOVER_SORT_VALUES.has(sortParam)
+    ? sortParam
+    : DEFAULT_DISCOVER_SORT;
 
   const [movies, setMovies] = useState([]);
   const [genres, setGenres] = useState([]);
   const [loading, setLoading] = useState(true);
   const [totalPages, setTotalPages] = useState(0);
   const [error, setError] = useState(null);
+  const hasActiveFilters = Boolean(
+    selectedGenre || releaseYear || minRating || sortBy !== DEFAULT_DISCOVER_SORT,
+  );
 
   const updateParams = useCallback((updates) => {
     setSearchParams(
@@ -66,10 +80,13 @@ const useMovies = () => {
         let response;
         if (searchQuery.trim()) {
           response = await tmdbService.searchMovies(searchQuery, page);
-        } else if (selectedGenre) {
-          response = await tmdbService.getMoviesByGenre(selectedGenre, page);
         } else {
-          response = await tmdbService.discoverMovies(page);
+          response = await tmdbService.discoverMovies(page, {
+            genreId: selectedGenre,
+            releaseYear,
+            minRating,
+            sortBy,
+          });
         }
 
         if (!ignore && response?.results) {
@@ -93,7 +110,7 @@ const useMovies = () => {
       ignore = true;
       clearTimeout(debounceTimer);
     };
-  }, [selectedGenre, page, searchQuery]);
+  }, [minRating, page, releaseYear, searchQuery, selectedGenre, sortBy]);
 
   const handleGenreChange = useCallback((genreId) => {
     updateParams({ genre: genreId, page: 1, q: null });
@@ -101,12 +118,42 @@ const useMovies = () => {
   }, [updateParams]);
 
   const handleSearch = useCallback((value) => {
-    updateParams({ q: value, genre: null, page: 1 });
+    updateParams({ q: value, page: 1 });
     setError(null);
   }, [updateParams]);
 
   const clearSearch = useCallback(() => {
     updateParams({ q: null, page: 1 });
+    setError(null);
+  }, [updateParams]);
+
+  const handleYearChange = useCallback((value) => {
+    updateParams({ year: value || null, page: 1, q: null });
+    setError(null);
+  }, [updateParams]);
+
+  const handleRatingChange = useCallback((value) => {
+    updateParams({ rating: value || null, page: 1, q: null });
+    setError(null);
+  }, [updateParams]);
+
+  const handleSortChange = useCallback((value) => {
+    updateParams({
+      sort: value === DEFAULT_DISCOVER_SORT ? null : value,
+      page: 1,
+      q: null,
+    });
+    setError(null);
+  }, [updateParams]);
+
+  const clearFilters = useCallback(() => {
+    updateParams({
+      genre: null,
+      year: null,
+      rating: null,
+      sort: null,
+      page: 1,
+    });
     setError(null);
   }, [updateParams]);
 
@@ -121,6 +168,10 @@ const useMovies = () => {
     genres,
     selectedGenre,
     searchQuery,
+    releaseYear,
+    minRating,
+    sortBy,
+    hasActiveFilters,
     loading,
     page,
     totalPages,
@@ -128,6 +179,10 @@ const useMovies = () => {
     handleGenreChange,
     handleSearch,
     clearSearch,
+    handleYearChange,
+    handleRatingChange,
+    handleSortChange,
+    clearFilters,
     handlePageChange,
   };
 };

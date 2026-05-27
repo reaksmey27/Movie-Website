@@ -2,7 +2,7 @@ import React from 'react';
 import { FireIcon } from '@heroicons/react/24/outline';
 import useTrendingMovies from '../../hooks/movies/useTrendingMovies';
 import MovieGrid from '../../components/ui/MovieGrid';
-import PageLoader from '../../components/ui/PageLoader';
+import MovieGridSkeleton from '../../components/ui/MovieGridSkeleton';
 import PageError from '../../components/ui/PageError';
 
 const TrendingPage = () => {
@@ -33,7 +33,7 @@ const TrendingPage = () => {
                 {error ? (
                     <PageError message={error} buttonLabel="Retry Sync" buttonColor="bg-orange-500 text-white hover:bg-orange-600" icon={FireIcon} iconColor="text-orange-500" borderColor="border-orange-500/10 bg-orange-500/5" />
                 ) : loading ? (
-                    <PageLoader color="border-orange-600" label="Lighting the fire..." glow="shadow-[0_0_15px_rgba(249,115,22,0.3)]" />
+                    <MovieGridSkeleton />
                 ) : (
                     <MovieGrid movies={movies} />
                 )}

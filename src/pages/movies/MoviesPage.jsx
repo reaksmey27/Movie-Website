@@ -3,16 +3,30 @@ import useMovies from '../../hooks/movies/useMovies';
 import MoviesHeader from './components/MoviesHeader';
 import Pagination from './components/Pagination';
 import MovieGrid from '../../components/ui/MovieGrid';
+import MovieGridSkeleton from '../../components/ui/MovieGridSkeleton';
 import PageError from '../../components/ui/PageError';
-import PageLoader from '../../components/ui/PageLoader';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 
 const MoviesPage = () => {
     const {
         movies, genres, selectedGenre, searchQuery,
+        releaseYear, minRating, sortBy, hasActiveFilters,
         loading, page, totalPages, error,
         handleGenreChange, handleSearch, clearSearch, handlePageChange,
+        handleYearChange, handleRatingChange, handleSortChange, clearFilters,
     } = useMovies();
+    const resetResults = searchQuery ? clearSearch : hasActiveFilters ? clearFilters : undefined;
+    const resetLabel = searchQuery ? "Clear Search" : "Reset Filters";
+    const emptyTitle = searchQuery
+        ? "No Search Results"
+        : hasActiveFilters
+            ? "No Movies Match These Filters"
+            : "No Movies Found";
+    const emptyMessage = searchQuery
+        ? `We couldn't find any movies for "${searchQuery}". Try a different title or keyword.`
+        : hasActiveFilters
+            ? "Try widening your filters or reset them to see more discover results."
+            : "Try browsing a different genre or checking back for more titles.";
 
     return (
         <div className="relative min-h-screen overflow-hidden bg-slate-950 px-4 pb-16 pt-22 sm:px-6 sm:pb-24 sm:pt-28 lg:px-24 lg:pt-36 xl:px-40">
@@ -26,9 +40,17 @@ const MoviesPage = () => {
                     totalPages={totalPages}
                     genres={genres}
                     selectedGenre={selectedGenre}
+                    releaseYear={releaseYear}
+                    minRating={minRating}
+                    sortBy={sortBy}
+                    hasActiveFilters={hasActiveFilters}
                     onSearch={handleSearch}
                     onClear={clearSearch}
                     onGenreChange={handleGenreChange}
+                    onYearChange={handleYearChange}
+                    onRatingChange={handleRatingChange}
+                    onSortChange={handleSortChange}
+                    onClearFilters={clearFilters}
                 />
 
                 {error ? (
@@ -41,10 +63,16 @@ const MoviesPage = () => {
                         borderColor="border-red-500/10 bg-red-500/5"
                     />
                 ) : loading ? (
-                    <PageLoader color="border-purple-600" label="Updating Feed..." />
+                    <MovieGridSkeleton />
                 ) : (
                     <>
-                        <MovieGrid movies={movies} onReset={clearSearch} />
+                        <MovieGrid
+                            movies={movies}
+                            onReset={resetResults}
+                            resetLabel={resetLabel}
+                            emptyTitle={emptyTitle}
+                            emptyMessage={emptyMessage}
+                        />
                         {totalPages > 1 && <Pagination page={page} totalPages={totalPages} onPageChange={handlePageChange} />}
                     </>
                 )}

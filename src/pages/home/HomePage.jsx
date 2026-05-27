@@ -1,16 +1,15 @@
 import React from "react";
 import HeroSection from "./components/HeroSection";
 import MovieSlider from "./components/MovieSlider";
-import HomeContentSection from "./components/HomeContentSection";
+import HomePageSkeleton from "./components/HomePageSkeleton";
 import useHomeMovies from "../../hooks/movies/useHomeMovies";
-import PageLoader from "../../components/ui/PageLoader";
 import PageError from "../../components/ui/PageError";
 
 const HomePage = () => {
   const { movies, loading, error, retry } = useHomeMovies();
 
   if (loading) {
-    return <PageLoader color="border-purple-500" label="Loading Movies..." />;
+    return <HomePageSkeleton />;
   }
 
   return (
@@ -60,7 +59,6 @@ const HomePage = () => {
           <MovieSlider title="Fantasy" movies={movies.fantasy} />
         )}
 
-        <HomeContentSection />
       </div>
     </main>
   );
