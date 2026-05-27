@@ -32,8 +32,12 @@ const useTrendingMovies = () => {
                 console.error('Error fetching trending movies:', err);
                 let errorMessage = "Unable to spark the trend.";
 
-                if (err.message?.includes('Invalid API key') || err.message?.includes('401')) {
-                    errorMessage = "Invalid TMDB API key. Please update your VITE_TMDB_API_KEY in the .env file.";
+                if (
+                    err.message?.includes("Invalid TMDB credentials") ||
+                    err.message?.includes("TMDB credentials are missing") ||
+                    err.message?.includes('401')
+                ) {
+                    errorMessage = "Invalid TMDB credentials. Update VITE_TMDB_API_KEY or VITE_TMDB_READ_ACCESS_TOKEN in your .env file.";
                 } else if (err.message?.includes('Network error') || err.message?.includes('Failed to fetch')) {
                     errorMessage = "Network error. Please check your connection.";
                 }

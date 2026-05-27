@@ -23,7 +23,7 @@ A React-based movie website powered by TMDB API.
    Create a `.env` file from `.env.example` and fill in the values.
 
    Required values:
-   - `VITE_TMDB_API_KEY`: get your free API key from [TMDB](https://www.themoviedb.org/settings/api)
+   - `VITE_TMDB_API_KEY` or `VITE_TMDB_READ_ACCESS_TOKEN`: get your TMDB credential from [TMDB](https://www.themoviedb.org/settings/api)
    - `VITE_FIREBASE_*`: create a Firebase web app and copy its client config from Project Settings
 
 4. **Authorize your app domain in Firebase Authentication:**
@@ -53,8 +53,8 @@ Vercel also provides its CDN automatically for deployed projects and custom doma
 
 Before you redeploy, make sure these settings are in place:
 
-1. In Vercel, open your project settings and add the same `VITE_*` variables from your local `.env`:
-   - `VITE_TMDB_API_KEY`
+   1. In Vercel, open your project settings and add the same `VITE_*` variables from your local `.env`:
+   - `VITE_TMDB_API_KEY` or `VITE_TMDB_READ_ACCESS_TOKEN`
    - `VITE_FIREBASE_API_KEY`
    - `VITE_FIREBASE_AUTH_DOMAIN`
    - `VITE_FIREBASE_PROJECT_ID`
@@ -82,8 +82,8 @@ Before you redeploy, make sure these settings are in place:
 
 This error occurs when the TMDB API key is missing or invalid. To fix:
 
-1. Verify your `.env` file contains a valid `VITE_TMDB_API_KEY`
-2. Ensure the API key is correct and not expired
+1. Verify your `.env` file contains a valid `VITE_TMDB_API_KEY` or `VITE_TMDB_READ_ACCESS_TOKEN`
+2. Ensure the TMDB credential is correct and still active
 3. Restart the development server after updating the `.env` file
 
 ### Network Errors

@@ -1,4 +1,5 @@
-const API_KEY = import.meta.env.VITE_TMDB_API_KEY;
+const API_KEY = import.meta.env.VITE_TMDB_API_KEY?.trim() || "";
+const READ_ACCESS_TOKEN = import.meta.env.VITE_TMDB_READ_ACCESS_TOKEN?.trim() || "";
 const BASE_URL = "https://api.themoviedb.org/3";
 const IMAGE_BASE_URL = "https://image.tmdb.org/t/p";
 const DEFAULT_CACHE_TTL = 5 * 60 * 1000;
@@ -6,13 +7,24 @@ const LONG_CACHE_TTL = 30 * 60 * 1000;
 const GENRE_CACHE_TTL = 24 * 60 * 60 * 1000;
 const responseCache = new Map();
 const pendingRequests = new Map();
+const INVALID_API_KEY_VALUES = new Set([
+  "",
+  "your_tmdb_api_key",
+  "332625e9a1fcfb93329932bfebe2ba33",
+]);
+
+const looksLikeBearerToken = (value) => value.split(".").length === 3;
+const bearerToken = READ_ACCESS_TOKEN || (looksLikeBearerToken(API_KEY) ? API_KEY : "");
+const apiKey = bearerToken ? "" : API_KEY;
+const hasTmdbCredentials =
+  Boolean(bearerToken) || (Boolean(apiKey) && !INVALID_API_KEY_VALUES.has(apiKey));
 
 // Validate API key on module load
-if (!API_KEY || API_KEY === "332625e9a1fcfb93329932bfebe2ba33") {
+if (!hasTmdbCredentials) {
   console.error(
-    "TMDB API Key is missing or invalid! Please add a valid VITE_TMDB_API_KEY to your .env file",
+    "TMDB credentials are missing or invalid. Add VITE_TMDB_API_KEY or VITE_TMDB_READ_ACCESS_TOKEN to your .env file.",
   );
-  console.error("Get your API key from: https://www.themoviedb.org/settings/api");
+  console.error("Get your TMDB credentials from: https://www.themoviedb.org/settings/api");
 }
 
 const buildCacheKey = (endpoint, params) => {
@@ -56,6 +68,12 @@ const fetchFromTMDB = async (
   params = {},
   { ttl = DEFAULT_CACHE_TTL, forceRefresh = false } = {},
 ) => {
+  if (!hasTmdbCredentials) {
+    throw new Error(
+      "TMDB credentials are missing. Add VITE_TMDB_API_KEY or VITE_TMDB_READ_ACCESS_TOKEN to your .env file.",
+    );
+  }
+
   const cacheKey = buildCacheKey(endpoint, params);
 
   if (!forceRefresh) {
@@ -69,24 +87,34 @@ const fetchFromTMDB = async (
     }
   }
 
-  const queryParams = new URLSearchParams({
-    api_key: API_KEY,
-    ...cleanParams(params),
-  });
+  const queryParams = new URLSearchParams(cleanParams(params));
+
+  if (apiKey) {
+    queryParams.set("api_key", apiKey);
+  }
 
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), 15000);
+  const requestUrl = queryParams.toString()
+    ? `${BASE_URL}${endpoint}?${queryParams}`
+    : `${BASE_URL}${endpoint}`;
+  const headers = bearerToken
+    ? {
+        Authorization: `Bearer ${bearerToken}`,
+      }
+    : undefined;
 
   const request = (async () => {
     try {
-      const response = await fetch(`${BASE_URL}${endpoint}?${queryParams}`, {
+      const response = await fetch(requestUrl, {
         signal: controller.signal,
+        headers,
       });
 
       if (!response.ok) {
         if (response.status === 401) {
           throw new Error(
-            "Invalid API key. Please check your TMDB API key in the .env file.",
+            "Invalid TMDB credentials. Please check VITE_TMDB_API_KEY or VITE_TMDB_READ_ACCESS_TOKEN in your .env file.",
           );
         }
         if (response.status === 429) {

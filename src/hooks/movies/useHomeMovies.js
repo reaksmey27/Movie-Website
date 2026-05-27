@@ -81,8 +81,12 @@ const useHomeMovies = () => {
       let errorMessage = err.message || "Failed to sync with cinematic database.";
 
       // Provide more helpful error messages
-      if (err.message?.includes('Invalid API key') || err.message?.includes('401')) {
-        errorMessage = "Invalid TMDB API key. Please update your VITE_TMDB_API_KEY in the .env file with a valid key from https://www.themoviedb.org/settings/api";
+      if (
+        err.message?.includes("Invalid TMDB credentials") ||
+        err.message?.includes("TMDB credentials are missing") ||
+        err.message?.includes("401")
+      ) {
+        errorMessage = "Invalid TMDB credentials. Update VITE_TMDB_API_KEY or VITE_TMDB_READ_ACCESS_TOKEN in your .env file with a valid TMDB credential from https://www.themoviedb.org/settings/api, then restart Vite.";
       } else if (err.message?.includes('Network error') || err.message?.includes('Failed to fetch')) {
         errorMessage = "Network error. Please check your internet connection or try using a VPN.";
       }

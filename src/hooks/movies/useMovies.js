@@ -96,7 +96,24 @@ const useMovies = () => {
       } catch (err) {
         if (!ignore) {
           console.error("Error fetching movies:", err);
-          setError("Unable to connect to the movie database. Please check your network.");
+          let errorMessage = "Unable to connect to the movie database. Please check your network.";
+
+          if (
+            err.message?.includes("Invalid TMDB credentials") ||
+            err.message?.includes("TMDB credentials are missing") ||
+            err.message?.includes("401")
+          ) {
+            errorMessage =
+              "Invalid TMDB credentials. Update VITE_TMDB_API_KEY or VITE_TMDB_READ_ACCESS_TOKEN in your .env file, then restart Vite.";
+          } else if (
+            err.message?.includes("Network error") ||
+            err.message?.includes("Failed to fetch")
+          ) {
+            errorMessage =
+              "Network error. Please check your internet connection or try using a VPN.";
+          }
+
+          setError(errorMessage);
         }
       } finally {
         if (!ignore) {
