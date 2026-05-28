@@ -42,10 +42,10 @@ const MoviesPage = () => {
   return (
     <div className="relative min-h-screen overflow-hidden bg-slate-950 px-4 pb-16 pt-22 sm:px-6 sm:pb-24 sm:pt-28 lg:px-24 lg:pt-36 xl:px-40">
       {/* ── Background glows ── */}
-      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-purple-600/10 blur-[120px] rounded-full -z-10" />
-      <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-blue-600/10 blur-[120px] rounded-full -z-10" />
+      <div className="absolute top-0 right-0 w-125 h-125 bg-purple-600/10 blur-[120px] rounded-full -z-10" />
+      <div className="absolute bottom-0 left-0 w-125 h-125 bg-blue-600/10 blur-[120px] rounded-full -z-10" />
 
-      <div className="mx-auto max-w-[1400px]">
+      <div className="mx-auto max-w-350">
         <MovieHeader
           searchQuery={searchQuery}
           page={page}

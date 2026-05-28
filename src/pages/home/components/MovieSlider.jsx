@@ -85,7 +85,7 @@ const MovieSlider = ({ title, movies = [] }) => {
         {movies.map((movie) => (
           <div
             key={movie.id}
-            className="w-[58vw] min-w-[11rem] max-w-[13rem] shrink-0 snap-start min-[360px]:w-[11.5rem] min-[420px]:w-[12.5rem] sm:min-w-[15rem] sm:max-w-[17rem] sm:w-[15.5rem] lg:w-[16rem] xl:w-[17rem]"
+            className="w-[58vw] min-w-44 max-w-52 shrink-0 snap-start min-[360px]:w-46 min-[420px]:w-50 sm:min-w-60 sm:max-w-68 sm:w-62 lg:w-[16rem] xl:w-68"
           >
             <MovieCard movie={movie} headingLevel="h3" />
           </div>

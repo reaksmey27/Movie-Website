@@ -43,7 +43,7 @@ const ProfileAvatar = ({ user, onLogout }) => {
             referrerPolicy="no-referrer"
           />
         ) : (
-          <div className="flex h-full w-full items-center justify-center rounded-[2.7rem] border border-white/10 bg-gradient-to-br from-purple-600 via-fuchsia-500 to-blue-500 text-4xl font-black text-white shadow-2xl">
+          <div className="flex h-full w-full items-center justify-center rounded-[2.7rem] border border-white/10 bg-linear-to-br from-purple-600 via-fuchsia-500 to-blue-500 text-4xl font-black text-white shadow-2xl">
             {initial}
           </div>
         )}
@@ -64,18 +64,18 @@ const ProfileAvatar = ({ user, onLogout }) => {
       </div>
 
       {/* ── Info grid ── */}
-      <div className="mt-6 rounded-[2rem] border border-white/10 bg-slate-950/40 p-4 space-y-3">
+      <div className="mt-6 rounded-4xl border border-white/10 bg-slate-950/40 p-4 space-y-3">
         <div className="grid grid-cols-2 gap-3">
-          <div className="rounded-[1.5rem] border border-white/8 bg-white/3 p-4">
+          <div className="rounded-3xl border border-white/8 bg-white/3 p-4">
             <p className="text-[10px] font-black uppercase tracking-[0.25em] text-white/35">Genre</p>
             <p className="mt-2 text-sm font-bold text-white">{user.favoriteGenre || "Open taste"}</p>
           </div>
-          <div className="rounded-[1.5rem] border border-white/8 bg-white/3 p-4">
+          <div className="rounded-3xl border border-white/8 bg-white/3 p-4">
             <p className="text-[10px] font-black uppercase tracking-[0.25em] text-white/35">Status</p>
             <p className="mt-2 text-sm font-bold text-emerald-300">Active</p>
           </div>
         </div>
-        <div className="rounded-[1.5rem] border border-white/8 bg-black/20 p-4 space-y-3">
+        <div className="rounded-3xl border border-white/8 bg-black/20 p-4 space-y-3">
           <div className="flex items-center gap-3 text-sm text-slate-300">
             <MapPinIcon className="h-4 w-4 shrink-0 text-fuchsia-400" />
             <span>{user.location || "Add your city"}</span>

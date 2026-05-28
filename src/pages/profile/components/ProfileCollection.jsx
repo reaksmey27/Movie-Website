@@ -39,7 +39,7 @@ const EmptyState = () => (
 const MovieCard = ({ movie }) => (
   <Link
     to={`/movie/${movie.id}`}
-    className="group overflow-hidden rounded-[2rem] border border-white/10 bg-black/30 transition-all hover:-translate-y-1 hover:border-white/20"
+    className="group overflow-hidden rounded-4xl border border-white/10 bg-black/30 transition-all hover:-translate-y-1 hover:border-white/20"
   >
     <div className="relative h-64 overflow-hidden">
       <img
@@ -49,7 +49,7 @@ const MovieCard = ({ movie }) => (
         loading="lazy"
         decoding="async"
       />
-      <div className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent" />
+      <div className="absolute inset-0 bg-linear-to-t from-black via-black/30 to-transparent" />
       <div className="absolute left-4 top-4 rounded-full bg-black/60 px-3 py-1 text-[10px] font-black uppercase tracking-[0.2em] text-white backdrop-blur">
         {movie.genres?.[0] || "Movie"}
       </div>
