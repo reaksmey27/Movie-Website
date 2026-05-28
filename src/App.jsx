@@ -1,8 +1,9 @@
 import { Suspense, useEffect, useState } from "react";
 import { BrowserRouter as Router } from "react-router-dom";
 
-import ErrorBoundary from "./components/ErrorBoundary";
-import RouteTitleManager from "./components/RouteTitleManager";
+// Fixed imports: explicitly adding .jsx extensions for root-level components
+import ErrorBoundary from "./components/ErrorBoundary.jsx";
+import RouteTitleManager from "./components/RouteTitleManager.jsx";
 import Footer from "./components/layout/Footer";
 import Navbar from "./components/layout/Navbar";
 import PageLoader from "./components/ui/PageLoader";
