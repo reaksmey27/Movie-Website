@@ -24,7 +24,7 @@ class ErrorBoundary extends React.Component {
               <ExclamationTriangleIcon className="h-10 w-10 text-red-500" />
             </div>
             <h1 className="text-3xl font-black text-white mb-4 uppercase tracking-tighter">
-              Something went wrong
+              Something went wrongs
             </h1>
             <p className="text-gray-400 mb-8">
               We encountered an unexpected error. Please try refreshing the page or return to the homepage.
