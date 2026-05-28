@@ -1,63 +1,103 @@
-import React, { memo, useCallback, useEffect, useState } from "react";
+import { memo, useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { useFavorites } from "../../../context/FavoritesContext";
 import {
-  PlayCircleIcon,
-  HeartIcon,
-  StarIcon,
-  PlayIcon,
-  XMarkIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
+  HeartIcon,
+  PlayCircleIcon,
+  PlayIcon,
+  StarIcon,
+  XMarkIcon,
 } from "@heroicons/react/24/solid";
 import { HeartIcon as HeartOutline } from "@heroicons/react/24/outline";
 
+import { useFavorites } from "../../../context/FavoritesContext";
+
+// ─── Constants ────────────────────────────────────────────────────────────────
+
+const FEATURED_COUNT = 4;
+const SLIDE_INTERVAL = 5000;
+const FADE_DURATION  = 600;
+const DOT_DURATION   = 400;
+
+// ─── Sub-components ───────────────────────────────────────────────────────────
+
+const NavButton = ({ onClick, children }) => (
+  <button
+    onClick={onClick}
+    className="p-3 sm:p-4 rounded-full bg-black/20 border border-white/10 backdrop-blur-md text-white hover:bg-white/20 transition-all active:scale-90"
+  >
+    {children}
+  </button>
+);
+
+const TrailerModal = ({ movie, onClose }) => (
+  <div className="fixed inset-0 z-200 flex items-center justify-center p-2 sm:p-10 bg-black/95 backdrop-blur-2xl animate-in fade-in duration-300">
+    <div className="relative w-full max-w-6xl aspect-video bg-black rounded-xl sm:rounded-3xl overflow-hidden shadow-[0_0_100px_rgba(168,85,247,0.3)] border border-white/10 animate-in zoom-in duration-500">
+      <button
+        onClick={onClose}
+        className="absolute top-4 right-4 sm:top-6 sm:right-6 z-210 p-2 sm:p-3 bg-black/40 hover:bg-red-500 text-white rounded-full transition-all active:scale-90 backdrop-blur-md border border-white/10 group"
+      >
+        <XMarkIcon className="h-5 w-5 sm:h-6 sm:w-6 group-hover:rotate-90 transition-transform duration-300" />
+      </button>
+      <iframe
+        className="w-full h-full"
+        src={`https://www.youtube.com/embed/${movie.trailerKey}?autoplay=1&rel=0`}
+        title={`${movie.title} Trailer`}
+        frameBorder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        allowFullScreen
+      />
+    </div>
+  </div>
+);
+
+// ─── HeroSection ──────────────────────────────────────────────────────────────
+
 const HeroSection = ({ trendingMovies = [] }) => {
-  const FEATURED_MOVIES = trendingMovies.slice(0, 4);
+  const featured = trendingMovies.slice(0, FEATURED_COUNT);
   const { toggleFavorite, isFavorite } = useFavorites();
 
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [fade, setFade] = useState(true);
-  const [showTrailer, setShowTrailer] = useState(false);
+  const [fade, setFade]                 = useState(true);
+  const [showTrailer, setShowTrailer]   = useState(false);
+
+  const transition = useCallback((getNext, delay = FADE_DURATION) => {
+    setFade(false);
+    setTimeout(() => {
+      setCurrentIndex(getNext);
+      setFade(true);
+    }, delay);
+  }, []);
 
   const handleNext = useCallback(() => {
-    setFade(false);
-    setTimeout(() => {
-      setCurrentIndex((prev) => (prev + 1) % FEATURED_MOVIES.length);
-      setFade(true);
-    }, 600);
-  }, [FEATURED_MOVIES.length]);
+    transition((prev) => (prev + 1) % featured.length);
+  }, [featured.length, transition]);
 
   const handlePrev = useCallback(() => {
-    setFade(false);
-    setTimeout(() => {
-      setCurrentIndex((prev) =>
-        prev === 0 ? FEATURED_MOVIES.length - 1 : prev - 1,
-      );
-      setFade(true);
-    }, 600);
-  }, [FEATURED_MOVIES.length]);
+    transition((prev) => (prev === 0 ? featured.length - 1 : prev - 1));
+  }, [featured.length, transition]);
+
+  const goTo = useCallback((idx) => {
+    transition(() => idx, DOT_DURATION);
+  }, [transition]);
 
   useEffect(() => {
-    if (FEATURED_MOVIES.length === 0 || showTrailer) return;
+    if (featured.length === 0 || showTrailer) return;
+    const id = setInterval(handleNext, SLIDE_INTERVAL);
+    return () => clearInterval(id);
+  }, [featured.length, showTrailer, handleNext]);
 
-    const interval = setInterval(() => {
-      handleNext();
-    }, 8000);
+  if (featured.length === 0) return null;
 
-    return () => clearInterval(interval);
-  }, [FEATURED_MOVIES.length, showTrailer, handleNext]);
-
-  if (FEATURED_MOVIES.length === 0) return null;
-
-  const movie = FEATURED_MOVIES[currentIndex];
+  const movie = featured[currentIndex];
   const isFav = isFavorite(movie.id);
 
   return (
     <section className="relative flex min-h-svh w-full items-end overflow-hidden bg-black pb-24 pt-28 sm:items-center sm:pb-0 sm:pt-0">
-      <div
-        className={`absolute inset-0 z-0 transition-opacity duration-1000 ${fade ? "opacity-60" : "opacity-0"}`}
-      >
+
+      {/* ── Background ── */}
+      <div className={`absolute inset-0 z-0 transition-opacity duration-1000 ${fade ? "opacity-60" : "opacity-0"}`}>
         <img
           src={movie.backdropImage || movie.image}
           alt=""
@@ -69,17 +109,17 @@ const HeroSection = ({ trendingMovies = [] }) => {
         <div className="absolute inset-0 bg-linear-to-r from-slate-950 via-slate-950/20 to-transparent" />
       </div>
 
-      <div
-        className={`relative z-10 w-full max-w-7xl px-4 pb-10 transition-all duration-700 ease-out transform sm:mt-16 sm:px-6 sm:pb-0 lg:px-24 xl:px-40
-        ${fade ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-12"}`}
-      >
+      {/* ── Content ── */}
+      <div className={`relative z-10 w-full max-w-7xl px-4 pb-10 transition-all duration-700 ease-out transform sm:mt-16 sm:px-6 sm:pb-0 lg:px-24 xl:px-40 ${fade ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-12"}`}>
         <h2 className="mb-4 text-4xl font-black leading-[0.9] tracking-tighter text-white drop-shadow-2xl sm:mb-6 sm:text-5xl lg:text-6xl">
-          {movie.title} <br className="hidden sm:block" />
+          {movie.title}{" "}
+          <br className="hidden sm:block" />
           <span className="mt-2 block text-base font-bold tracking-tight text-white/60 sm:mt-0 sm:inline sm:text-3xl lg:text-4xl">
             {movie.subtitle}
           </span>
         </h2>
 
+        {/* Badges */}
         <div className="mb-6 flex flex-wrap items-center gap-2.5 sm:mb-8 sm:gap-4">
           <span className="rounded-lg bg-purple-600 px-2 py-1 text-[9px] font-black uppercase tracking-widest text-white shadow-lg sm:text-[10px]">
             Featured
@@ -104,6 +144,7 @@ const HeroSection = ({ trendingMovies = [] }) => {
           {movie.description}
         </p>
 
+        {/* Actions */}
         <div className="flex flex-col items-stretch gap-4 sm:flex-row sm:items-center sm:gap-6">
           <Link
             to={`/movie/${movie.id}`}
@@ -134,11 +175,10 @@ const HeroSection = ({ trendingMovies = [] }) => {
                   : "border-white/10 bg-white/5 text-white hover:bg-white/10"
               }`}
             >
-              {isFav ? (
-                <HeartIcon className="h-5 w-5 sm:h-6 sm:w-6" />
-              ) : (
-                <HeartOutline className="h-5 w-5 sm:h-6 sm:w-6" />
-              )}
+              {isFav
+                ? <HeartIcon className="h-5 w-5 sm:h-6 sm:w-6" />
+                : <HeartOutline className="h-5 w-5 sm:h-6 sm:w-6" />
+              }
               <span className="text-[10px] uppercase tracking-[0.18em] sm:text-xs sm:tracking-[0.2em]">
                 Favorite
               </span>
@@ -147,34 +187,24 @@ const HeroSection = ({ trendingMovies = [] }) => {
         </div>
       </div>
 
+      {/* ── Nav arrows ── */}
       <div className="absolute inset-y-0 left-0 hidden lg:flex items-center px-10 z-30">
-        <button
-          onClick={handlePrev}
-          className="p-3 sm:p-4 rounded-full bg-black/20 border border-white/10 backdrop-blur-md text-white hover:bg-white/20 transition-all active:scale-90"
-        >
+        <NavButton onClick={handlePrev}>
           <ChevronLeftIcon className="h-6 w-6 sm:h-8 sm:w-8" />
-        </button>
+        </NavButton>
       </div>
       <div className="absolute inset-y-0 right-0 hidden lg:flex items-center px-10 z-30">
-        <button
-          onClick={handleNext}
-          className="p-3 sm:p-4 rounded-full bg-black/20 border border-white/10 backdrop-blur-md text-white hover:bg-white/20 transition-all active:scale-90"
-        >
+        <NavButton onClick={handleNext}>
           <ChevronRightIcon className="h-6 w-6 sm:h-8 sm:w-8" />
-        </button>
+        </NavButton>
       </div>
 
+      {/* ── Dot indicators ── */}
       <div className="absolute bottom-5 left-1/2 z-20 flex -translate-x-1/2 items-center gap-3 sm:bottom-12 sm:gap-4">
-        {FEATURED_MOVIES.map((_, idx) => (
+        {featured.map((_, idx) => (
           <button
             key={idx}
-            onClick={() => {
-              setFade(false);
-              setTimeout(() => {
-                setCurrentIndex(idx);
-                setFade(true);
-              }, 400);
-            }}
+            onClick={() => goTo(idx)}
             className={`h-2 rounded-full transition-all duration-500 ${
               idx === currentIndex
                 ? "w-10 sm:w-14 bg-purple-600 shadow-lg shadow-purple-500/50"
@@ -184,25 +214,9 @@ const HeroSection = ({ trendingMovies = [] }) => {
         ))}
       </div>
 
+      {/* ── Trailer modal ── */}
       {showTrailer && movie.trailerKey && (
-        <div className="fixed inset-0 z-200 flex items-center justify-center p-2 sm:p-10 bg-black/95 backdrop-blur-2xl animate-in fade-in duration-300">
-          <div className="relative w-full max-w-6xl aspect-video bg-black rounded-xl sm:rounded-3xl overflow-hidden shadow-[0_0_100px_rgba(168,85,247,0.3)] border border-white/10 animate-in zoom-in duration-500">
-            <button
-              onClick={() => setShowTrailer(false)}
-              className="absolute top-4 right-4 sm:top-6 sm:right-6 z-210 p-2 sm:p-3 bg-black/40 hover:bg-red-500 text-white rounded-full transition-all active:scale-90 backdrop-blur-md border border-white/10 group"
-            >
-              <XMarkIcon className="h-5 w-5 sm:h-6 sm:w-6 group-hover:rotate-90 transition-transform duration-300" />
-            </button>
-            <iframe
-              className="w-full h-full"
-              src={`https://www.youtube.com/embed/${movie.trailerKey}?autoplay=1&rel=0`}
-              title={`${movie.title} Trailer`}
-              frameBorder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-              allowFullScreen
-            ></iframe>
-          </div>
-        </div>
+        <TrailerModal movie={movie} onClose={() => setShowTrailer(false)} />
       )}
     </section>
   );

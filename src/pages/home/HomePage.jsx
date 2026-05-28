@@ -1,16 +1,31 @@
-import React from "react";
-import HeroSection from "./components/HeroSection";
-import MovieSlider from "./components/MovieSlider";
-import HomePageSkeleton from "./components/HomePageSkeleton";
-import useHomeMovies from "../../hooks/movies/useHomeMovies";
 import PageError from "../../components/ui/PageError";
+import useHomeMovies from "../../hooks/movies/useHomeMovies";
+import HeroSection from "./components/HeroSection";
+import HomePageSkeleton from "./components/HomePageSkeleton";
+import MovieSlider from "./components/MovieSlider";
+
+// ─── Slider config ────────────────────────────────────────────────────────────
+
+const SLIDERS = [
+  { key: "trending",  title: "Trending Now"    },
+  { key: "upcoming",  title: "Upcoming Movies" },
+  { key: "topRated",  title: "Top Rated"       },
+  { key: "sciFi",     title: "Sci-Fi"          },
+  { key: "action",    title: "Action"          },
+  { key: "comedy",    title: "Comedy"          },
+  { key: "animation", title: "Animation"       },
+  { key: "crime",     title: "Crime"           },
+  { key: "fantasy",   title: "Fantasy"         },
+];
+
+// ─── Component ────────────────────────────────────────────────────────────────
 
 const HomePage = () => {
   const { movies, loading, error, retry } = useHomeMovies();
 
-  if (loading) {
-    return <HomePageSkeleton />;
-  }
+  if (loading) return <HomePageSkeleton />;
+
+  const heroMovies = movies.featured.length > 0 ? movies.featured : movies.trending;
 
   return (
     <main id="home" className="min-h-screen bg-slate-950">
@@ -18,11 +33,7 @@ const HomePage = () => {
         CineMax home: discover trending, upcoming, and top-rated movies
       </h1>
 
-      <HeroSection
-        trendingMovies={
-          movies.featured.length > 0 ? movies.featured : movies.trending
-        }
-      />
+      <HeroSection trendingMovies={heroMovies} />
 
       <div className="relative z-30 mt-8 space-y-10 pb-14 sm:mt-16 sm:space-y-14 sm:pb-20">
         {error && (
@@ -31,34 +42,11 @@ const HomePage = () => {
           </div>
         )}
 
-        {movies.trending.length > 0 && (
-          <MovieSlider title="Trending Now" movies={movies.trending} />
+        {SLIDERS.map(({ key, title }) =>
+          movies[key]?.length > 0 && (
+            <MovieSlider key={key} title={title} movies={movies[key]} />
+          )
         )}
-        {movies.upcoming.length > 0 && (
-          <MovieSlider title="Upcoming Movies" movies={movies.upcoming} />
-        )}
-        {movies.topRated.length > 0 && (
-          <MovieSlider title="Top Rated" movies={movies.topRated} />
-        )}
-        {movies.sciFi.length > 0 && (
-          <MovieSlider title="Sci-Fi" movies={movies.sciFi} />
-        )}
-        {movies.action.length > 0 && (
-          <MovieSlider title="Action" movies={movies.action} />
-        )}
-        {movies.comedy.length > 0 && (
-          <MovieSlider title="Comedy" movies={movies.comedy} />
-        )}
-        {movies.animation.length > 0 && (
-          <MovieSlider title="Animation" movies={movies.animation} />
-        )}
-        {movies.crime.length > 0 && (
-          <MovieSlider title="Crime" movies={movies.crime} />
-        )}
-        {movies.fantasy.length > 0 && (
-          <MovieSlider title="Fantasy" movies={movies.fantasy} />
-        )}
-
       </div>
     </main>
   );

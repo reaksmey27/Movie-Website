@@ -1,4 +1,3 @@
-import React from "react";
 import {
   ArrowRightIcon,
   SparklesIcon,
@@ -13,14 +12,13 @@ const SignupPage = () => {
   const { user, loading } = useAuth();
   const { formData, error, isBusy, handleChange, handleSubmit } = useAuthForm("register");
 
-  if (!loading && user) {
-    return <Navigate to="/" replace />;
-  }
+  if (loading) return null;
+  if (user) return <Navigate to="/" replace />;
 
   return (
     <div className="relative min-h-screen overflow-hidden bg-slate-950 px-4 pb-10 pt-24 sm:px-6 sm:pb-16 sm:pt-28 lg:px-10">
       <div className="absolute inset-x-0 top-0 -z-10 h-72 bg-[radial-gradient(circle_at_top,rgba(59,130,246,0.22),rgba(15,23,42,0))]" />
-      <div className="absolute -left-30 top-24 -z-10 h-105] w-105 rounded-full bg-sky-500/15 blur-[140px]" />
+      <div className="absolute -left-30 top-24 -z-10 h-105 w-105 rounded-full bg-sky-500/15 blur-[140px]" />
       <div className="absolute -bottom-30 -right-10 -z-10 h-105 w-105 rounded-full bg-indigo-500/15 blur-[140px]" />
 
       <div className="mx-auto grid w-full max-w-6xl gap-8 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
@@ -39,20 +37,12 @@ const SignupPage = () => {
 
           <div className="mt-8 grid gap-3 sm:grid-cols-2">
             <div className="rounded-[1.6rem] border border-white/10 bg-white/5 p-5">
-              <p className="text-[10px] font-black uppercase tracking-[0.25em] text-white/45">
-                Personal Space
-              </p>
-              <p className="mt-3 text-lg font-bold text-white">
-                Save favorites, shape your taste, and keep a clean profile.
-              </p>
+              <p className="text-[10px] font-black uppercase tracking-[0.25em] text-white/45">Personal Space</p>
+              <p className="mt-3 text-lg font-bold text-white">Save favorites, shape your taste, and keep a clean profile.</p>
             </div>
             <div className="rounded-[1.6rem] border border-white/10 bg-white/5 p-5">
-              <p className="text-[10px] font-black uppercase tracking-[0.25em] text-white/45">
-                Flexible Entry
-              </p>
-              <p className="mt-3 text-lg font-bold text-white">
-                Use email and password today, switch to Google anytime.
-              </p>
+              <p className="text-[10px] font-black uppercase tracking-[0.25em] text-white/45">Flexible Entry</p>
+              <p className="mt-3 text-lg font-bold text-white">Use email and password today, switch to Google anytime.</p>
             </div>
           </div>
         </section>
@@ -63,9 +53,7 @@ const SignupPage = () => {
               <div className="mb-6 rounded-2xl bg-sky-600 p-4 shadow-xl shadow-sky-600/30">
                 <UserPlusIcon className="h-8 w-8 text-white" />
               </div>
-              <h2 className="text-3xl font-black uppercase tracking-tighter text-white">
-                Join CineMax
-              </h2>
+              <h2 className="text-3xl font-black uppercase tracking-tighter text-white">Join CineMax</h2>
               <p className="mt-2 text-sm font-medium text-gray-400">
                 Create an account to sync your identity and movie collections.
               </p>
@@ -134,11 +122,11 @@ const SignupPage = () => {
                 </label>
               </div>
 
-              {error ? (
+              {error && (
                 <div className="rounded-2xl border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm font-medium text-red-200">
                   {error}
                 </div>
-              ) : null}
+              )}
 
               <button
                 type="submit"
@@ -152,9 +140,7 @@ const SignupPage = () => {
 
             <div className="my-6 flex items-center gap-3">
               <div className="h-px flex-1 bg-white/10" />
-              <span className="text-[10px] font-black uppercase tracking-[0.25em] text-white/35">
-                Or sign up with
-              </span>
+              <span className="text-[10px] font-black uppercase tracking-[0.25em] text-white/35">Or sign up with</span>
               <div className="h-px flex-1 bg-white/10" />
             </div>
 

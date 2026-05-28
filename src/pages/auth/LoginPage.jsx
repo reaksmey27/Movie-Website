@@ -1,9 +1,5 @@
 import React from "react";
-import {
-  ArrowRightIcon,
-  LockClosedIcon,
-  SparklesIcon,
-} from "@heroicons/react/24/outline";
+import { ArrowRightIcon, LockClosedIcon, SparklesIcon } from "@heroicons/react/24/outline";
 import { Link, Navigate } from "react-router-dom";
 import LoginButton from "../../components/auth/LoginButton";
 import useAuthForm from "../../hooks/auth/useAuthForm";
@@ -13,9 +9,8 @@ const LoginPage = () => {
   const { user, loading } = useAuth();
   const { formData, error, isBusy, handleChange, handleSubmit } = useAuthForm("login");
 
-  if (!loading && user) {
-    return <Navigate to="/" replace />;
-  }
+  if (loading) return null;
+  if (user) return <Navigate to="/" replace />;
 
   return (
     <div className="relative min-h-screen overflow-hidden bg-slate-950 px-4 pb-10 pt-24 sm:px-6 sm:pb-16 sm:pt-28 lg:px-10">
@@ -39,20 +34,12 @@ const LoginPage = () => {
 
           <div className="mt-8 grid gap-3 sm:grid-cols-2">
             <div className="rounded-[1.6rem] border border-white/10 bg-white/5 p-5">
-              <p className="text-[10px] font-black uppercase tracking-[0.25em] text-white/45">
-                Fast Return
-              </p>
-              <p className="mt-3 text-lg font-bold text-white">
-                Your saved picks stay close and ready.
-              </p>
+              <p className="text-[10px] font-black uppercase tracking-[0.25em] text-white/45">Fast Return</p>
+              <p className="mt-3 text-lg font-bold text-white">Your saved picks stay close and ready.</p>
             </div>
             <div className="rounded-[1.6rem] border border-white/10 bg-white/5 p-5">
-              <p className="text-[10px] font-black uppercase tracking-[0.25em] text-white/45">
-                Secure Access
-              </p>
-              <p className="mt-3 text-lg font-bold text-white">
-                Firebase-backed authentication with familiar flows.
-              </p>
+              <p className="text-[10px] font-black uppercase tracking-[0.25em] text-white/45">Secure Access</p>
+              <p className="mt-3 text-lg font-bold text-white">Firebase-backed authentication with familiar flows.</p>
             </div>
           </div>
         </section>
@@ -63,9 +50,7 @@ const LoginPage = () => {
               <div className="mb-6 rounded-2xl bg-fuchsia-600 p-4 shadow-xl shadow-fuchsia-600/30">
                 <LockClosedIcon className="h-8 w-8 text-white" />
               </div>
-              <h2 className="text-3xl font-black uppercase tracking-tighter text-white">
-                Welcome Back
-              </h2>
+              <h2 className="text-3xl font-black uppercase tracking-tighter text-white">Welcome Back</h2>
               <p className="mt-2 text-sm font-medium text-gray-400">
                 Use your CineMax account to continue where you left off.
               </p>
@@ -102,11 +87,11 @@ const LoginPage = () => {
                 />
               </label>
 
-              {error ? (
+              {error && (
                 <div className="rounded-2xl border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm font-medium text-red-200">
                   {error}
                 </div>
-              ) : null}
+              )}
 
               <button
                 type="submit"
@@ -120,9 +105,7 @@ const LoginPage = () => {
 
             <div className="my-6 flex items-center gap-3">
               <div className="h-px flex-1 bg-white/10" />
-              <span className="text-[10px] font-black uppercase tracking-[0.25em] text-white/35">
-                Or continue with
-              </span>
+              <span className="text-[10px] font-black uppercase tracking-[0.25em] text-white/35">Or continue with</span>
               <div className="h-px flex-1 bg-white/10" />
             </div>
 
@@ -137,7 +120,7 @@ const LoginPage = () => {
               <p className="text-sm font-medium text-gray-500">
                 Need an account?{" "}
                 <Link
-                  to="/register"
+                  to="/signup"
                   className="font-black text-white underline underline-offset-4 transition-colors hover:text-fuchsia-300"
                 >
                   Create one here

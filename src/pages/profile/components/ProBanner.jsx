@@ -1,22 +1,20 @@
-import React from 'react';
+import { SparklesIcon } from "@heroicons/react/24/solid";
 
-const ProBanner = () => {
-    return (
-        <div className="bg-gradient-to-r from-purple-600 to-blue-600 rounded-[2.5rem] p-10 shadow-2xl relative overflow-hidden group">
-            <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 blur-[80px] -mr-32 -mt-32 transition-transform duration-700 group-hover:scale-150" />
-            <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8">
-                <div>
-                    <h3 className="text-2xl font-black text-white uppercase tracking-tighter italic mb-2">Join Pro Membership</h3>
-                    <p className="text-white/80 font-medium max-w-md">
-                        Unlock early access to upcoming trailers and high-definition streaming for your favorites.
-                    </p>
-                </div>
-                <button className="bg-white text-black px-10 py-4 rounded-2xl font-black uppercase tracking-widest text-xs hover:scale-105 active:scale-95 transition-all shadow-xl">
-                    Upgrade Now
-                </button>
-            </div>
+// Simple, clean header for the Profile page
+const ProBanner = ({ user }) => {
+  return (
+    <section className="overflow-hidden rounded-[2.75rem] border border-white/10 bg-[linear-gradient(135deg,rgba(255,255,255,0.07),rgba(255,255,255,0.03))] shadow-2xl backdrop-blur-2xl">
+      <div className="px-5 py-8 sm:px-8 sm:py-10 lg:px-10">
+        <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-black/20 px-4 py-2 text-[10px] font-black uppercase tracking-[0.3em] text-purple-200">
+          <SparklesIcon className="h-4 w-4" />
+          Profile Lounge
         </div>
-    );
+        <h1 className="mt-6 text-3xl font-black uppercase tracking-[-0.05em] text-white sm:text-4xl">
+          {user?.name}
+        </h1>
+      </div>
+    </section>
+  );
 };
 
 export default ProBanner;

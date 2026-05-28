@@ -1,27 +1,46 @@
-import React, { memo, useCallback, useEffect, useRef, useState } from "react";
+import { memo, useCallback, useEffect, useRef, useState } from "react";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 import MovieCard from "../../../components/ui/MovieCard";
 
-const getHeadingId = (title) =>
-  `slider-${title
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-|-$/g, "")}`;
+// ─── Helpers ──────────────────────────────────────────────────────────────────
+
+const toHeadingId = (title) =>
+  `slider-${title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "")}`;
+
+// ─── Sub-components ───────────────────────────────────────────────────────────
+
+const NAV_BTN_CLASS =
+  "absolute bottom-10 top-23 z-40 hidden w-16 cursor-pointer items-center justify-center opacity-0 transition-opacity duration-300 group-hover/slider:opacity-100 md:flex md:w-24";
+
+const NavButton = ({ direction, title, onClick }) => (
+  <button
+    type="button"
+    onClick={onClick}
+    className={`${NAV_BTN_CLASS} ${direction === "left" ? "left-0" : "right-0"}`}
+    aria-label={`Scroll ${title} ${direction}`}
+  >
+    <div className="p-3 rounded-full bg-black/20 backdrop-blur-md border border-white/10 text-white hover:bg-white hover:text-black transition-all">
+      {direction === "left"
+        ? <ChevronLeftIcon className="h-8 w-8" />
+        : <ChevronRightIcon className="h-8 w-8" />
+      }
+    </div>
+  </button>
+);
+
+// ─── Component ────────────────────────────────────────────────────────────────
 
 const MovieSlider = ({ title, movies = [] }) => {
   const sliderRef = useRef(null);
-  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollLeft,  setCanScrollLeft]  = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);
-  const headingId = getHeadingId(title);
+  const headingId = toHeadingId(title);
 
   const checkScroll = useCallback(() => {
-    if (!sliderRef.current) {
-      return;
-    }
-
-    const { scrollLeft, scrollWidth, clientWidth } = sliderRef.current;
-    setCanScrollLeft(scrollLeft > 0);
-    setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 1);
+    const el = sliderRef.current;
+    if (!el) return;
+    setCanScrollLeft(el.scrollLeft > 0);
+    setCanScrollRight(el.scrollLeft < el.scrollWidth - el.clientWidth - 1);
   }, []);
 
   useEffect(() => {
@@ -30,27 +49,19 @@ const MovieSlider = ({ title, movies = [] }) => {
     return () => window.removeEventListener("resize", checkScroll);
   }, [checkScroll, movies.length]);
 
-  const handleScroll = useCallback(
-    (direction) => {
-      if (!sliderRef.current) {
-        return;
-      }
-
-      const scrollAmount = sliderRef.current.clientWidth;
-      sliderRef.current.scrollBy({
-        left: direction === "left" ? -scrollAmount : scrollAmount,
-        behavior: "smooth",
-      });
-      window.setTimeout(checkScroll, 500);
-    },
-    [checkScroll],
-  );
+  const handleScroll = useCallback((direction) => {
+    const el = sliderRef.current;
+    if (!el) return;
+    el.scrollBy({ left: direction === "left" ? -el.clientWidth : el.clientWidth, behavior: "smooth" });
+    window.setTimeout(checkScroll, 500);
+  }, [checkScroll]);
 
   return (
     <section
       aria-labelledby={headingId}
       className="group/slider relative overflow-hidden bg-transparent py-4 sm:py-10"
     >
+      {/* ── Heading ── */}
       <div className="mb-4 px-4 sm:mb-8 sm:px-6 lg:px-24">
         <h2
           id={headingId}
@@ -61,32 +72,11 @@ const MovieSlider = ({ title, movies = [] }) => {
         </h2>
       </div>
 
-      {canScrollLeft && (
-        <button
-          type="button"
-          onClick={() => handleScroll("left")}
-          className="absolute bottom-10 left-0 top-23 z-40 hidden w-16 cursor-pointer items-center justify-center opacity-0 transition-opacity duration-300 group-hover/slider:opacity-100 md:flex md:w-24"
-          aria-label={`Scroll ${title} left`}
-        >
-          <div className="p-3 rounded-full bg-black/20 backdrop-blur-md border border-white/10 text-white hover:bg-white hover:text-black transition-all">
-            <ChevronLeftIcon className="h-8 w-8" />
-          </div>
-        </button>
-      )}
+      {/* ── Nav buttons ── */}
+      {canScrollLeft  && <NavButton direction="left"  title={title} onClick={() => handleScroll("left")}  />}
+      {canScrollRight && <NavButton direction="right" title={title} onClick={() => handleScroll("right")} />}
 
-      {canScrollRight && (
-        <button
-          type="button"
-          onClick={() => handleScroll("right")}
-          className="absolute bottom-10 right-0 top-23 z-40 hidden w-16 cursor-pointer items-center justify-center opacity-0 transition-opacity duration-300 group-hover/slider:opacity-100 md:flex md:w-24"
-          aria-label={`Scroll ${title} right`}
-        >
-          <div className="p-3 rounded-full bg-black/20 backdrop-blur-md border border-white/10 text-white hover:bg-white hover:text-black transition-all">
-            <ChevronRightIcon className="h-8 w-8" />
-          </div>
-        </button>
-      )}
-
+      {/* ── Scroll track ── */}
       <div
         ref={sliderRef}
         onScroll={checkScroll}
