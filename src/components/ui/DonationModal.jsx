@@ -6,9 +6,11 @@ import {
   HeartIcon,
 } from "@heroicons/react/24/solid";
 
+import donationQr from "../../assets/images/donation-qr.png";
+
 const DonationModal = ({ isOpen, onClose }) => {
   const panelRef = useRef(null);
-  const [copied, setCopied] = useState(null); // 'name' | 'number' | null
+  const [copied, setCopied] = useState(null);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -122,7 +124,7 @@ const DonationModal = ({ isOpen, onClose }) => {
                 </div>
                 <div className="bg-white p-2">
                   <img
-                    src="/src/assets/images/donation-qr.png"
+                    src={donationQr}
                     alt="Donation QR Code"
                     className="w-full h-auto border-0 outline-none"
                     decoding="async"
