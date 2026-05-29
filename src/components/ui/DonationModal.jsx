@@ -116,12 +116,7 @@ const DonationModal = ({ isOpen, onClose }) => {
           <div className="flex gap-4 items-stretch">
             {/* LEFT — QR Code (no border style, original image only) */}
             <div className="flex flex-col items-center shrink-0">
-              <div className="rounded-2xl overflow-hidden w-40">
-                <div className="bg-[#c0392b] px-3 py-2 flex items-center justify-center">
-                  <span className="text-white font-black text-xs tracking-widest">
-                    KHQR
-                  </span>
-                </div>
+              <div className="rounded-2xl overflow-hidden w-48">
                 <div className="bg-white p-2">
                   <img
                     src={donationQr}
