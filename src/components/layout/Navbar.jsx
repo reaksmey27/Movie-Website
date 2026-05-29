@@ -2,16 +2,17 @@ import React, { useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   BellIcon,
-  ArrowLeftOnRectangleIcon,
   TrashIcon,
   Bars3Icon,
   XMarkIcon,
   SunIcon,
   MoonIcon,
 } from "@heroicons/react/24/solid";
+
 import { useAuth } from "../../context/AuthContext";
 import { useNotification } from "../../context/NotificationContext";
 import { THEMES } from "../../utils/theme";
+import DonationModal from "../ui/DonationModal.jsx";
 
 const NAV_LINKS = [
   { name: "Home", path: "/" },
@@ -25,12 +26,16 @@ const NAV_LINKS = [
 const Navbar = ({ theme, onToggleTheme }) => {
   const location = useLocation();
   const navigate = useNavigate();
+
   const { user, logout, isAuthenticated } = useAuth();
+
   const { history, unreadCount, markAllAsRead, clearHistory, getIcon } =
     useNotification();
 
   const [showNotifPanel, setShowNotifPanel] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isDonationOpen, setIsDonationOpen] = useState(false);
+
   const panelRef = useRef(null);
 
   useEffect(() => {
@@ -49,6 +54,7 @@ const Navbar = ({ theme, onToggleTheme }) => {
     };
 
     document.addEventListener("mousedown", handleClickOutside);
+
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
@@ -58,7 +64,10 @@ const Navbar = ({ theme, onToggleTheme }) => {
     if (linkPath.includes("#")) {
       const pathPart = linkPath.split("#")[0] || "/";
       const hashPart = `#${linkPath.split("#")[1]}`;
-      return location.pathname === pathPart && location.hash === hashPart;
+
+      return (
+        location.pathname === pathPart && location.hash === hashPart
+      );
     }
 
     if (linkPath === "/") {
@@ -70,27 +79,17 @@ const Navbar = ({ theme, onToggleTheme }) => {
 
   const formatTime = (isoString) => {
     const date = new Date(isoString);
-    return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+
+    return date.toLocaleTimeString([], {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
   };
 
   const getUserInitial = () => {
     const value = user?.name || user?.email || "";
+
     return value.charAt(0).toUpperCase();
-  };
-
-  const renderUserAvatar = (className, fallbackClassName) => {
-    if (user?.avatar) {
-      return (
-        <img
-          src={user.avatar}
-          alt={user.name}
-          className={className}
-          referrerPolicy="no-referrer"
-        />
-      );
-    }
-
-    return <div className={fallbackClassName}>{getUserInitial()}</div>;
   };
 
   const handleLogout = async () => {
@@ -99,7 +98,9 @@ const Navbar = ({ theme, onToggleTheme }) => {
   };
 
   const isLightTheme = theme === THEMES.LIGHT;
+
   const ThemeIcon = isLightTheme ? MoonIcon : SunIcon;
+
   const themeButtonLabel = isLightTheme
     ? "Switch to dark mode"
     : "Switch to light mode";
@@ -107,6 +108,8 @@ const Navbar = ({ theme, onToggleTheme }) => {
   return (
     <div className="fixed left-0 top-0 z-100 w-full px-2 sm:top-6 sm:px-6 lg:px-24 xl:px-40">
       <nav className="flex items-center justify-between border-b border-[var(--color-border)] bg-[var(--color-nav-bg)] px-3 py-2.5 text-[var(--color-text)] shadow-2xl ring-1 ring-[var(--color-ring)] backdrop-blur-md transition-all sm:rounded-full sm:border sm:px-6 sm:py-3">
+        
+        {/* Logo */}
         <Link
           to="/"
           className="flex items-center gap-2"
@@ -120,6 +123,7 @@ const Navbar = ({ theme, onToggleTheme }) => {
           />
         </Link>
 
+        {/* Desktop Nav */}
         <div className="hidden gap-10 lg:flex">
           {NAV_LINKS.map((link) => {
             const isActive = checkActive(link.path);
@@ -135,11 +139,12 @@ const Navbar = ({ theme, onToggleTheme }) => {
                 }`}
               >
                 {link.name}
+
                 <span
                   className={`absolute -bottom-1 left-1/2 h-1 -translate-x-1/2 rounded-full bg-purple-500 transition-all duration-300 ${
                     isActive
                       ? "w-4 opacity-100 shadow-[0_0_8px_rgba(168,85,247,0.8)]"
-                      : "w-0 opacity-0 group-hover:w-3 group-hover:opacity-100 group-hover:shadow-[0_0_8px_rgba(168,85,247,0.4)]"
+                      : "w-0 opacity-0 group-hover:w-3 group-hover:opacity-100"
                   }`}
                 />
               </Link>
@@ -147,7 +152,10 @@ const Navbar = ({ theme, onToggleTheme }) => {
           })}
         </div>
 
+        {/* Right Actions */}
         <div className="flex items-center gap-2 sm:gap-5">
+
+          {/* Theme Button */}
           <button
             type="button"
             onClick={onToggleTheme}
@@ -158,11 +166,13 @@ const Navbar = ({ theme, onToggleTheme }) => {
             <ThemeIcon className="h-5 w-5 sm:h-6 sm:w-6" />
           </button>
 
+          {/* Notifications */}
           <div className="relative" ref={panelRef}>
             <button
               type="button"
               onClick={() => {
                 setShowNotifPanel(!showNotifPanel);
+
                 if (!showNotifPanel) {
                   markAllAsRead();
                 }
@@ -174,8 +184,9 @@ const Navbar = ({ theme, onToggleTheme }) => {
               }`}
             >
               <BellIcon className="h-5 w-5 sm:h-6 sm:w-6" />
+
               {unreadCount > 0 && (
-                <span className="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[10px] font-black shadow-lg duration-300 animate-in zoom-in sm:h-5 sm:w-5">
+                <span className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-[10px] font-black text-white shadow-lg">
                   {unreadCount}
                 </span>
               )}
@@ -183,15 +194,16 @@ const Navbar = ({ theme, onToggleTheme }) => {
 
             {showNotifPanel && (
               <div className="fixed left-2 right-2 top-16 overflow-hidden rounded-2xl border border-[var(--color-border)] bg-[var(--color-panel-bg)] shadow-2xl backdrop-blur-2xl duration-300 animate-in fade-in slide-in-from-top-4 sm:absolute sm:left-auto sm:right-0 sm:top-auto sm:mt-4 sm:w-80 sm:rounded-4xl">
+
                 <div className="flex items-center justify-between border-b border-[var(--color-border-soft)] px-6 py-5">
                   <h3 className="text-sm font-black uppercase tracking-tighter italic">
                     Notifications
                   </h3>
+
                   <button
                     type="button"
                     onClick={clearHistory}
                     className="rounded-lg p-1.5 text-gray-500 hover:bg-[var(--color-surface-1)] hover:text-red-400"
-                    title="Clear All"
                   >
                     <TrashIcon className="h-4 w-4" />
                   </button>
@@ -201,7 +213,8 @@ const Navbar = ({ theme, onToggleTheme }) => {
                   {history.length === 0 ? (
                     <div className="p-10 text-center">
                       <BellIcon className="mx-auto mb-3 h-8 w-8 text-gray-700 opacity-50" />
-                      <p className="text-[10px] font-bold uppercase leading-relaxed tracking-widest text-gray-500">
+
+                      <p className="text-[10px] font-bold uppercase tracking-widest text-gray-500">
                         No new alerts.
                       </p>
                     </div>
@@ -212,11 +225,15 @@ const Navbar = ({ theme, onToggleTheme }) => {
                           key={notif.id}
                           className="flex gap-4 border-b border-[var(--color-border-soft)] px-6 py-4 transition-colors hover:bg-[var(--color-surface-1)]"
                         >
-                          <div className="mt-1 shrink-0">{getIcon(notif.type, true)}</div>
+                          <div className="mt-1 shrink-0">
+                            {getIcon(notif.type, true)}
+                          </div>
+
                           <div className="min-w-0 flex-1">
                             <p className="mb-1 text-[10px] font-bold leading-relaxed text-[var(--color-text)] sm:text-xs">
                               {notif.message}
                             </p>
+
                             <span className="text-[10px] font-black uppercase tracking-widest text-gray-600">
                               {formatTime(notif.timestamp)}
                             </span>
@@ -230,112 +247,81 @@ const Navbar = ({ theme, onToggleTheme }) => {
             )}
           </div>
 
+          {/* Profile Avatar */}
           <div className="hidden items-center gap-4 sm:flex">
             {isAuthenticated ? (
-              <>
-                <Link
-                  to="/profile"
-                  className={`flex items-center gap-2 rounded-full border px-4 py-1.5 transition-all hover:bg-[var(--color-surface-2)] ${
-                    location.pathname === "/profile"
-                      ? "border-purple-500/50 bg-[var(--color-surface-3)]"
-                      : "border-[var(--color-border)] bg-[var(--color-surface-1)]"
-                  }`}
-                >
-                  {renderUserAvatar(
-                    "h-6 w-6 rounded-full object-cover",
-                    "flex h-6 w-6 items-center justify-center rounded-full bg-gradient-to-br from-purple-600 to-blue-600 text-[10px] font-black uppercase",
-                  )}
-                  <span className="max-w-25 truncate text-sm font-bold">{user?.name}</span>
-                </Link>
-                <button
-                  onClick={handleLogout}
-                  className="text-gray-500 transition-all hover:scale-110 hover:text-red-500"
-                >
-                  <ArrowLeftOnRectangleIcon className="h-6 w-6" />
-                </button>
-              </>
+              <Link
+                to="/profile"
+                className={`relative rounded-full border p-2 transition-all duration-300 active:scale-90 ${
+                  location.pathname === "/profile"
+                    ? "border-purple-500/40 bg-[var(--color-surface-3)] text-purple-400 shadow-[0_0_15px_rgba(168,85,247,0.25)]"
+                    : "border-transparent bg-[var(--color-surface-2)] text-[var(--color-text)] hover:border-purple-500/30 hover:text-purple-400"
+                }`}
+              >
+                {user?.avatar ? (
+                  <img
+                    src={user.avatar}
+                    alt={user.name}
+                    referrerPolicy="no-referrer"
+                    className="h-6 w-6 rounded-full object-cover"
+                  />
+                ) : (
+                  <div className="flex h-6 w-6 items-center justify-center rounded-full bg-gradient-to-br from-purple-600 to-blue-600 text-[10px] font-black uppercase text-white">
+                    {getUserInitial()}
+                  </div>
+                )}
+
+                {/* Active Dot */}
+                <span className="absolute bottom-1 right-1 h-2.5 w-2.5 rounded-full border border-[#0B1020] bg-green-400 shadow-[0_0_10px_rgba(74,222,128,0.8)]" />
+              </Link>
             ) : (
               <Link
                 to="/login"
                 className="rounded-full border border-purple-500/50 px-5 py-1.5 text-sm font-bold transition-all hover:bg-purple-600"
               >
-                Sign in
-              </Link>
-            )}
-          </div>
-
-          <button
-            type="button"
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="rounded-full p-2 text-[var(--color-text)] transition-colors hover:text-purple-500 lg:hidden"
-            aria-label={isMenuOpen ? "Close navigation menu" : "Open navigation menu"}
-          >
-            {isMenuOpen ? <XMarkIcon className="h-7 w-7" /> : <Bars3Icon className="h-7 w-7" />}
-          </button>
-        </div>
-      </nav>
-
-      {isMenuOpen && (
-        <div className="fixed inset-0 top-14.5 z-90 duration-300 animate-in fade-in slide-in-from-top-4 sm:top-19 lg:hidden">
-          <div
-            className="absolute inset-0 bg-[var(--color-overlay)] backdrop-blur-3xl"
-            onClick={() => setIsMenuOpen(false)}
-          />
-          <div className="relative z-10 flex max-h-full flex-col gap-6 overflow-y-auto p-6 sm:p-8">
-            {NAV_LINKS.map((link) => (
-              <Link
-                key={link.name}
-                to={link.path}
-                onClick={() => setIsMenuOpen(false)}
-                className={`text-xl font-black uppercase tracking-tighter sm:text-2xl ${
-                  checkActive(link.path)
-                    ? "border-l-4 border-purple-500 px-4 text-purple-500"
-                    : "text-gray-400 hover:text-[var(--color-text)]"
-                }`}
-              >
-                {link.name}
-              </Link>
-            ))}
-
-            <div className="my-4 h-px bg-[var(--color-border-soft)]" />
-
-            {isAuthenticated ? (
-              <div className="flex flex-col gap-6">
-                <Link
-                  to="/profile"
-                  onClick={() => setIsMenuOpen(false)}
-                  className="group flex items-center gap-4"
-                >
-                  {renderUserAvatar(
-                    "h-10 w-10 rounded-2xl object-cover",
-                    "flex h-10 w-10 items-center justify-center rounded-2xl bg-purple-600 font-black text-xl",
-                  )}
-                  <span className="text-xl font-bold transition-colors group-hover:text-purple-500">
-                    {user?.name}
-                  </span>
-                </Link>
-                <button
-                  onClick={async () => {
-                    setIsMenuOpen(false);
-                    await handleLogout();
-                  }}
-                  className="py-2 text-left text-sm font-black uppercase tracking-widest text-red-500"
-                >
-                  Logout Connection
-                </button>
-              </div>
-            ) : (
-              <Link
-                to="/login"
-                onClick={() => setIsMenuOpen(false)}
-                className="rounded-2xl bg-purple-600 py-4 text-center font-black uppercase tracking-widest text-white"
-              >
                 Sign In
               </Link>
             )}
           </div>
+
+          {/* Support Button */}
+          <button
+            type="button"
+            onClick={() => setIsDonationOpen(true)}
+            className="hidden rounded-full border border-purple-500/40 bg-[var(--color-surface-2)] px-4 py-1.5 text-sm font-bold text-purple-300 transition-all hover:border-purple-500/70 hover:bg-[var(--color-surface-3)] hover:text-purple-200 active:scale-95 sm:block"
+          >
+            Support Us ❤️
+          </button>
+
+          {/* Mobile Support */}
+          <button
+            type="button"
+            onClick={() => setIsDonationOpen(true)}
+            className="rounded-full border border-purple-500/40 bg-[var(--color-surface-2)] p-2 text-[var(--color-text)] transition-all hover:border-purple-500/70 hover:text-purple-300 active:scale-95 sm:hidden"
+          >
+            ❤️
+          </button>
+
+          {/* Mobile Menu */}
+          <button
+            type="button"
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            className="rounded-full p-2 text-[var(--color-text)] transition-colors hover:text-purple-500 lg:hidden"
+          >
+            {isMenuOpen ? (
+              <XMarkIcon className="h-7 w-7" />
+            ) : (
+              <Bars3Icon className="h-7 w-7" />
+            )}
+          </button>
         </div>
-      )}
+      </nav>
+
+      {/* Donation Modal */}
+      <DonationModal
+        isOpen={isDonationOpen}
+        onClose={() => setIsDonationOpen(false)}
+      />
     </div>
   );
 };
