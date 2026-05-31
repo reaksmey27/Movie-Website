@@ -65,9 +65,7 @@ const Navbar = ({ theme, onToggleTheme }) => {
       const pathPart = linkPath.split("#")[0] || "/";
       const hashPart = `#${linkPath.split("#")[1]}`;
 
-      return (
-        location.pathname === pathPart && location.hash === hashPart
-      );
+      return location.pathname === pathPart && location.hash === hashPart;
     }
 
     if (linkPath === "/") {
@@ -108,7 +106,6 @@ const Navbar = ({ theme, onToggleTheme }) => {
   return (
     <div className="fixed left-0 top-0 z-100 w-full px-2 sm:top-6 sm:px-6 lg:px-24 xl:px-40">
       <nav className="flex items-center justify-between border-b border-[var(--color-border)] bg-[var(--color-nav-bg)] px-3 py-2.5 text-[var(--color-text)] shadow-2xl ring-1 ring-[var(--color-ring)] backdrop-blur-md transition-all sm:rounded-full sm:border sm:px-6 sm:py-3">
-        
         {/* Logo */}
         <Link
           to="/"
@@ -154,7 +151,6 @@ const Navbar = ({ theme, onToggleTheme }) => {
 
         {/* Right Actions */}
         <div className="flex items-center gap-2 sm:gap-5">
-
           {/* Theme Button */}
           <button
             type="button"
@@ -194,7 +190,6 @@ const Navbar = ({ theme, onToggleTheme }) => {
 
             {showNotifPanel && (
               <div className="fixed left-2 right-2 top-16 overflow-hidden rounded-2xl border border-[var(--color-border)] bg-[var(--color-panel-bg)] shadow-2xl backdrop-blur-2xl duration-300 animate-in fade-in slide-in-from-top-4 sm:absolute sm:left-auto sm:right-0 sm:top-auto sm:mt-4 sm:w-80 sm:rounded-4xl">
-
                 <div className="flex items-center justify-between border-b border-[var(--color-border-soft)] px-6 py-5">
                   <h3 className="text-sm font-black uppercase tracking-tighter italic">
                     Notifications
@@ -284,22 +279,25 @@ const Navbar = ({ theme, onToggleTheme }) => {
             )}
           </div>
 
-          {/* Support Button */}
+          {/* Buy Me a Coffee Button */}
           <button
             type="button"
             onClick={() => setIsDonationOpen(true)}
-            className="hidden rounded-full border border-purple-500/40 bg-[var(--color-surface-2)] px-4 py-1.5 text-sm font-bold text-purple-300 transition-all hover:border-purple-500/70 hover:bg-[var(--color-surface-3)] hover:text-purple-200 active:scale-95 sm:block"
+            className="hidden items-center gap-2 rounded-full border border-amber-400/40 bg-[var(--color-surface-2)] px-4 py-1.5 text-sm font-bold text-amber-200 transition-all hover:border-amber-400/70 hover:bg-[var(--color-surface-3)] hover:text-amber-100 hover:shadow-[0_0_18px_rgba(245,158,11,0.35)] active:scale-95 sm:flex"
           >
-            Support Us ❤️
+            <span aria-hidden>☕</span>
+            <span>Buy me a coffee</span>
           </button>
 
-          {/* Mobile Support */}
+          {/* Mobile: emoji only */}
           <button
             type="button"
             onClick={() => setIsDonationOpen(true)}
-            className="rounded-full border border-purple-500/40 bg-[var(--color-surface-2)] p-2 text-[var(--color-text)] transition-all hover:border-purple-500/70 hover:text-purple-300 active:scale-95 sm:hidden"
+            className="rounded-full border border-amber-400/40 bg-[var(--color-surface-2)] p-2 text-[var(--color-text)] transition-all hover:border-amber-400/70 hover:text-amber-200 active:scale-95 sm:hidden hover:shadow-[0_0_18px_rgba(245,158,11,0.35)]"
+            aria-label="Buy me a coffee"
+            title="Buy me a coffee"
           >
-            ❤️
+            ☕
           </button>
 
           {/* Mobile Menu */}
