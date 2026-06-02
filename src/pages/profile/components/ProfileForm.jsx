@@ -82,28 +82,30 @@ const ProfileForm = ({
     {/* ── Fields ── */}
     <form onSubmit={onSubmit} className="space-y-6">
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-        {FIELDS.map(
-          ({ name, label, type, icon: Icon, placeholder, locked }) => (
-            <label key={name} className="space-y-2">
+        {FIELDS.map((field) => {
+          const FieldIcon = field.icon;
+
+          return (
+            <label key={field.name} className="space-y-2">
               <span className="ml-1 text-xs font-black uppercase tracking-widest text-gray-400">
-                {label}
+                {field.label}
               </span>
               <div className="relative">
-                <Icon className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-500" />
+                <FieldIcon className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-500" />
                 <input
-                  type={type}
-                  name={name}
-                  value={formData[name]}
+                  type={field.type}
+                  name={field.name}
+                  value={formData[field.name]}
                   onChange={onFieldChange}
-                  readOnly={locked || !isEditing}
-                  placeholder={placeholder}
-                  className={`${FIELD_CLASS} ${locked ? "cursor-not-allowed border-white/5 text-gray-500" : !isEditing ? "cursor-default" : ""}`}
+                  readOnly={field.locked || !isEditing}
+                  placeholder={field.placeholder}
+                  className={`${FIELD_CLASS} ${field.locked ? "cursor-not-allowed border-white/5 text-gray-500" : !isEditing ? "cursor-default" : ""}`}
                   style={{ paddingLeft: 28 }}
                 />
               </div>
             </label>
-          ),
-        )}
+          );
+        })}
       </div>
 
       {/* Bio */}

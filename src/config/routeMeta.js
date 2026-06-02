@@ -4,7 +4,7 @@ export const DEFAULT_TITLE =
   "CineMax Movies | Discover Trending, Upcoming, and Favorite Films";
 
 export const DEFAULT_DESCRIPTION =
-  "CineMax helps you discover trending movies, browse upcoming releases, save favorites, and build a personal watchlist in one cinematic experience.";
+  "CineMax helps you discover trending movies, explore upcoming releases, browse by genre, save favorites, and build a personal watchlist in one cinematic experience.";
 
 export const MOVIE_DETAIL_TITLE =
   "Movie Details | Watch Trailers and Explore Films on CineMax";

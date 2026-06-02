@@ -1,6 +1,7 @@
 import PageError from "../../components/ui/PageError";
 import useHomeMovies from "../../hooks/movies/useHomeMovies";
 import HeroSection from "./components/HeroSection";
+import HomeInfoSection from "./components/HomeInfoSection";
 import HomePageSkeleton from "./components/HomePageSkeleton";
 import MovieSlider from "./components/MovieSlider";
 
@@ -48,6 +49,8 @@ const HomePage = () => {
           )
         )}
       </div>
+
+      <HomeInfoSection />
     </main>
   );
 };
