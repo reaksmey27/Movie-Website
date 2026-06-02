@@ -1,7 +1,8 @@
-import { memo, useEffect, useRef, useState } from "react";
+import { memo, useCallback, useEffect, useRef, useState } from "react";
 import {
   CheckIcon,
   ChevronUpDownIcon,
+  ClockIcon,
   MagnifyingGlassIcon,
   XMarkIcon,
 } from "@heroicons/react/24/outline";
@@ -25,6 +26,8 @@ const GENRE_BTN_BASE =
 
 const SEARCH_DEBOUNCE = 250;
 const YEAR_DEBOUNCE   = 250;
+const SEARCH_HISTORY_KEY = "cinemax-search-history";
+const SEARCH_HISTORY_LIMIT = 8;
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -38,6 +41,48 @@ const getSubtitle = (hasSearchQuery, hasActiveFilters, searchQuery, page, totalP
   if (hasSearchQuery)   return `Searching for "${searchQuery}" movies. Page ${page} of ${totalPages}.`;
   if (hasActiveFilters) return `Discover results tailored to your filters. Page ${page} of ${totalPages}.`;
   return "Browse through thousands of movies by your favorite genres. Live updates from the global community.";
+};
+
+const normalizeSearchQuery = (query) => query.trim();
+
+const readSearchHistory = () => {
+  if (typeof window === "undefined") return [];
+
+  try {
+    const stored = window.localStorage.getItem(SEARCH_HISTORY_KEY);
+    const parsed = stored ? JSON.parse(stored) : [];
+
+    if (!Array.isArray(parsed)) return [];
+
+    return parsed
+      .filter((item) => typeof item === "string")
+      .map((item) => item.trim())
+      .filter(Boolean)
+      .slice(0, SEARCH_HISTORY_LIMIT);
+  } catch {
+    return [];
+  }
+};
+
+const writeSearchHistory = (history) => {
+  if (typeof window === "undefined") return;
+
+  try {
+    window.localStorage.setItem(SEARCH_HISTORY_KEY, JSON.stringify(history));
+  } catch {
+    // Ignore storage failures in restricted browser contexts.
+  }
+};
+
+const updateSearchHistory = (history, query) => {
+  const normalizedQuery = normalizeSearchQuery(query);
+  if (!normalizedQuery) return history;
+
+  const deduped = history.filter(
+    (item) => item.toLowerCase() !== normalizedQuery.toLowerCase(),
+  );
+
+  return [normalizedQuery, ...deduped].slice(0, SEARCH_HISTORY_LIMIT);
 };
 
 // ─── FilterSelect ─────────────────────────────────────────────────────────────
@@ -127,25 +172,97 @@ const MoviesHeader = ({
   const [inputValue, setInputValue] = useState(searchQuery);
   const [yearInput,  setYearInput]  = useState(releaseYear);
   const [openSelect, setOpenSelect] = useState(null);
+  const [searchHistory, setSearchHistory] = useState(() => readSearchHistory());
+  const [isSearchFocused, setIsSearchFocused] = useState(false);
+  const [hasTypedSinceFocus, setHasTypedSinceFocus] = useState(false);
+  const containerRef = useRef(null);
+  const skipNextDebounceRef = useRef(false);
 
   const hasSearchQuery = Boolean(searchQuery.trim());
   const heading        = getHeadingState(hasSearchQuery, hasActiveFilters);
   const subtitle       = getSubtitle(hasSearchQuery, hasActiveFilters, searchQuery, page, totalPages);
+  const isTyping       = inputValue !== searchQuery;
+  const shouldShowHistoryDropdown = isSearchFocused && !hasTypedSinceFocus && !isTyping;
 
   const toggleSelect = (key) =>
     setOpenSelect((cur) => (cur === key ? null : key));
+
+  const saveSearchQuery = useCallback((query) => {
+    const normalizedQuery = normalizeSearchQuery(query);
+    if (!normalizedQuery) return;
+
+    setSearchHistory((current) => updateSearchHistory(current, normalizedQuery));
+  }, []);
+
+  const runSearch = useCallback((query, { persistHistory = false } = {}) => {
+    if (persistHistory) {
+      saveSearchQuery(query);
+    }
+
+    onSearch(query);
+  }, [onSearch, saveSearchQuery]);
+
+  const handleSearchSelection = (query) => {
+    skipNextDebounceRef.current = true;
+    setHasTypedSinceFocus(false);
+    setInputValue(query);
+    setIsSearchFocused(false);
+    runSearch(query, { persistHistory: true });
+  };
+
+  const handleDeleteHistoryItem = (queryToRemove) => {
+    setSearchHistory((current) =>
+      current.filter((item) => item.toLowerCase() !== queryToRemove.toLowerCase()),
+    );
+  };
+
+  const handleClearAllHistory = () => {
+    setSearchHistory([]);
+  };
 
   // ── Sync external → local ──
   useEffect(() => { setInputValue(searchQuery); }, [searchQuery]);
   useEffect(() => { setYearInput(releaseYear);  }, [releaseYear]);
   useEffect(() => { setOpenSelect(null);        }, [minRating, sortBy]);
+  useEffect(() => { writeSearchHistory(searchHistory); }, [searchHistory]);
+
+  useEffect(() => {
+    if (!isSearchFocused) return;
+
+    const handlePointerDown = (e) => {
+      if (!containerRef.current?.contains(e.target)) {
+        setHasTypedSinceFocus(false);
+        setIsSearchFocused(false);
+      }
+    };
+
+    const handleEscape = (e) => {
+      if (e.key === "Escape") {
+        setHasTypedSinceFocus(false);
+        setIsSearchFocused(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handlePointerDown);
+    document.addEventListener("keydown", handleEscape);
+
+    return () => {
+      document.removeEventListener("mousedown", handlePointerDown);
+      document.removeEventListener("keydown", handleEscape);
+    };
+  }, [isSearchFocused]);
 
   // ── Debounced search ──
   useEffect(() => {
     if (inputValue === searchQuery) return;
-    const id = window.setTimeout(() => onSearch(inputValue), SEARCH_DEBOUNCE);
+    if (skipNextDebounceRef.current) {
+      skipNextDebounceRef.current = false;
+      return;
+    }
+
+    const id = window.setTimeout(() => runSearch(inputValue, { persistHistory: true }), SEARCH_DEBOUNCE);
     return () => window.clearTimeout(id);
-  }, [inputValue, onSearch, searchQuery]);
+  }, [inputValue, onSearch, runSearch, searchQuery]);
 
   // ── Debounced year ──
   useEffect(() => {
@@ -155,7 +272,7 @@ const MoviesHeader = ({
   }, [yearInput, onYearChange, releaseYear]);
 
   return (
-    <div className="mb-10 flex flex-col gap-6 sm:mb-16 sm:gap-10">
+    <div ref={containerRef} className="mb-10 flex flex-col gap-6 sm:mb-16 sm:gap-10">
 
       {/* ── Title + search bar ── */}
       <div className="flex flex-col justify-between gap-5 md:flex-row md:items-end md:gap-8">
@@ -174,17 +291,111 @@ const MoviesHeader = ({
             type="text"
             placeholder="Search movies..."
             value={inputValue}
-            onChange={(e) => setInputValue(e.target.value)}
+            onFocus={() => {
+              setHasTypedSinceFocus(false);
+              setIsSearchFocused(true);
+            }}
+            onBlur={() => {
+              window.setTimeout(() => {
+                if (!containerRef.current?.contains(document.activeElement)) {
+                  setHasTypedSinceFocus(false);
+                  setIsSearchFocused(false);
+                }
+              }, 0);
+            }}
+            onChange={(e) => {
+              setHasTypedSinceFocus(true);
+              setInputValue(e.target.value);
+            }}
+            onKeyDown={(e) => {
+              if (e.key === "Escape") {
+                setHasTypedSinceFocus(false);
+                setIsSearchFocused(false);
+                e.currentTarget.blur();
+              }
+            }}
             className="w-full rounded-2xl border-2 border-white/5 bg-white/5 px-14 py-3.5 font-bold text-white outline-none transition-all placeholder:text-gray-600 focus:border-purple-500/50 focus:bg-white/10 sm:py-4"
           />
           {inputValue && (
             <button
               type="button"
-              onClick={() => { setInputValue(""); onClear(); }}
+              onClick={() => {
+                skipNextDebounceRef.current = true;
+                setHasTypedSinceFocus(true);
+                setInputValue("");
+                onClear();
+              }}
               className="absolute right-5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white transition-colors"
             >
               <XMarkIcon className="h-6 w-6" />
             </button>
+          )}
+
+          {shouldShowHistoryDropdown && (
+            <div className="absolute left-0 right-0 top-full z-50 mt-3">
+              <div className="overflow-hidden rounded-[1.5rem] border border-white/10 bg-[#1f2023]/95 shadow-[0_24px_80px_rgba(0,0,0,0.65)] backdrop-blur-2xl">
+                <div className="flex items-center justify-between border-b border-white/5 px-5 py-4">
+                  <p className="text-[10px] font-black uppercase tracking-[0.38em] text-gray-500">
+                    Search history
+                  </p>
+                  {searchHistory.length > 0 && (
+                    <button
+                      type="button"
+                      onClick={handleClearAllHistory}
+                      className="text-[11px] font-bold text-purple-400 transition-colors hover:text-purple-300"
+                    >
+                      Clear all
+                    </button>
+                  )}
+                </div>
+
+                {searchHistory.length > 0 ? (
+                  <ul className="max-h-[28rem] overflow-y-auto py-2">
+                    {searchHistory.map((item) => (
+                      <li
+                        key={item}
+                        className="group flex items-center gap-3 px-5 py-3.5 transition-colors hover:bg-white/5"
+                      >
+                        <button
+                          type="button"
+                          onClick={() => handleSearchSelection(item)}
+                          className="flex min-w-0 flex-1 items-center gap-4 text-left"
+                        >
+                          <ClockIcon className="h-4 w-4 shrink-0 text-gray-400 transition-colors group-hover:text-purple-400" />
+                          <span className="truncate text-[15px] font-medium text-white/95">
+                            {item}
+                          </span>
+                        </button>
+
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleDeleteHistoryItem(item);
+                          }}
+                          className="shrink-0 rounded-full p-2 text-gray-500 opacity-0 transition-all hover:bg-white/8 hover:text-white group-hover:opacity-100"
+                          aria-label={`Delete ${item} from search history`}
+                        >
+                          <XMarkIcon className="h-4 w-4" />
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <div className="flex flex-col items-center gap-3 px-6 py-10 text-center">
+                    <div className="flex h-12 w-12 items-center justify-center rounded-full border border-white/10 bg-white/5">
+                      <ClockIcon className="h-5 w-5 text-purple-400" />
+                    </div>
+                    <div>
+                      <p className="text-sm font-bold text-white">No recent searches</p>
+                      <p className="mt-1 text-xs font-medium text-gray-500">
+                        Your recent movie searches will appear here for quick access.
+                      </p>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
           )}
         </div>
       </div>
