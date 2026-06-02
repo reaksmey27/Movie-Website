@@ -1,7 +1,6 @@
 import PageError from "../../components/ui/PageError";
 import useHomeMovies from "../../hooks/movies/useHomeMovies";
 import HeroSection from "./components/HeroSection";
-import HomeContentSection from "./components/HomeContentSection";
 import HomePageSkeleton from "./components/HomePageSkeleton";
 import MovieSlider from "./components/MovieSlider";
 
@@ -37,8 +36,6 @@ const HomePage = () => {
       <HeroSection trendingMovies={heroMovies} />
 
       <div className="relative z-30 mt-8 space-y-10 pb-14 sm:mt-16 sm:space-y-14 sm:pb-20">
-        <HomeContentSection />
-
         {error && (
           <div className="mx-4 py-2 sm:mx-6 lg:px-24 xl:px-40">
             <PageError message={error} buttonLabel="Try Again" onRetry={retry} />

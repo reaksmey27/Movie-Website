@@ -6,6 +6,7 @@ import ErrorBoundary from "./components/ErrorBoundary.jsx";
 import RouteTitleManager from "./components/RouteTitleManager.jsx";
 import Footer from "./components/layout/Footer";
 import Navbar from "./components/layout/Navbar";
+import BackToTopButton from "./components/ui/BackToTopButton";
 import PageLoader from "./components/ui/PageLoader";
 import AppRoutes from "./config/routes";
 import { AuthProvider } from "./context/AuthContext";
@@ -51,6 +52,7 @@ const App = () => {
                       <AppRoutes />
                     </Suspense>
                   </main>
+                  <BackToTopButton />
                   <Footer />
                 </div>
               </Router>
