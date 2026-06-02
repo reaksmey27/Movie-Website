@@ -26,7 +26,7 @@ const MovieGrid = ({
     }
 
     return (
-        <div className="grid grid-cols-1 gap-x-3 gap-y-5 min-[390px]:grid-cols-2 sm:gap-x-5 sm:gap-y-8 lg:grid-cols-4 lg:gap-x-8 lg:gap-y-10">
+        <div className="grid grid-cols-2 gap-x-3 gap-y-5 sm:gap-x-5 sm:gap-y-8 md:grid-cols-3 lg:grid-cols-4 lg:gap-x-8 lg:gap-y-10">
             {movies.map((movie, index) => (
                 <div
                     key={movie.id}

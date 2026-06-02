@@ -7,7 +7,9 @@ import {
   XMarkIcon,
   SunIcon,
   MoonIcon,
+  ArrowRightOnRectangleIcon,
 } from "@heroicons/react/24/solid";
+import { FaCoffee } from "react-icons/fa";
 
 import { useAuth } from "../../context/AuthContext";
 import { useNotification } from "../../context/NotificationContext";
@@ -150,12 +152,12 @@ const Navbar = ({ theme, onToggleTheme }) => {
         </div>
 
         {/* Right Actions */}
-        <div className="flex items-center gap-2 sm:gap-5">
+        <div className="flex items-center gap-1 sm:gap-5">
           {/* Theme Button */}
           <button
             type="button"
             onClick={onToggleTheme}
-            className="rounded-full border border-[var(--color-border)] bg-[var(--color-surface-2)] p-2 text-[var(--color-text)] transition-all hover:border-purple-500/50 hover:text-purple-400 active:scale-95"
+            className="rounded-full border border-[var(--color-border)] bg-[var(--color-surface-2)] p-1.5 text-[var(--color-text)] transition-all hover:border-purple-500/50 hover:text-purple-400 active:scale-95 sm:p-2"
             aria-label={themeButtonLabel}
             title={themeButtonLabel}
           >
@@ -168,12 +170,13 @@ const Navbar = ({ theme, onToggleTheme }) => {
               type="button"
               onClick={() => {
                 setShowNotifPanel(!showNotifPanel);
+                setIsMenuOpen(false);
 
                 if (!showNotifPanel) {
                   markAllAsRead();
                 }
               }}
-              className={`relative rounded-full border border-transparent bg-[var(--color-surface-2)] p-2 text-[var(--color-text)] transition-all active:scale-90 hover:text-purple-400 ${
+              className={`relative rounded-full border border-transparent bg-[var(--color-surface-2)] p-1.5 text-[var(--color-text)] transition-all active:scale-90 hover:text-purple-400 sm:p-2 ${
                 showNotifPanel
                   ? "border-purple-500/40 bg-[var(--color-surface-3)] text-purple-400"
                   : ""
@@ -285,26 +288,31 @@ const Navbar = ({ theme, onToggleTheme }) => {
             onClick={() => setIsDonationOpen(true)}
             className="hidden items-center gap-2 rounded-full border border-amber-400/40 bg-[var(--color-surface-2)] px-4 py-1.5 text-sm font-bold text-amber-200 transition-all hover:border-amber-400/70 hover:bg-[var(--color-surface-3)] hover:text-amber-100 hover:shadow-[0_0_18px_rgba(245,158,11,0.35)] active:scale-95 sm:flex"
           >
-            <span aria-hidden>☕</span>
+            <FaCoffee className="h-4 w-4" aria-hidden="true" />
             <span>Buy me a coffee</span>
           </button>
 
-          {/* Mobile: emoji only */}
+          {/* Mobile: coffee icon only */}
           <button
             type="button"
             onClick={() => setIsDonationOpen(true)}
-            className="rounded-full border border-amber-400/40 bg-[var(--color-surface-2)] p-2 text-[var(--color-text)] transition-all hover:border-amber-400/70 hover:text-amber-200 active:scale-95 sm:hidden hover:shadow-[0_0_18px_rgba(245,158,11,0.35)]"
+            className="rounded-full border border-amber-400/40 bg-[var(--color-surface-2)] p-1.5 text-[var(--color-text)] transition-all hover:border-amber-400/70 hover:text-amber-200 active:scale-95 sm:hidden hover:shadow-[0_0_18px_rgba(245,158,11,0.35)]"
             aria-label="Buy me a coffee"
             title="Buy me a coffee"
           >
-            ☕
+            <FaCoffee className="h-5 w-5" aria-hidden="true" />
           </button>
 
           {/* Mobile Menu */}
           <button
             type="button"
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="rounded-full p-2 text-[var(--color-text)] transition-colors hover:text-purple-500 lg:hidden"
+            onClick={() => {
+              setIsMenuOpen(!isMenuOpen);
+              setShowNotifPanel(false);
+            }}
+            className="rounded-full p-1.5 text-[var(--color-text)] transition-colors hover:text-purple-500 sm:p-2 lg:hidden"
+            aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+            aria-expanded={isMenuOpen}
           >
             {isMenuOpen ? (
               <XMarkIcon className="h-7 w-7" />
@@ -314,6 +322,95 @@ const Navbar = ({ theme, onToggleTheme }) => {
           </button>
         </div>
       </nav>
+
+      {isMenuOpen && (
+        <div className="lg:hidden">
+          <button
+            type="button"
+            className="fixed inset-x-0 bottom-0 top-14 z-[100] bg-black/60 backdrop-blur-sm sm:top-24"
+            aria-label="Close menu overlay"
+            onClick={() => setIsMenuOpen(false)}
+          />
+
+          <aside className="fixed bottom-0 right-0 top-14 z-[110] w-[min(18rem,calc(100vw-1rem))] overflow-y-auto border-l border-[var(--color-border)] bg-[var(--color-panel-bg)] p-4 shadow-2xl ring-1 ring-[var(--color-ring)] backdrop-blur-2xl sm:top-24">
+            <div className="mb-4 rounded-2xl border border-[var(--color-border-soft)] bg-[var(--color-surface-1)] p-3">
+              {isAuthenticated ? (
+                <Link
+                  to="/profile"
+                  className="flex items-center gap-3"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  {user?.avatar ? (
+                    <img
+                      src={user.avatar}
+                      alt={user.name}
+                      referrerPolicy="no-referrer"
+                      className="h-10 w-10 rounded-full object-cover"
+                    />
+                  ) : (
+                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-purple-600 to-blue-600 text-sm font-black uppercase text-white">
+                      {getUserInitial()}
+                    </div>
+                  )}
+
+                  <div className="min-w-0">
+                    <p className="truncate text-sm font-black">
+                      {user?.name || "Profile"}
+                    </p>
+                    <p className="truncate text-xs text-[var(--color-text-muted)]">
+                      {user?.email}
+                    </p>
+                  </div>
+                </Link>
+              ) : (
+                <Link
+                  to="/login"
+                  className="flex items-center justify-between rounded-xl bg-purple-600 px-4 py-3 text-sm font-black text-white transition hover:bg-purple-500"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  Sign In
+                  <ArrowRightOnRectangleIcon className="h-5 w-5" />
+                </Link>
+              )}
+            </div>
+
+            <div className="flex flex-col gap-1">
+              {NAV_LINKS.map((link) => {
+                const isActive = checkActive(link.path);
+
+                return (
+                  <Link
+                    key={link.name}
+                    to={link.path}
+                    onClick={() => setIsMenuOpen(false)}
+                    className={`rounded-xl px-4 py-3 text-sm font-black transition ${
+                      isActive
+                        ? "bg-purple-600 text-white shadow-[0_0_18px_rgba(168,85,247,0.25)]"
+                        : "text-[var(--color-text-soft)] hover:bg-[var(--color-surface-2)] hover:text-[var(--color-text)]"
+                    }`}
+                  >
+                    {link.name}
+                  </Link>
+                );
+              })}
+            </div>
+
+            {isAuthenticated && (
+              <button
+                type="button"
+                onClick={() => {
+                  setIsMenuOpen(false);
+                  handleLogout();
+                }}
+                className="mt-5 flex w-full items-center justify-between rounded-xl border border-red-500/30 px-4 py-3 text-sm font-black text-red-300 transition hover:bg-red-500/10 hover:text-red-200"
+              >
+                Logout
+                <ArrowRightOnRectangleIcon className="h-5 w-5" />
+              </button>
+            )}
+          </aside>
+        </div>
+      )}
 
       {/* Donation Modal */}
       <DonationModal

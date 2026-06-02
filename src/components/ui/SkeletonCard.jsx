@@ -4,7 +4,7 @@ const SkeletonCard = ({ className = "" }) => {
   return (
     <div
       aria-hidden="true"
-      className={`relative h-[18.5rem] w-full shrink-0 overflow-hidden rounded-2xl border border-white/10 bg-slate-900/80 shadow-2xl min-[380px]:h-[21rem] min-[420px]:h-[24rem] sm:h-[26rem] md:h-[30rem] lg:h-[32rem] ${className}`}
+      className={`relative aspect-[2/3] w-full shrink-0 overflow-hidden rounded-2xl border border-white/10 bg-slate-900/80 shadow-2xl ${className}`}
     >
       <div className="absolute inset-0 skeleton-shimmer opacity-60" />
       <div className="absolute inset-0 bg-linear-to-t from-black via-black/70 to-slate-900/25" />

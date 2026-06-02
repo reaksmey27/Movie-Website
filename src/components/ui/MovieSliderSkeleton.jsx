@@ -18,7 +18,7 @@ const MovieSliderSkeleton = ({ count = 6 }) => {
         {Array.from({ length: count }, (_, index) => (
           <div
             key={index}
-            className="w-[58vw] min-w-[11rem] max-w-[13rem] shrink-0 min-[360px]:w-[11.5rem] min-[420px]:w-[12.5rem] sm:min-w-[15rem] sm:max-w-[17rem] sm:w-[15.5rem] lg:w-[16rem] xl:w-[17rem]"
+            className="w-[44vw] min-w-36 max-w-44 shrink-0 min-[380px]:w-40 min-[420px]:w-44 sm:w-56 sm:min-w-56 sm:max-w-60 lg:w-60 xl:w-64"
           >
             <SkeletonCard />
           </div>

@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { XMarkIcon, ClipboardDocumentIcon, CheckIcon, ArrowDownTrayIcon } from "@heroicons/react/24/solid";
+import { FaCoffee } from "react-icons/fa";
 import donationQr from "../../assets/images/donation-qr.png";
 
 // ─── Constants ───────────────────────────────────────────────────────────────
@@ -115,11 +116,11 @@ const DonationModal = ({ isOpen, onClose }) => {
         <div className="flex items-center justify-between px-6 pb-4 pt-6">
           <div className="flex items-center gap-3">
             <div className="flex h-10 w-10 items-center justify-center rounded-2xl border border-yellow-400/20 bg-yellow-400/15">
-              <span className="text-xl">☕</span>
+              <FaCoffee className="h-5 w-5 text-yellow-300" aria-hidden="true" />
             </div>
             <div>
               <h2 className="text-base font-black tracking-tight text-white">Buy Me a Coffee</h2>
-              <p className="text-xs font-medium text-white/60">Support CineMax with a coffee ☕</p>
+              <p className="text-xs font-medium text-white/60">Support CineMax with a coffee</p>
             </div>
           </div>
 
@@ -143,7 +144,7 @@ const DonationModal = ({ isOpen, onClose }) => {
             <p className="text-sm font-medium leading-relaxed text-white/80">
               <span className="font-bold text-yellow-300">Hey!</span> If you enjoy
               using CineMax, consider buying me a coffee. It keeps me motivated
-              to build more! ☕🙏
+              to build more!
             </p>
             <p className="mt-2 text-xs font-medium leading-relaxed text-yellow-200/70">
               សូមអរគុណចំពោះការគាំទ្រ CineMax ❤️ ទឹកចិត្តរបស់អ្នកមានន័យខ្លាំងណាស់។
@@ -209,7 +210,7 @@ const DonationModal = ({ isOpen, onClose }) => {
               <div className="px-3 py-2.5">
                 <p className="text-[10px] leading-relaxed text-white/60">
                   Open your ABA app, scan the QR or enter the account number above.
-                  Every coffee counts! ☕
+                  Every coffee counts!
                 </p>
               </div>
             </div>
@@ -219,10 +220,11 @@ const DonationModal = ({ isOpen, onClose }) => {
           <button
             type="button"
             onClick={onClose}
-            className="w-full rounded-2xl bg-yellow-400 px-4 py-3 text-sm font-bold text-gray-900 transition-all active:scale-[0.98] hover:bg-yellow-300"
+            className="flex w-full items-center justify-center gap-2 rounded-2xl bg-yellow-400 px-4 py-3 text-sm font-bold text-gray-900 transition-all active:scale-[0.98] hover:bg-yellow-300"
             style={{ boxShadow: "0 4px 20px rgba(251,191,36,0.3)" }}
           >
-            ☕ Maybe Next Time!
+            <FaCoffee className="h-4 w-4" aria-hidden="true" />
+            Maybe Next Time!
           </button>
         </div>
       </div>

@@ -18,6 +18,11 @@ const HIGHLIGHTS = [
     description:
       "Ratings, artwork, trailers, and quick summaries help you compare films at a glance before you commit to a full detail page.",
   },
+  {
+    title: "Return whenever your taste changes",
+    description:
+      "Fresh rows make it easy to revisit the homepage for new releases, familiar favorites, and different genres as your next movie mood shifts.",
+  },
 ];
 
 // ─── Sub-components ───────────────────────────────────────────────────────────
@@ -61,6 +66,15 @@ const HomeContentSection = () => (
             major picks with trailer access, and saved collections help you keep track of the
             stories you do not want to lose. The goal is to make discovery feel exciting,
             organized, and genuinely useful for everyday movie browsing.
+          </p>
+
+          <p className="max-w-3xl text-sm leading-6 text-slate-300 sm:text-base sm:leading-7">
+            CineMax also helps when you do not know exactly what you want yet. Start with the
+            biggest titles of the moment, move into a genre that matches your mood, then open a
+            film page when something looks promising. Because each section has a clear purpose, the
+            homepage works for quick decisions and slower browsing: you can chase a blockbuster,
+            discover an animated favorite, check what is coming soon, or save a title for a calmer
+            night without losing your place.
           </p>
         </div>
 

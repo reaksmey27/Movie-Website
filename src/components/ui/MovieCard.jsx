@@ -34,7 +34,7 @@ const MovieCard = ({ movie, headingLevel = "h2" }) => {
   return (
     <Link
       to={`/movie/${movie.id}`}
-      className="group relative block h-[18.5rem] w-full shrink-0 cursor-pointer touch-manipulation transition-all duration-500 hover:z-50 hover:scale-[1.02] min-[380px]:h-[21rem] min-[420px]:h-[24rem] sm:h-[26rem] md:h-[30rem] lg:h-[32rem]"
+      className="group relative block aspect-[2/3] w-full shrink-0 cursor-pointer touch-manipulation transition-all duration-500 hover:z-50 hover:scale-[1.02]"
     >
       <img
         src={movie.posterImage || movie.image}
@@ -97,7 +97,7 @@ const MovieCard = ({ movie, headingLevel = "h2" }) => {
         </div>
 
         <div className="relative z-10 space-y-2 transition-transform duration-500 sm:translate-y-4 sm:group-hover:translate-y-0">
-          <TitleTag className="line-clamp-2 text-sm font-black leading-tight text-white transition-transform duration-500 ease-out min-[420px]:text-[0.95rem] sm:text-xl sm:translate-y-4 sm:group-hover:translate-y-0 md:text-2xl">
+          <TitleTag className="line-clamp-2 text-sm font-black leading-tight text-white transition-transform duration-500 ease-out min-[420px]:text-base sm:text-xl sm:translate-y-4 sm:group-hover:translate-y-0 md:text-2xl">
             {movie.title}
           </TitleTag>
 
