@@ -58,7 +58,7 @@ const LoginButton = ({
       type="button"
       onClick={handleClick}
       disabled={isBusy}
-      className={`inline-flex w-full items-center justify-center gap-3 rounded-2xl border border-white/10 bg-white px-5 py-4 font-black text-slate-900 transition-all hover:-translate-y-0.5 hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-60 ${className}`}
+      className={`inline-flex w-full items-center justify-center gap-3 rounded-xl border border-white/10 bg-white px-4 py-3 text-sm font-semibold text-slate-900 transition-all hover:-translate-y-0.5 hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-60 ${className}`}
     >
       <GoogleIcon />
       <span>{isBusy ? "Connecting..." : label}</span>

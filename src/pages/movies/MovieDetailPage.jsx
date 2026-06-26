@@ -85,6 +85,7 @@ const MovieDetailPage = () => {
 
                 {isPlaying ? (
                     <MoviePlayer
+                        movie={movie}
                         SERVERS={SERVERS}
                         activeServer={activeServer}
                         currentServer={currentServer}

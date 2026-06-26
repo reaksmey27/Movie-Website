@@ -105,6 +105,8 @@ const Navbar = ({ theme, onToggleTheme }) => {
     ? "Switch to dark mode"
     : "Switch to light mode";
 
+  const modalState = { backgroundLocation: location };
+
   return (
     <div className="fixed left-0 top-0 z-100 w-full px-2 sm:top-6 sm:px-6 lg:px-24 xl:px-40">
       <nav className="flex items-center justify-between border-b border-[var(--color-border)] bg-[var(--color-nav-bg)] px-3 py-2.5 text-[var(--color-text)] shadow-2xl ring-1 ring-[var(--color-ring)] backdrop-blur-md transition-all sm:rounded-full sm:border sm:px-6 sm:py-3">
@@ -275,6 +277,7 @@ const Navbar = ({ theme, onToggleTheme }) => {
             ) : (
               <Link
                 to="/login"
+                state={modalState}
                 className="rounded-full border border-purple-500/50 px-5 py-1.5 text-sm font-bold transition-all hover:bg-purple-600"
               >
                 Sign In
@@ -365,6 +368,7 @@ const Navbar = ({ theme, onToggleTheme }) => {
               ) : (
                 <Link
                   to="/login"
+                  state={modalState}
                   className="flex items-center justify-between rounded-xl bg-purple-600 px-4 py-3 text-sm font-black text-white transition hover:bg-purple-500"
                   onClick={() => setIsMenuOpen(false)}
                 >

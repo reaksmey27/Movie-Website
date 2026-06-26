@@ -26,7 +26,12 @@ const HomePage = () => {
 
   if (loading) return <HomePageSkeleton />;
 
-  const heroMovies = movies.featured.length > 0 ? movies.featured : movies.trending;
+  const heroMovies =
+    movies.featured.length > 0
+      ? movies.featured
+      : movies.nowPlaying.length > 0
+        ? movies.nowPlaying
+        : movies.trending;
 
   return (
     <main id="home" className="min-h-screen bg-slate-950">

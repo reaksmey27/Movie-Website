@@ -182,6 +182,36 @@
     animation: skeleton-shimmer 1.7s linear infinite;
   }
 
+  @keyframes auth-backdrop-fade {
+    from {
+      opacity: 0;
+    }
+
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes auth-modal-pop {
+    from {
+      opacity: 0;
+      transform: translateY(18px) scale(0.97);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  .animate-auth-backdrop {
+    animation: auth-backdrop-fade 180ms ease-out both;
+  }
+
+  .animate-auth-modal {
+    animation: auth-modal-pop 220ms ease-out both;
+  }
+
   .bg-slate-950 {
     background-color: var(--color-bg) !important;
   }

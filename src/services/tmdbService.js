@@ -193,6 +193,11 @@ export const tmdbService = {
     return data?.results || [];
   },
 
+  getNowPlayingMovies: async () => {
+    const data = await fetchFromTMDB("/movie/now_playing", {}, { ttl: DEFAULT_CACHE_TTL });
+    return data?.results || [];
+  },
+
   getPopularMovies: async () => {
     const data = await fetchFromTMDB("/movie/popular", {}, { ttl: DEFAULT_CACHE_TTL });
     return data?.results || [];

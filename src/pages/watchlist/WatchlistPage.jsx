@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { BookmarkIcon } from "@heroicons/react/24/outline";
 import MovieGrid from "../../components/ui/MovieGrid";
 import PageLoader from "../../components/ui/PageLoader";
@@ -7,6 +7,8 @@ import { useAuth } from "../../context/AuthContext";
 import { useWatchlist } from "../../context/WatchlistContext";
 
 const WatchlistPage = () => {
+  const location = useLocation();
+  const modalState = { backgroundLocation: location };
   const { isAuthenticated } = useAuth();
   const { watchlist, loading } = useWatchlist();
 
@@ -47,6 +49,7 @@ const WatchlistPage = () => {
             </p>
             <Link
               to="/login"
+              state={modalState}
               className="w-full rounded-2xl bg-amber-500 px-6 py-4 text-center text-xs font-black uppercase tracking-widest text-slate-950 shadow-xl shadow-amber-500/20 transition-all hover:bg-amber-400 active:scale-95 sm:w-auto sm:px-10"
             >
               Sign In

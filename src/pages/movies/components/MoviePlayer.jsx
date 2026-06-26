@@ -1,6 +1,20 @@
 import React from 'react';
 
+const resolveValue = (value, movie) => {
+    if (typeof value === "function") {
+        return value(movie);
+    }
+
+    return value || "";
+};
+
+const resolveTracks = (value, movie) => {
+    const tracks = typeof value === "function" ? value(movie) : value;
+    return Array.isArray(tracks) ? tracks : [];
+};
+
 const MoviePlayer = ({
+    movie,
     SERVERS,
     activeServer,
     currentServer,
@@ -15,6 +29,15 @@ const MoviePlayer = ({
     onNextServer,
     onReloadPlayer,
 }) => {
+    const movieVideoUrl = resolveValue(movie?.videoUrl, movie);
+    const serverVideoUrl = resolveValue(currentServer?.videoUrl, movie);
+    const activeVideoUrl = serverVideoUrl || movieVideoUrl;
+    const subtitleTracks = [
+        ...resolveTracks(movie?.subtitleTracks, movie),
+        ...resolveTracks(currentServer?.subtitleTracks, movie),
+    ];
+    const hasDirectVideo = Boolean(activeVideoUrl);
+
     return (
         <div className="space-y-6">
             <div className="flex flex-nowrap sm:flex-wrap gap-3 overflow-x-auto pb-2 sm:pb-0 no-scrollbar">
@@ -58,21 +81,47 @@ const MoviePlayer = ({
 
                 <div className="relative w-full overflow-hidden rounded-xl border border-white/10 bg-black shadow-2xl sm:rounded-3xl">
                     <div className="aspect-video bg-black">
-                        <iframe
-                            key={`${currentServerUrl}-${playerInstance}`}
-                            src={currentServerUrl}
-                            className="h-full w-full bg-black"
-                            frameBorder="0"
-                            scrolling="no"
-                            allow="autoplay; fullscreen; picture-in-picture; encrypted-media"
-                            allowFullScreen
-                            sandbox="allow-same-origin allow-scripts allow-presentation"
-                            loading="eager"
-                            referrerPolicy="strict-origin-when-cross-origin"
-                            title="Cinema Player"
-                            onLoad={onIframeLoad}
-                            onError={onIframeError}
-                        />
+                        {hasDirectVideo ? (
+                            <video
+                                key={`${activeVideoUrl}-${playerInstance}`}
+                                className="h-full w-full bg-black"
+                                controls
+                                autoPlay
+                                playsInline
+                                preload="metadata"
+                                onLoadedData={onIframeLoad}
+                                onError={onIframeError}
+                                poster={movie?.backdropImage || movie?.image || ""}
+                            >
+                                <source src={activeVideoUrl} />
+                                {subtitleTracks.map((track) => (
+                                    <track
+                                        key={`${track.src}-${track.lang || track.srclang || "subtitles"}`}
+                                        kind={track.kind || "subtitles"}
+                                        src={track.src}
+                                        srcLang={track.lang || track.srclang || "en"}
+                                        label={track.label || track.lang || "Subtitles"}
+                                        default={track.default}
+                                    />
+                                ))}
+                            </video>
+                        ) : (
+                            <iframe
+                                key={`${currentServerUrl}-${playerInstance}`}
+                                src={currentServerUrl}
+                                className="h-full w-full bg-black"
+                                frameBorder="0"
+                                scrolling="no"
+                                allow="autoplay; fullscreen; picture-in-picture; encrypted-media"
+                                allowFullScreen
+                                sandbox="allow-same-origin allow-scripts allow-presentation"
+                                loading="eager"
+                                referrerPolicy="strict-origin-when-cross-origin"
+                                title="Cinema Player"
+                                onLoad={onIframeLoad}
+                                onError={onIframeError}
+                            />
+                        )}
                     </div>
                     {iframeLoading && (
                         <div className="absolute inset-0 flex items-center justify-center bg-black/70 backdrop-blur-sm">
@@ -82,8 +131,16 @@ const MoviePlayer = ({
                 </div>
 
                 <p className="text-center text-[10px] font-bold uppercase tracking-widest text-gray-500">
-                    Softer streams usually look better at this size or in fullscreen than stretched edge to edge.
+                    {hasDirectVideo
+                        ? "Use the caption button in the player controls if subtitle tracks are available."
+                        : "Softer streams usually look better at this size or in fullscreen than stretched edge to edge."}
                 </p>
+
+                {hasDirectVideo && subtitleTracks.length === 0 && (
+                    <p className="text-center text-[10px] font-bold uppercase tracking-widest text-amber-300">
+                        This video source does not include subtitle tracks yet.
+                    </p>
+                )}
             </div>
 
             <div className="p-4 bg-purple-600/10 border border-purple-500/20 rounded-2xl flex items-center gap-3">

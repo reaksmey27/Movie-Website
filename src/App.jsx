@@ -1,5 +1,5 @@
 import { Suspense, useEffect, useState } from "react";
-import { BrowserRouter as Router } from "react-router-dom";
+import { BrowserRouter as Router, useLocation } from "react-router-dom";
 
 // Fixed imports: explicitly adding .jsx extensions for root-level components
 import ErrorBoundary from "./components/ErrorBoundary.jsx";
@@ -8,7 +8,7 @@ import Footer from "./components/layout/Footer";
 import Navbar from "./components/layout/Navbar";
 import BackToTopButton from "./components/ui/BackToTopButton";
 import PageLoader from "./components/ui/PageLoader";
-import AppRoutes from "./config/routes";
+import { AuthModalRoutes, BaseRoutes } from "./config/routes";
 import { AuthProvider } from "./context/AuthContext";
 import { FavoritesProvider } from "./context/FavoritesContext";
 import { NotificationProvider } from "./context/NotificationContext";
@@ -24,6 +24,29 @@ const ScrollManager = () => {
 };
 
 // ─── App ──────────────────────────────────────────────────────────────────────
+
+const AppContent = ({ theme, toggleTheme }) => {
+  const location = useLocation();
+  const backgroundLocation = location.state?.backgroundLocation;
+
+  return (
+    <>
+      <ScrollManager />
+      <RouteTitleManager />
+      <div className="min-h-screen bg-(--color-bg) text-(--color-text)">
+        <Navbar theme={theme} onToggleTheme={toggleTheme} />
+        <main className="relative">
+          <Suspense fallback={<PageLoader color="border-purple-500" label="Loading Experience..." />}>
+            <BaseRoutes location={backgroundLocation || location} />
+            {backgroundLocation && <AuthModalRoutes location={location} />}
+          </Suspense>
+        </main>
+        <BackToTopButton />
+        <Footer />
+      </div>
+    </>
+  );
+};
 
 const App = () => {
   const [theme, setTheme] = useState(getStoredTheme);
@@ -43,18 +66,7 @@ const App = () => {
           <WatchlistProvider>
             <FavoritesProvider>
               <Router>
-                <ScrollManager />
-                <RouteTitleManager />
-                <div className="min-h-screen bg-(--color-bg) text-(--color-text)">
-                  <Navbar theme={theme} onToggleTheme={toggleTheme} />
-                  <main className="relative">
-                    <Suspense fallback={<PageLoader color="border-purple-500" label="Loading Experience..." />}>
-                      <AppRoutes />
-                    </Suspense>
-                  </main>
-                  <BackToTopButton />
-                  <Footer />
-                </div>
+                <AppContent theme={theme} toggleTheme={toggleTheme} />
               </Router>
             </FavoritesProvider>
           </WatchlistProvider>
