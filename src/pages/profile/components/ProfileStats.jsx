@@ -26,8 +26,7 @@ const ProfileStats = ({ user }) => {
   ).sort((a, b) => b[1] - a[1])[0];
 
   const profileCompletion = Math.round(
-    ([user?.name, user?.location, user?.favoriteGenre, user?.bio].filter(Boolean).length /
-      4) *
+    ([user?.name, user?.location, user?.favoriteGenre, user?.bio].filter(Boolean).length / 4) *
       100,
   );
 
@@ -35,13 +34,17 @@ const ProfileStats = ({ user }) => {
     {
       label: "Saved Favorites",
       value: favorites.length,
-      detail: favorites.length ? "Your personal collection is growing." : "Start building your list.",
+      detail: favorites.length
+        ? "Your personal collection is growing."
+        : "Start building your list.",
       icon: <HeartIcon className="h-5 w-5 text-rose-400" />,
     },
     {
       label: "Average Rating",
       value: averageRating,
-      detail: favorites.length ? "Across the movies you saved." : "Add favorites to unlock insights.",
+      detail: favorites.length
+        ? "Across the movies you saved."
+        : "Add favorites to unlock insights.",
       icon: <StarIcon className="h-5 w-5 text-amber-400" />,
     },
     {
@@ -59,29 +62,29 @@ const ProfileStats = ({ user }) => {
   ];
 
   return (
-    <div className="rounded-[2.5rem] border border-white/10 bg-white/5 p-5 shadow-xl backdrop-blur-2xl sm:p-8">
-      <div className="mb-6">
-        <p className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-500">
+    <div className="rounded-[2rem] border border-white/10 bg-white/5 p-5 shadow-lg backdrop-blur-sm sm:p-7">
+      <div className="mb-5">
+        <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-gray-500">
           Account Snapshot
         </p>
-        <h3 className="mt-2 text-2xl font-black uppercase tracking-tighter text-white">
+        <h3 className="mt-2 text-2xl font-semibold tracking-tight text-white">
           Your movie DNA
         </h3>
       </div>
 
-      <div className="space-y-4">
+      <div className="space-y-3">
         {stats.map((stat) => (
           <div
             key={stat.label}
-            className="rounded-[1.75rem] border border-white/10 bg-black/30 p-4 transition-colors hover:border-white/20"
+            className="rounded-[1.25rem] border border-white/10 bg-slate-950/35 p-4 transition-colors hover:border-white/20"
           >
             <div className="flex items-start gap-4">
-              <div className="rounded-2xl bg-white/5 p-3">{stat.icon}</div>
+              <div className="rounded-xl bg-white/5 p-3">{stat.icon}</div>
               <div>
-                <p className="text-[10px] font-black uppercase tracking-[0.25em] text-gray-500">
+                <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-gray-500">
                   {stat.label}
                 </p>
-                <p className="mt-1 text-xl font-bold text-white">{stat.value}</p>
+                <p className="mt-1 text-xl font-semibold text-white">{stat.value}</p>
                 <p className="mt-1 text-sm text-gray-400">{stat.detail}</p>
               </div>
             </div>

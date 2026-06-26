@@ -1,22 +1,21 @@
 import PageError from "../../components/ui/PageError";
 import useHomeMovies from "../../hooks/movies/useHomeMovies";
 import HeroSection from "./components/HeroSection";
-import HomeInfoSection from "./components/HomeInfoSection";
 import HomePageSkeleton from "./components/HomePageSkeleton";
 import MovieSlider from "./components/MovieSlider";
 
 // ─── Slider config ────────────────────────────────────────────────────────────
 
 const SLIDERS = [
-  { key: "trending",  title: "Trending Now"    },
-  { key: "upcoming",  title: "Upcoming Movies" },
-  { key: "topRated",  title: "Top Rated"       },
-  { key: "sciFi",     title: "Sci-Fi"          },
-  { key: "action",    title: "Action"          },
-  { key: "comedy",    title: "Comedy"          },
-  { key: "animation", title: "Animation"       },
-  { key: "crime",     title: "Crime"           },
-  { key: "fantasy",   title: "Fantasy"         },
+  { key: "trending", title: "Trending Now" },
+  { key: "upcoming", title: "Upcoming Movies" },
+  { key: "topRated", title: "Top Rated" },
+  { key: "sciFi", title: "Sci-Fi" },
+  { key: "action", title: "Action" },
+  { key: "comedy", title: "Comedy" },
+  { key: "animation", title: "Animation" },
+  { key: "crime", title: "Crime" },
+  { key: "fantasy", title: "Fantasy" },
 ];
 
 // ─── Component ────────────────────────────────────────────────────────────────
@@ -44,18 +43,21 @@ const HomePage = () => {
       <div className="relative z-30 mt-8 space-y-10 pb-14 sm:mt-16 sm:space-y-14 sm:pb-20">
         {error && (
           <div className="mx-4 py-2 sm:mx-6 lg:px-24 xl:px-40">
-            <PageError message={error} buttonLabel="Try Again" onRetry={retry} />
+            <PageError
+              message={error}
+              buttonLabel="Try Again"
+              onRetry={retry}
+            />
           </div>
         )}
 
-        {SLIDERS.map(({ key, title }) =>
-          movies[key]?.length > 0 && (
-            <MovieSlider key={key} title={title} movies={movies[key]} />
-          )
+        {SLIDERS.map(
+          ({ key, title }) =>
+            movies[key]?.length > 0 && (
+              <MovieSlider key={key} title={title} movies={movies[key]} />
+            ),
         )}
       </div>
-
-      <HomeInfoSection />
     </main>
   );
 };
