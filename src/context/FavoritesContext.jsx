@@ -4,15 +4,31 @@ import { useNotification } from "./NotificationContext";
 
 const FavoritesContext = createContext();
 
+const readStoredFavorites = () => {
+  try {
+    const saved = localStorage.getItem("movie_favorites");
+    const parsed = saved ? JSON.parse(saved) : [];
+
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    return [];
+  }
+};
+
+const writeStoredFavorites = (favorites) => {
+  try {
+    localStorage.setItem("movie_favorites", JSON.stringify(favorites));
+  } catch {
+    // Ignore storage failures in restricted browser contexts.
+  }
+};
+
 export const FavoritesProvider = ({ children }) => {
   const { showNotification } = useNotification();
-  const [favorites, setFavorites] = useState(() => {
-    const saved = localStorage.getItem("movie_favorites");
-    return saved ? JSON.parse(saved) : [];
-  });
+  const [favorites, setFavorites] = useState(() => readStoredFavorites());
 
   useEffect(() => {
-    localStorage.setItem("movie_favorites", JSON.stringify(favorites));
+    writeStoredFavorites(favorites);
   }, [favorites]);
 
   const favoriteIds = useMemo(

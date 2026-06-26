@@ -10,15 +10,31 @@ import {
 
 const NotificationContext = createContext();
 
+const readStoredNotifications = () => {
+  try {
+    const saved = localStorage.getItem("cinema_notifications");
+    const parsed = saved ? JSON.parse(saved) : [];
+
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    return [];
+  }
+};
+
+const writeStoredNotifications = (notifications) => {
+  try {
+    localStorage.setItem("cinema_notifications", JSON.stringify(notifications));
+  } catch {
+    // Ignore storage failures in restricted browser contexts.
+  }
+};
+
 export const NotificationProvider = ({ children }) => {
   const [notifications, setNotifications] = useState([]);
-  const [history, setHistory] = useState(() => {
-    const saved = localStorage.getItem("cinema_notifications");
-    return saved ? JSON.parse(saved) : [];
-  });
+  const [history, setHistory] = useState(() => readStoredNotifications());
 
   useEffect(() => {
-    localStorage.setItem("cinema_notifications", JSON.stringify(history));
+    writeStoredNotifications(history);
   }, [history]);
 
   const unreadCount = useMemo(

@@ -43,7 +43,11 @@ const readStoredProfiles = () => {
 };
 
 const persistStoredProfiles = (profiles) => {
-  localStorage.setItem(PROFILE_STORAGE_KEY, JSON.stringify(profiles));
+  try {
+    localStorage.setItem(PROFILE_STORAGE_KEY, JSON.stringify(profiles));
+  } catch {
+    // Ignore storage failures in restricted browser contexts.
+  }
 };
 
 const normalizeUser = (firebaseUser) => {
