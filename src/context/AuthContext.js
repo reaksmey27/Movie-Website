@@ -285,11 +285,17 @@ export const AuthProvider = ({ children }) => {
       setUser(null);
       showNotification("You've been signed out safely.", "info");
       return true;
-    } catch {
+    } catch (error) {
+      console.error("[auth] logout failed", {
+        code: error?.code,
+        message: error?.message,
+        fullError: error,
+      });
       showNotification("We couldn't sign you out right now.", "error");
       return false;
     }
   }, [showNotification]);
+
 
   const value = useMemo(
     () => ({

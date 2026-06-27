@@ -1,5 +1,7 @@
+import { Navigate } from "react-router-dom";
+
 import useProfile from "../../hooks/auth/useProfile";
-import GuestBanner from "./components/Guestbanner";
+
 import ProBanner from "./components/ProBanner";
 import ProfileAvatar from "./components/ProfileAvatar";
 import ProfileCollection from "./components/ProfileCollection";
@@ -7,6 +9,7 @@ import ProfileForm from "./components/ProfileForm";
 import ProfileStats from "./components/ProfileStats";
 
 const ProfilePage = () => {
+
   const {
     user,
     logout,
@@ -19,7 +22,7 @@ const ProfilePage = () => {
     handleUpdateProfile,
   } = useProfile();
 
-  if (!user) return <GuestBanner />;
+  if (!user) return <Navigate to="/login" replace />;
 
   return (
     <div className="relative min-h-screen overflow-hidden bg-slate-950 px-4 pb-20 pt-24 sm:px-8 sm:pb-24 sm:pt-32 lg:px-16 xl:px-24">
