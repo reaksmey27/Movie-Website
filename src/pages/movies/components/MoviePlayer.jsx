@@ -114,7 +114,6 @@ const MoviePlayer = ({
                                 scrolling="no"
                                 allow="autoplay; fullscreen; picture-in-picture; encrypted-media"
                                 allowFullScreen
-                                sandbox="allow-same-origin allow-scripts allow-presentation"
                                 loading="eager"
                                 referrerPolicy="strict-origin-when-cross-origin"
                                 title="Cinema Player"
