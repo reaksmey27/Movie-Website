@@ -66,6 +66,9 @@ const BAD_URL_KEYWORDS = [
   "adsterra", "hilltopads", "propellerads", "clickadu", "adcash",
   "go.php", "click.php", "redirect.php", "track.php", "redir.",
   "adf.ly", "shorte.st",
+  // Confirmed vidsrc ad redirectors (from live URLs)
+  "proceedflow.com", "click?key=", "click_id=", "zoneid=", "fcost=",
+  "geo=kh", "creative_id=", "cost=0.000",
 ];
 
 const isBadUrl = (url) => {
@@ -109,6 +112,9 @@ export const blockMiddleClick = (e) => {
   if (e.button === 1) e.preventDefault();
 };
 // ─────────────────────────────────────────────────────────────────────────────
+
+// Patch immediately when this module loads — don't wait for player to open
+patchWindowOpen();
 
 const useMovieDetail = (id) => {
   const [movie, setMovie] = useState(null);
