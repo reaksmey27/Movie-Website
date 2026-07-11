@@ -51,6 +51,65 @@ const SERVERS = [
 
 const PLAYER_TIMEOUT_MS = 12000;
 
+// ─── Ad / popup blocker ───────────────────────────────────────────────────────
+// Keywords in 18+, gambling, and shady ad URLs — block any popup matching these
+const BAD_URL_KEYWORDS = [
+  // 18+ / adult
+  "porn", "xxx", "adult", "sex", "nude", "naked", "onlyfans", "cam4",
+  "chaturbate", "xvideos", "xhamster", "redtube", "brazzers", "milf",
+  "escort", "dating18", "hookup", "nsfw",
+  // Gambling
+  "casino", "poker", "betting", "slots", "gambling", "bet365", "888casino",
+  "sportbet", "wager",
+  // Shady ad networks commonly used by vidsrc
+  "popads", "popcash", "trafficjunky", "exoclick", "juicyads", "plugrush",
+  "adsterra", "hilltopads", "propellerads", "clickadu", "adcash",
+  "go.php", "click.php", "redirect.php", "track.php", "redir.",
+  "adf.ly", "shorte.st",
+];
+
+const isBadUrl = (url) => {
+  try {
+    const lower = url.toLowerCase();
+    return BAD_URL_KEYWORDS.some((kw) => lower.includes(kw));
+  } catch {
+    return false;
+  }
+};
+
+// Intercept window.open so iframe ads cannot open new tabs
+const patchWindowOpen = () => {
+  if (window.__adBlockPatched) return;
+  window.__adBlockPatched = true;
+
+  const _open = window.open.bind(window);
+  window.open = (url = "", ...args) => {
+    if (!url || isBadUrl(String(url))) {
+      console.warn("[AdBlock] Blocked popup:", url);
+      return null;
+    }
+    return _open(url, ...args);
+  };
+};
+
+// Block focus-steal redirects (vidsrc opens a tab when iframe steals focus)
+const blockFocusRedirect = () => {
+  const handler = () => {
+    setTimeout(() => {
+      if (document.activeElement?.tagName === "IFRAME") return;
+      window.focus();
+    }, 50);
+  };
+  window.addEventListener("blur", handler);
+  return () => window.removeEventListener("blur", handler);
+};
+
+// Export so MoviePlayer.jsx can attach it to the iframe wrapper div
+export const blockMiddleClick = (e) => {
+  if (e.button === 1) e.preventDefault();
+};
+// ─────────────────────────────────────────────────────────────────────────────
+
 const useMovieDetail = (id) => {
   const [movie, setMovie] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -103,7 +162,6 @@ const useMovieDetail = (id) => {
       setIframeLoading(false);
       return;
     }
-
     setIframeLoading(true);
     setPlayerMessage("");
   }, [isPlaying, activeServer, id, playerInstance]);
@@ -118,6 +176,18 @@ const useMovieDetail = (id) => {
 
     return () => clearTimeout(timeoutId);
   }, [isPlaying, iframeLoading]);
+
+  // Activate ad blockers only while player is open
+  useEffect(() => {
+    if (!isPlaying) return;
+
+    patchWindowOpen();
+    const cleanupFocus = blockFocusRedirect();
+
+    return () => {
+      cleanupFocus();
+    };
+  }, [isPlaying]);
 
   const activeServerIndex = SERVERS.findIndex((s) => s.name === activeServer);
   const currentServer = SERVERS[activeServerIndex] || SERVERS[0];
