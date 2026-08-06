@@ -2,45 +2,41 @@ import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 
-const fallbackFirebaseConfig = {
-  apiKey: "AIzaSyCUbAGgFUKKWfRbMrP_SYQ41RO8D-CXajE",
-  authDomain: "my-movie-app-b4609.firebaseapp.com",
-  projectId: "my-movie-app-b4609",
-  storageBucket: "my-movie-app-b4609.firebasestorage.app",
-  messagingSenderId: "224909798382",
-  appId: "1:224909798382:web:8e0a66b4f6c002d6613cff",
-  measurementId: "G-C0ND35GCSC",
-};
-
-export const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY || fallbackFirebaseConfig.apiKey,
-  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || fallbackFirebaseConfig.authDomain,
-  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || fallbackFirebaseConfig.projectId,
-  storageBucket:
-    import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || fallbackFirebaseConfig.storageBucket,
-  messagingSenderId:
-    import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || fallbackFirebaseConfig.messagingSenderId,
-  appId: import.meta.env.VITE_FIREBASE_APP_ID || fallbackFirebaseConfig.appId,
-  measurementId:
-    import.meta.env.VITE_FIREBASE_MEASUREMENT_ID || fallbackFirebaseConfig.measurementId,
-};
-
-const missingFirebaseEnvKeys = [
+const REQUIRED_ENV_KEYS = [
   "VITE_FIREBASE_API_KEY",
   "VITE_FIREBASE_AUTH_DOMAIN",
   "VITE_FIREBASE_PROJECT_ID",
   "VITE_FIREBASE_STORAGE_BUCKET",
   "VITE_FIREBASE_MESSAGING_SENDER_ID",
   "VITE_FIREBASE_APP_ID",
-].filter((envKey) => !import.meta.env[envKey]);
+];
+
+const missingFirebaseEnvKeys = REQUIRED_ENV_KEYS.filter(
+  (envKey) => !import.meta.env[envKey],
+);
 
 if (missingFirebaseEnvKeys.length > 0) {
-  console.warn(
-    `[firebase] Missing env vars: ${missingFirebaseEnvKeys.join(
+  // Fail loudly instead of silently falling back to a hardcoded project.
+  // A hardcoded fallback config here would mean anyone who builds this
+  // repo without their own .env silently connects to someone else's live
+  // Firebase project (auth + Firestore), which is a real security risk.
+  throw new Error(
+    `[firebase] Missing required env vars: ${missingFirebaseEnvKeys.join(
       ", ",
-    )}. Using fallback project "${firebaseConfig.projectId}". If Google sign-in fails with auth/unauthorized-domain, add your current host in Firebase Console or set your own Firebase env vars.`,
+    )}. Create a .env file (see .env.example) with your own Firebase project's ` +
+      `credentials. Get them from Firebase Console -> Project Settings -> General -> Your apps.`,
   );
 }
+
+export const firebaseConfig = {
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
+  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID,
+};
 
 const app = initializeApp(firebaseConfig);
 
