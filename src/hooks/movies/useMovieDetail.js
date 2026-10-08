@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { tmdbService } from "../../services/tmdbService";
+import { useAuth } from "../../context/AuthContext";
 
 const buildUrl = (baseUrl, params = {}) => {
   const searchParams = new URLSearchParams(
@@ -100,15 +101,21 @@ const blockFocusRedirect = () => {
 patchWindowOpen();
 
 const useMovieDetail = (id) => {
+  const { isAuthenticated, loading: authLoading } = useAuth();
   const [movie, setMovie] = useState(null);
   const [loading, setLoading] = useState(true);
 
   const [showTrailer, setShowTrailer] = useState(false);
-  const [isPlaying, setIsPlaying] = useState(false);
+  const [playRequested, setIsPlaying] = useState(false);
+  const isPlaying = playRequested && isAuthenticated && !authLoading;
   const [activeServer, setActiveServer] = useState(SERVERS[0].name);
   const [iframeLoading, setIframeLoading] = useState(false);
   const [playerMessage, setPlayerMessage] = useState("");
   const [playerInstance, setPlayerInstance] = useState(0);
+
+  useEffect(() => {
+    if (!isAuthenticated) setIsPlaying(false);
+  }, [isAuthenticated]);
 
   useEffect(() => {
     let ignore = false;

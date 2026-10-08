@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import { getAuthRedirect } from "../../utils/authRedirect";
 import { useAuth } from "../../context/AuthContext";
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -13,6 +14,7 @@ const createInitialState = () => ({
 
 const useAuthForm = (mode = "login") => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { login, register, authenticating } = useAuth();
   const [formData, setFormData] = useState(createInitialState);
   const [error, setError] = useState("");
@@ -87,7 +89,7 @@ const useAuthForm = (mode = "login") => {
 
       if (nextUser) {
         setFormData(createInitialState());
-        navigate("/");
+        navigate(getAuthRedirect(location.state), { replace: true });
       }
     } finally {
       setSubmitting(false);

@@ -17,6 +17,8 @@ const MovieInfo = ({
   isFav,
   isWatchlisted,
   onPlay,
+  playLabel = "Play Movie",
+  playDisabled = false,
   onTrailer,
   onFavorite,
   onWatchlist,
@@ -80,10 +82,11 @@ const MovieInfo = ({
         <div className="flex flex-col gap-4 pt-2 sm:flex-row sm:gap-6 sm:pt-4">
           <button
             onClick={onPlay}
+            disabled={playDisabled}
             className="group flex min-h-14 items-center justify-center gap-4 rounded-2xl bg-purple-600 px-8 py-4 text-[10px] font-black uppercase tracking-[0.2em] text-white shadow-xl shadow-purple-600/30 transition-all hover:bg-purple-500 active:scale-95 sm:px-10 sm:py-5 sm:text-xs"
           >
             <PlayIcon className="h-5 w-5 transition-transform group-hover:scale-125" />
-            Play Movie
+            {playLabel}
           </button>
 
           <div className="flex flex-wrap gap-3 sm:gap-6">

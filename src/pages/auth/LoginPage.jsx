@@ -5,6 +5,7 @@ import LoginButton from "../../components/auth/LoginButton";
 import useAuthForm from "../../hooks/auth/useAuthForm";
 import { useAuth } from "../../context/AuthContext";
 import AuthShell from "./AuthShell";
+import { getAuthRedirect } from "../../utils/authRedirect";
 
 const LoginPage = () => {
   const { user, loading } = useAuth();
@@ -24,7 +25,7 @@ const LoginPage = () => {
   };
 
   if (loading) return null;
-  if (user) return <Navigate to="/" replace />;
+  if (user) return <Navigate to={getAuthRedirect(location.state)} replace />;
 
   return (
     <AuthShell onClose={handleClose}>
@@ -39,7 +40,9 @@ const LoginPage = () => {
         <h1 className="text-3xl font-black tracking-[-0.05em] text-white sm:text-4xl">
           Welcome Back
         </h1>
-        <p className="mt-2 text-sm text-white/55">Enter your details.</p>
+        <p className="mt-2 text-sm text-white/55">
+          {location.state?.returnTo ? "Log in to watch this movie." : "Enter your details."}
+        </p>
 
         <form className="mt-6 space-y-3" onSubmit={handleSubmit}>
           <label className="block">
@@ -108,7 +111,7 @@ const LoginPage = () => {
           Don&apos;t have account?{" "}
           <Link
             to="/signup"
-            state={backgroundLocation ? { backgroundLocation } : undefined}
+            state={location.state}
             className="font-semibold text-purple-400 hover:text-purple-300"
           >
             Sign up

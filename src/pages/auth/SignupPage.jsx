@@ -5,6 +5,7 @@ import LoginButton from "../../components/auth/LoginButton";
 import useAuthForm from "../../hooks/auth/useAuthForm";
 import { useAuth } from "../../context/AuthContext";
 import AuthShell from "./AuthShell";
+import { getAuthRedirect } from "../../utils/authRedirect";
 
 const SignupPage = () => {
   const { user, loading } = useAuth();
@@ -24,7 +25,7 @@ const SignupPage = () => {
   };
 
   if (loading) return null;
-  if (user) return <Navigate to="/" replace />;
+  if (user) return <Navigate to={getAuthRedirect(location.state)} replace />;
 
   return (
     <AuthShell onClose={handleClose}>
@@ -138,7 +139,7 @@ const SignupPage = () => {
           Already have an account?{" "}
           <Link
             to="/login"
-            state={backgroundLocation ? { backgroundLocation } : undefined}
+            state={location.state}
             className="font-semibold text-purple-400 hover:text-purple-300"
           >
             Sign in

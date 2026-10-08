@@ -1,5 +1,6 @@
 import React, { startTransition, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import { getAuthRedirect } from "../../utils/authRedirect";
 import { useAuth } from "../../context/AuthContext";
 
 const GoogleIcon = () => (
@@ -28,6 +29,7 @@ const LoginButton = ({
   label = "Continue with Google",
 }) => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { signInWithGoogle, loading, authenticating } = useAuth();
   const [submitting, setSubmitting] = useState(false);
 
@@ -45,7 +47,7 @@ const LoginButton = ({
 
       if (nextUser) {
         startTransition(() => {
-          navigate("/");
+          navigate(getAuthRedirect(location.state), { replace: true });
         });
       }
     } finally {

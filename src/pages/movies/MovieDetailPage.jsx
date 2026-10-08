@@ -1,5 +1,6 @@
 import React from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
 import { useFavorites } from '../../context/FavoritesContext';
 import { useWatchlist } from '../../context/WatchlistContext';
 import { ChevronLeftIcon } from '@heroicons/react/24/solid';
@@ -14,6 +15,8 @@ import { XMarkIcon } from '@heroicons/react/24/outline';
 const MovieDetailPage = () => {
     const { id } = useParams();
     const navigate = useNavigate();
+    const location = useLocation();
+    const { isAuthenticated, loading: authLoading } = useAuth();
     const { toggleFavorite, isFavorite } = useFavorites();
     const { toggleWatchlist, isInWatchlist } = useWatchlist();
 
@@ -105,7 +108,18 @@ const MovieDetailPage = () => {
                         movie={movie}
                         isFav={isFavorite(movie.id)}
                         isWatchlisted={isInWatchlist(movie.id)}
-                        onPlay={() => setIsPlaying(true)}
+                        playLabel={authLoading ? 'Checking login...' : isAuthenticated ? 'Play Movie' : 'Log in to Watch'}
+                        playDisabled={authLoading}
+                        onPlay={() => {
+                            if (authLoading) return;
+                            if (!isAuthenticated) {
+                                navigate('/login', {
+                                    state: { backgroundLocation: location, returnTo: `/movie/${id}` },
+                                });
+                                return;
+                            }
+                            setIsPlaying(true);
+                        }}
                         onTrailer={() => setShowTrailer(true)}
                         onFavorite={() => toggleFavorite(movie)}
                         onWatchlist={() => toggleWatchlist(movie)}
